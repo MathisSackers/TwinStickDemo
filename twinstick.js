@@ -44,6 +44,9 @@ hero.speed = 5;
 hero.rotation_speed = 0.2;
 var gamepad = {};
 gamepad.bindings = {};
+var input = {ok_press: false, ok_down: false, ok_release: false,
+			 fire_press: false, fire_down: false, fire_release: false,
+			 pause_press: false, pause_down: false, pause_release: false};
 
 //This setup function will run when the images have loaded
 function setup() {
@@ -73,10 +76,13 @@ function gameLoop(delta) {
 			hero.visible = true;
 		}
 	} else if (state === 'play') {
-		let input = getInput();
+		getInput();
 		let move = calculateMovement(hero.x, hero.y, hero.height, input.left_x, input.left_y, delta * hero.speed);
 		hero.x = move.x;
 		hero.y = move.y;
+		if (input.pause_press) {
+			state = 'pause';
+		}
 		// if we want to turn
 		if (Math.abs(input.right_y) > 0.5 || Math.abs(input.right_x) > 0.5) {
 			// amount we can rotate _this_ frame
@@ -84,7 +90,10 @@ function gameLoop(delta) {
 			hero.rotation = calculateRotation(input.right_x, -input.right_y, hero.rotation, speed);
 		}
 	} else if (state === 'pause') {
-
+		getInput();
+		if (input.pause_press) {
+			state = 'play';
+		}
 	} else if (state === 'continue?') {
 
 	} else if (state === 'won') {
@@ -185,7 +194,10 @@ function getInput() {
 		}
 	}
 
-	let input = {left_x: 0, left_y: 0, right_x: 0, right_y: 0};
+	input.left_x = 0;
+	input.left_y = 0;
+	input.right_x = 0;
+	input.right_y = 0;
 
 	// left stick - x axis - right
 	let pos = gamepad.pad.axes[gamepad.bindings.left_h];
@@ -305,6 +317,75 @@ function getInput() {
 		input.right_y -= pct;
 	}
 
+
+	// ok button
+	// last frame pressed? not this frame
+	if (input.ok_press) {
+		input.ok_press = false;
+	}
+	// last frame released? not this frame
+	if (input.ok_release) {
+		input.ok_release = false;
+	}
+	if (gamepad.bindings.ok_button.pressed) {
+		if (!input.ok_down) {
+			// just pressed
+			input.ok_press = true;
+			input.ok_down = true;
+		}
+	} else {
+		if (input.ok_down) {
+			// just released
+			input.ok_release = true;
+		}
+		input.ok_down = false;
+	}
+
+	// fire button
+	// last frame pressed? not this frame
+	if (input.fire_press) {
+		input.fire_press = false;
+	}
+	// last frame released? not this frame
+	if (input.fire_release) {
+		input.fire_release = false;
+	}
+	if (gamepad.bindings.fire_button.pressed) {
+		if (!input.fire_down) {
+			// just pressed
+			input.fire_press = true;
+			input.fire_down = true;
+		}
+	} else {
+		if (input.fire_down) {
+			// just released
+			input.fire_release = true;
+		}
+		input.fire_down = false;
+	}
+
+	// pause button
+	// last frame pressed? not this frame
+	if (input.pause_press) {
+		input.pause_press = false;
+	}
+	// last frame released? not this frame
+	if (input.pause_release) {
+		input.pause_release = false;
+	}
+	if (gamepad.bindings.pause_button.pressed) {
+		if (!input.pause_down) {
+			// just pressed
+			input.pause_press = true;
+			input.pause_down = true;
+		}
+	} else {
+		if (input.pause_down) {
+			// just released
+			input.pause_release = true;
+		}
+		input.pause_down = false;
+	}
 	return input;
 }
 
@@ -466,7 +547,34 @@ function bindControls() {
 				gamepad.bindings.right_h2 = axis;
 			}
 			gamepad.bindings.right_left = gamepad.pad.axes[axis];
-			return true;
+			t.text = 'Press the ok button.';
+			t.x = (window.innerWidth/2) - (t.width/2);
+		}
+	} else if (gamepad.bindings.ok_button === undefined) {
+		for (var i = 0; i < gamepad.pad.buttons.length; i++) {
+			if (gamepad.pad.buttons[i].pressed) {
+				gamepad.bindings.ok_button = gamepad.pad.buttons[i];
+				t.text = 'Press the pause button.';
+				t.x = (window.innerWidth/2) - (t.width/2);
+			}
+		}
+	} else if (gamepad.bindings.pause_button === undefined) {
+		for (var i = 0; i < gamepad.pad.buttons.length; i++) {
+			if (gamepad.pad.buttons[i].pressed && gamepad.pad.buttons[i] != gamepad.bindings.ok_button) {
+				gamepad.bindings.pause_button = gamepad.pad.buttons[i];
+				t.text = 'Press the fire button.';
+				t.x = (window.innerWidth/2) - (t.width/2);
+			}
+		}
+	} else if (gamepad.bindings.fire_button === undefined) {
+		for (var i = 0; i < gamepad.pad.buttons.length; i++) {
+			if (gamepad.pad.buttons[i].pressed && gamepad.pad.buttons[i] != gamepad.bindings.pause_button && gamepad.pad.buttons[i] != gamepad.bindings.ok_button) {
+				gamepad.bindings.fire_button = gamepad.pad.buttons[i];
+				t.text = 'Press the ... button.';
+				t.x = (window.innerWidth/2) - (t.width/2);
+				console.log(gamepad.pad.buttons)
+				return true;
+			}
 		}
 	}
 	return false;
