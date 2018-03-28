@@ -4,6 +4,7 @@ loader = PIXI.loader,
 resources = PIXI.loader.resources,
 Sprite = PIXI.Sprite,
 Text = PIXI.Text,
+Container = PIXI.Container,
 Graphics = PIXI.Graphics;
 
 //Create a Pixi Application
@@ -18,6 +19,7 @@ let app = new Application({
 app.renderer.view.style.position = "absolute";
 app.renderer.view.style.display = "block";
 app.renderer.autoResize = true;
+window.addEventListener('resize', () => {app.renderer.resize(window.innerWidth, window.innerHeight)});
 app.renderer.resize(window.innerWidth, window.innerHeight);
 
 // Set the background dark grey
@@ -37,6 +39,7 @@ loader
 .load(setup);
 
 var t;
+var gameContainer;
 var hero;
 // most pixels you can move per frame
 hero.speed = 5;
@@ -52,7 +55,10 @@ var input = {ok_press: false, ok_down: false, ok_release: false,
 function setup() {
 	// create hero
 	createHero();
-	app.stage.addChild(hero);
+	gameContainer = new Container();
+	gameContainer.addChild(hero);
+	gameContainer.visible = false;
+	app.stage.addChild(gameContainer);
 	
 	t = new Text("...");
 	t.style = {fill: light_grey};
@@ -73,7 +79,7 @@ function gameLoop(delta) {
 		if (bindControls()) {
 			state = 'play';
 			t.visible = false;
-			hero.visible = true;
+			gameContainer.visible = true;
 		}
 	} else if (state === 'play') {
 		getInput();
@@ -82,6 +88,11 @@ function gameLoop(delta) {
 		hero.y = move.y;
 		if (input.pause_press) {
 			state = 'pause';
+			t.text = 'PAUSED'
+			t.style = {fontSize: 65, fill: light_grey, letterSpacing: window.innerWidth/10};
+			t.x = (window.innerWidth/2) - (t.width/2);
+			t.visible = true;
+			gameContainer.alpha = 0.3;
 		}
 		// if we want to turn
 		if (Math.abs(input.right_y) > 0.5 || Math.abs(input.right_x) > 0.5) {
@@ -93,6 +104,9 @@ function gameLoop(delta) {
 		getInput();
 		if (input.pause_press) {
 			state = 'play';
+			t.visible = false;
+			t.style = {fill: light_grey};
+			gameContainer.alpha = 1;
 		}
 	} else if (state === 'continue?') {
 
@@ -180,7 +194,6 @@ function createHero() {
 	hero.x = window.innerWidth/2;
 	hero.y = window.innerHeight/2;
 	
-	hero.visible = false;
 	hero.pivot.set(0, 25);
 }
 
@@ -572,7 +585,6 @@ function bindControls() {
 				gamepad.bindings.fire_button = gamepad.pad.buttons[i];
 				t.text = 'Press the ... button.';
 				t.x = (window.innerWidth/2) - (t.width/2);
-				console.log(gamepad.pad.buttons)
 				return true;
 			}
 		}
