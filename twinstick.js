@@ -38,6 +38,10 @@ loader
 
 var t;
 var hero;
+// most pixels you can move per frame
+hero.speed = 5;
+// most rads you can turn per frame
+hero.rotation_speed = 0.2;
 var gamepad = {};
 gamepad.bindings = {};
 
@@ -47,7 +51,10 @@ function setup() {
 	createHero();
 	app.stage.addChild(hero);
 	
-	t = new Text("axes");
+	t = new Text("...");
+	t.style = {fill: light_grey};
+	t.x = (window.innerWidth/2) - (t.width/2);
+	t.y = window.innerHeight/3;
 	app.stage.addChild(t);
 
 	state = 'control';
@@ -67,10 +74,15 @@ function gameLoop(delta) {
 		}
 	} else if (state === 'play') {
 		let input = getInput();
-		hero.x += input.left_x;
-		hero.y += input.left_y;
-		hero.x += input.right_x;
-		hero.y += input.right_y;
+		let move = calculateMovement(hero.x, hero.y, hero.height, input.left_x, input.left_y, delta * hero.speed);
+		hero.x = move.x;
+		hero.y = move.y;
+		// if we want to turn
+		if (Math.abs(input.right_y) > 0.5 || Math.abs(input.right_x) > 0.5) {
+			// amount we can rotate _this_ frame
+			let speed = hero.rotation_speed * delta;
+			hero.rotation = calculateRotation(input.right_x, -input.right_y, hero.rotation, speed);
+		}
 	} else if (state === 'pause') {
 
 	} else if (state === 'continue?') {
@@ -81,6 +93,73 @@ function gameLoop(delta) {
 }
 
 
+function calculateMovement(currx, curry, bounds, x, y, speed) {
+	let len = Math.sqrt(x * x + y * y);
+	let point = {x: currx, y: curry};
+	// if we're not too fast no need to slow us
+	if (len < speed) {
+		len = 1;
+	}
+	if (len != 0) {
+		point.x += speed * x / len;
+		point.y += speed * y / len;
+	}
+
+	// check out of bounds
+	point.x = Math.max(point.x, bounds);
+	point.x = Math.min(point.x, window.innerWidth - bounds);
+	point.y = Math.max(point.y, bounds);
+	point.y = Math.min(point.y, window.innerHeight - bounds);
+	return point;
+}
+
+
+function calculateRotation(x,y,curr,speed) {
+	// thats the desired rotation
+	let goal = Math.atan2(x, y);
+	// 0 at top, pi/2 on right, pi at bottom and -pi/2 on left
+	let pi = Math.PI;
+	// goal distance from top
+	let g_d = Math.abs(goal);
+	if (goal < 0) {
+		g_d = 2 * pi + goal
+	}
+	// hero.rotation distance from top
+	let h_d = Math.abs(curr);
+	if (curr < 0) {
+		h_d = 2 * pi + curr
+	}
+	// distance between the two
+	let hg_d = Math.abs(goal - curr);
+	// if the distance is too big
+	if (hg_d > speed && hg_d < (2*pi) - speed) {
+		if(Math.abs(h_d - g_d) < pi) {
+			if (h_d < g_d) {
+				// turn right
+				goal = curr + speed;
+			} else {
+				// turn left
+				goal = curr - speed;
+			}
+		} else {
+			if (h_d > g_d) {
+				// turn right
+				goal = curr + speed;
+			} else {
+				// turn left
+				goal = curr - speed;
+			}
+		}
+	}
+	// fix if we went over the limit
+	if (goal > pi) {
+		goal -= 2*pi
+	} else if (goal < -pi) {
+		goal += 2*pi
+	}
+	return goal;
+}
+
 function createHero() {
 	hero = new Graphics();
 	hero.beginFill(light_grey);
@@ -88,10 +167,12 @@ function createHero() {
 	hero.drawPolygon([-15, 50, 15, 50, 0, 0]);
 	hero.endFill();
 
+
 	hero.x = window.innerWidth/2;
 	hero.y = window.innerHeight/2;
 	
 	hero.visible = false;
+	hero.pivot.set(0, 25);
 }
 
 
@@ -251,6 +332,7 @@ function bindControls() {
 	if (gamepad.bindings.resting === undefined) {
 		gamepad.bindings.resting = gamepad.pad.axes;
 		t.text = 'Move the left stick up.';
+		t.x = (window.innerWidth/2) - (t.width/2);
 	} else if (gamepad.bindings.left_v === undefined) {
 		let max_diff = 0;
 		let axis = 0;
@@ -265,6 +347,7 @@ function bindControls() {
 			gamepad.bindings.left_v = axis;
 			gamepad.bindings.left_up = gamepad.pad.axes[axis];
 			t.text = 'Move the left stick right.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.left_h === undefined) {
 		let max_diff = 0;
@@ -280,6 +363,7 @@ function bindControls() {
 			gamepad.bindings.left_h = axis;
 			gamepad.bindings.left_right = gamepad.pad.axes[axis];
 			t.text = 'Move the left stick down.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.left_down === undefined) {
 		let max_diff = 0;
@@ -297,6 +381,7 @@ function bindControls() {
 			}
 			gamepad.bindings.left_down = gamepad.pad.axes[axis];
 			t.text = 'Move the left stick left.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.left_left === undefined) {
 		let max_diff = 0;
@@ -314,6 +399,7 @@ function bindControls() {
 			}
 			gamepad.bindings.left_left = gamepad.pad.axes[axis];
 			t.text = 'Move the right stick up.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.right_v === undefined) {
 		let max_diff = 0;
@@ -329,6 +415,7 @@ function bindControls() {
 			gamepad.bindings.right_v = axis;
 			gamepad.bindings.right_up = gamepad.pad.axes[axis];
 			t.text = 'Move the right stick right.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.right_h === undefined) {
 		let max_diff = 0;
@@ -344,6 +431,7 @@ function bindControls() {
 			gamepad.bindings.right_h = axis;
 			gamepad.bindings.right_right = gamepad.pad.axes[axis];
 			t.text = 'Move the right stick down.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.right_down === undefined) {
 		let max_diff = 0;
@@ -361,6 +449,7 @@ function bindControls() {
 			}
 			gamepad.bindings.right_down = gamepad.pad.axes[axis];
 			t.text = 'Move the right stick left.';
+			t.x = (window.innerWidth/2) - (t.width/2);
 		}
 	} else if (gamepad.bindings.right_left === undefined) {
 		let max_diff = 0;
