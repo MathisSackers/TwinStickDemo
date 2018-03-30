@@ -16,165 +16,173 @@ function bindControls() {
       break;
     }
   }
-  if (gamepad.bindings.resting === undefined) {
-    gamepad.bindings.resting = gamepad.pad.axes;
-    return 'Move the left stick up.';
-  } else if (gamepad.bindings.left_v === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+  if (gamepad.pad !== undefined) {
+    if (gamepad.bindings.resting === undefined) {
+      gamepad.bindings.resting = gamepad.pad.axes;
+      return 'Move the left stick up.';
+    } else if (gamepad.bindings.left_v === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
       }
-    }
-    if (maxDiff > 0.2) {
-      gamepad.bindings.left_v = axis;
-      gamepad.bindings.left_up = gamepad.pad.axes[axis];
-      return 'Move the left stick right.';
-    }
-  } else if (gamepad.bindings.left_h === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+      if (maxDiff > 0.2) {
+        gamepad.bindings.left_v = axis;
+        gamepad.bindings.left_up = gamepad.pad.axes[axis];
+        return 'Move the left stick right.';
       }
-    }
-    if (maxDiff > 0.2 && axis !== gamepad.bindings.left_v) {
-      gamepad.bindings.left_h = axis;
-      gamepad.bindings.left_right = gamepad.pad.axes[axis];
-      return 'Move the left stick down.';
-    }
-  } else if (gamepad.bindings.left_down === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+    } else if (gamepad.bindings.left_h === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
       }
-    }
-    if (maxDiff > 0.2 && axis !== gamepad.bindings.left_h) {
-      if (axis !== gamepad.bindings.left_v) {
-        gamepad.bindings.left_v2 = axis;
+      if (maxDiff > 0.2 && axis !== gamepad.bindings.left_v) {
+        gamepad.bindings.left_h = axis;
+        gamepad.bindings.left_right = gamepad.pad.axes[axis];
+        return 'Move the left stick down.';
       }
-      gamepad.bindings.left_down = gamepad.pad.axes[axis];
-      return 'Move the left stick left.';
-    }
-  } else if (gamepad.bindings.left_left === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+    } else if (gamepad.bindings.left_down === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
       }
-    }
-    if (maxDiff > 0.2 && axis !== gamepad.bindings.left_v && axis !== gamepad.bindings.left_v2) {
-      if (axis !== gamepad.bindings.left_h) {
-        gamepad.bindings.left_h2 = axis;
+      if (maxDiff > 0.2 && axis !== gamepad.bindings.left_h) {
+        if (axis !== gamepad.bindings.left_v) {
+          gamepad.bindings.left_v2 = axis;
+        }
+        gamepad.bindings.left_down = gamepad.pad.axes[axis];
+        return 'Move the left stick left.';
       }
-      gamepad.bindings.left_left = gamepad.pad.axes[axis];
-      return 'Move the right stick up.';
-    }
-  } else if (gamepad.bindings.right_v === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+    } else if (gamepad.bindings.left_left === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
       }
-    }
-    if (
-      maxDiff > 0.2 && axis !== gamepad.bindings.left_h &&
-      axis !== gamepad.bindings.left_h2 &&
-      axis !== gamepad.bindings.left_v &&
-      axis !== gamepad.bindings.left_v2
-    ) {
-      gamepad.bindings.right_v = axis;
-      gamepad.bindings.right_up = gamepad.pad.axes[axis];
-      return 'Move the right stick right.';
-    }
-  } else if (gamepad.bindings.right_h === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+      if (maxDiff > 0.2 && axis !== gamepad.bindings.left_v && axis !== gamepad.bindings.left_v2) {
+        if (axis !== gamepad.bindings.left_h) {
+          gamepad.bindings.left_h2 = axis;
+        }
+        gamepad.bindings.left_left = gamepad.pad.axes[axis];
+        return 'Move the right stick up.';
       }
-    }
-    if (maxDiff > 0.2 && axis !== gamepad.bindings.right_v) {
-      gamepad.bindings.right_h = axis;
-      gamepad.bindings.right_right = gamepad.pad.axes[axis];
-      return 'Move the right stick down.';
-    }
-  } else if (gamepad.bindings.right_down === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
+    } else if (gamepad.bindings.right_v === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
       }
-    }
-    if (maxDiff > 0.2 && axis !== gamepad.bindings.right_h) {
-      if (axis !== gamepad.bindings.right_v) {
-        gamepad.bindings.right_v2 = axis;
-      }
-      gamepad.bindings.right_down = gamepad.pad.axes[axis];
-      return 'Move the right stick left.';
-    }
-  } else if (gamepad.bindings.right_left === undefined) {
-    let maxDiff = 0;
-    let axis = 0;
-    for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
-      const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
-      if (diff > maxDiff) {
-        maxDiff = diff;
-        axis = i;
-      }
-    }
-    if (maxDiff > 0.2 && axis !== gamepad.bindings.right_v && axis !== gamepad.bindings.right_v2) {
-      if (axis !== gamepad.bindings.right_h) {
-        gamepad.bindings.right_h2 = axis;
-      }
-      gamepad.bindings.right_left = gamepad.pad.axes[axis];
-      return 'Press the ok button.';
-    }
-  } else if (gamepad.bindings.ok_button === undefined) {
-    for (let i = 0; i < gamepad.pad.buttons.length; i += 1) {
-      if (gamepad.pad.buttons[i].pressed) {
-        gamepad.bindings.ok_button = gamepad.pad.buttons[i];
-        return 'Press the pause button.';
-      }
-    }
-  } else if (gamepad.bindings.pause_button === undefined) {
-    for (let i = 0; i < gamepad.pad.buttons.length; i += 1) {
-      if (gamepad.pad.buttons[i].pressed && gamepad.pad.buttons[i] !== gamepad.bindings.ok_button) {
-        gamepad.bindings.pause_button = gamepad.pad.buttons[i];
-        return 'Press the fire button.';
-      }
-    }
-  } else if (gamepad.bindings.fire_button === undefined) {
-    for (let i = 0; i < gamepad.pad.buttons.length; i += 1) {
       if (
-        gamepad.pad.buttons[i].pressed &&
-        gamepad.pad.buttons[i] !== gamepad.bindings.pause_button &&
-        gamepad.pad.buttons[i] !== gamepad.bindings.ok_button
+        maxDiff > 0.2 && axis !== gamepad.bindings.left_h &&
+        axis !== gamepad.bindings.left_h2 &&
+        axis !== gamepad.bindings.left_v &&
+        axis !== gamepad.bindings.left_v2
       ) {
-        gamepad.bindings.fire_button = gamepad.pad.buttons[i];
-        return true;
+        gamepad.bindings.right_v = axis;
+        gamepad.bindings.right_up = gamepad.pad.axes[axis];
+        return 'Move the right stick right.';
+      }
+    } else if (gamepad.bindings.right_h === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
+      }
+      if (maxDiff > 0.2 && axis !== gamepad.bindings.right_v) {
+        gamepad.bindings.right_h = axis;
+        gamepad.bindings.right_right = gamepad.pad.axes[axis];
+        return 'Move the right stick down.';
+      }
+    } else if (gamepad.bindings.right_down === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
+      }
+      if (maxDiff > 0.2 && axis !== gamepad.bindings.right_h) {
+        if (axis !== gamepad.bindings.right_v) {
+          gamepad.bindings.right_v2 = axis;
+        }
+        gamepad.bindings.right_down = gamepad.pad.axes[axis];
+        return 'Move the right stick left.';
+      }
+    } else if (gamepad.bindings.right_left === undefined) {
+      let maxDiff = 0;
+      let axis = 0;
+      for (let i = 0; i < gamepad.pad.axes.length; i += 1) {
+        const diff = Math.abs(gamepad.pad.axes[i] - gamepad.bindings.resting[i]);
+        if (diff > maxDiff) {
+          maxDiff = diff;
+          axis = i;
+        }
+      }
+      if (
+        maxDiff > 0.2 && axis !== gamepad.bindings.right_v &&
+        axis !== gamepad.bindings.right_v2
+      ) {
+        if (axis !== gamepad.bindings.right_h) {
+          gamepad.bindings.right_h2 = axis;
+        }
+        gamepad.bindings.right_left = gamepad.pad.axes[axis];
+        return 'Press the ok button.';
+      }
+    } else if (gamepad.bindings.ok_button === undefined) {
+      for (let i = 0; i < gamepad.pad.buttons.length; i += 1) {
+        if (gamepad.pad.buttons[i].pressed) {
+          gamepad.bindings.ok_button = gamepad.pad.buttons[i];
+          return 'Press the pause button.';
+        }
+      }
+    } else if (gamepad.bindings.pause_button === undefined) {
+      for (let i = 0; i < gamepad.pad.buttons.length; i += 1) {
+        if (
+          gamepad.pad.buttons[i].pressed &&
+          gamepad.pad.buttons[i] !== gamepad.bindings.ok_button
+        ) {
+          gamepad.bindings.pause_button = gamepad.pad.buttons[i];
+          return 'Press the fire button.';
+        }
+      }
+    } else if (gamepad.bindings.fire_button === undefined) {
+      for (let i = 0; i < gamepad.pad.buttons.length; i += 1) {
+        if (
+          gamepad.pad.buttons[i].pressed &&
+          gamepad.pad.buttons[i] !== gamepad.bindings.pause_button &&
+          gamepad.pad.buttons[i] !== gamepad.bindings.ok_button
+        ) {
+          gamepad.bindings.fire_button = gamepad.pad.buttons[i];
+          return true;
+        }
       }
     }
   }
