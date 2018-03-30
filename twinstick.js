@@ -59,7 +59,9 @@ function gameLoop(delta) {
     }
     hitScan();
     moveBullets(delta);
+    moveEnemyBullets(delta);
     moveEnemies(delta);
+    enemiesFire(delta);
     moveHitMarkers();
   } else if (state === 'pause') {
     getInput();

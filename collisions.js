@@ -2,19 +2,14 @@
 function rectHit(rect1, rect2) {
   const r1 = rect1;
   const r2 = rect2;
-  // Find the center points of each rectangle
-  r1.centerX = r1.x + (r1.width / 2);
-  r1.centerY = r1.y + (r1.height / 2);
-  r2.centerX = r2.x + (r2.width / 2);
-  r2.centerY = r2.y + (r2.height / 2);
   // Find the half-widths and half-heights of each sprite
   r1.halfWidth = r1.width / 2;
   r1.halfHeight = r1.height / 2;
   r2.halfWidth = r2.width / 2;
   r2.halfHeight = r2.height / 2;
   // Calculate the distance vector between the sprites
-  const vx = r1.centerX - r2.centerX;
-  const vy = r1.centerY - r2.centerY;
+  const vx = r1.x - r2.x;
+  const vy = r1.y - r2.y;
   // Figure out the combined half-widths and half-heights
   const combinedHalfWidths = r1.halfWidth + r2.halfWidth;
   const combinedHalfHeights = r1.halfHeight + r2.halfHeight;
@@ -29,33 +24,64 @@ function rectHit(rect1, rect2) {
   return false;
 }
 
+// generous detection between circle and rect, because (heroes) bullets might rotate and stuff :S
+function circleRectHit(circle, rectangle) {
+  const distanceX = circle.x - rectangle.x;
+  const distanceY = circle.y - rectangle.y;
+  const distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+  if (distance < (circle.width / 2) + (rectangle.height / 2)) {
+    return true;
+  }
+  return false;
+}
+
 // detect whether a bullet touches an enemy
 function hitScan() {
-  enemies.forEach((enemy) => {
-    if (enemy.visible) {
-      const e = enemy;
-      bullets.forEach((bullet) => {
-        if (bullet.visible) {
+  // scan hero bullets first
+  bullets.forEach((bullet) => {
+    // bullet hit
+    const b = bullet;
+    if (b.visible) {
+      enemyBullets.forEach((enemyBullet) => {
+        if (enemyBullet.visible && b.visible) {
+          const eb = enemyBullet;
+          if (circleRectHit(enemyBullet, bullet)) {
+            if (!muted) {
+              // sound
+            }
+            b.visible = false;
+            eb.visible = false;
+          }
+          return eb;
+        }
+        return enemyBullet;
+      });
+    }
+    // enemy hit
+    if (b.visible) {
+      enemies.forEach((enemy) => {
+        if (enemy.visible && b.visible) {
+          const e = enemy;
           if (rectHit(enemy, bullet)) {
             if (!muted) {
               sound.play('opponentHit');
             }
-            const b = bullet;
             hitMarker(b);
             b.visible = false;
             e.hp -= 1;
-            e.stagger = enemyStagger;
-            e.tint = staggerColor;
             if (e.hp <= 0) {
               e.visible = false;
+              return e;
             }
-            return b;
+            e.stagger = enemyStagger;
+            e.tint = staggerColor;
           }
+          return e;
         }
-        return bullet;
+        return enemy;
       });
-      return e;
+      return b;
     }
-    return enemy;
+    return bullet;
   });
 }

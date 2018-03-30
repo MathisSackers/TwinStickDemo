@@ -27,6 +27,8 @@ var textColor = 0xe1ddcf;
 var bulletColor = 0xf9efc7;
 // color for enemies
 var enemyColor = 0xe5b195;
+// color for enemy bullets
+var enemyBulletColor = 0xffb195;
 // color for staggered enemies
 var staggerColor = 0xffb195;
 // color for markers
@@ -43,6 +45,8 @@ var gameContainer;
 var hero;
 // array of all player bullets
 var bullets = [];
+// array of all enemy bullets
+var enemyBullets = []
 // array of all enemies
 var enemies = [];
 // array of all hit markers
@@ -55,6 +59,10 @@ var enemySpeed = 4;
 var enemyStagger = 5;
 // amount of times enemy needs to be hit to die
 var enemyHp = 10;
+// enemy cooldown after shooting
+var enemyBulletCooldown = 30;
+// speed of enemy bullets
+var enemyBulletSpeed = 3;
 // most pixels you can move per frame
 var heroSpeed = 5;
 // most pixels your bullet can move per frame

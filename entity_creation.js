@@ -44,9 +44,11 @@ function createEnemy() {
   enemy.beginFill(enemyColor);
   enemy.drawRect(0, 0, 50, 50);
   enemy.endFill();
+  enemy.pivot.set(25, 25);
   enemy.x = Math.random() * window.innerWidth;
   enemy.y = -enemy.height;
   enemy.hp = enemyHp;
+  enemy.bulletCooldown = enemyBulletCooldown * 2;
   enemy.stagger = 0;
   enemies.push(enemy);
   gameContainer.addChild(enemy);
@@ -61,6 +63,7 @@ function spawnEnemy() {
       e.x = Math.random() * window.innerWidth;
       e.y = -e.height;
       e.hp = enemyHp;
+      e.bulletCooldown = enemyBulletCooldown * 2;
       e.visible = true;
       e.stagger = 0;
       e.tint = 0xffffff;
@@ -89,7 +92,7 @@ function createHero() {
   hero.pivot.set(0, 25);
 }
 
-// gets a marker
+// creates a marker
 function createHitMarker(bullet) {
   const marker = new Graphics();
   marker.lineStyle(3, markerColor, 1);
@@ -126,4 +129,65 @@ function hitMarker(bullet) {
   if (needNewMarker) {
     createHitMarker(bullet);
   }
+}
+
+// creates an enemy bullet
+function createEnemyBullet(enemy) {
+  const bullet = new Graphics();
+  bullet.beginFill(enemyBulletColor);
+  bullet.drawCircle(0, 0, 30);
+  bullet.endFill();
+  bullet.pivot.set(0, 0);
+  bullet.x = enemy.x;
+  bullet.y = enemy.y;
+  const offDegrees = -0.2 + (Math.random() * 0.4);
+  const heroDirection = Math.atan2(hero.x - enemy.x, hero.y - enemy.y) + offDegrees;
+  const direction = (Math.random() < 0.4) ? heroDirection : Math.random() * 2 * Math.PI;
+  bullet.dy = Math.cos(direction);
+  bullet.dx = Math.sin(direction);
+  enemyBullets.push(bullet);
+  gameContainer.addChild(bullet);
+}
+
+// gets or creates an enemy bullet
+function enemyBullet(enemy) {
+  let needNewBullet = true;
+  enemyBullets.forEach((bullet) => {
+    if (needNewBullet && !bullet.visible) {
+      const b = bullet;
+      b.x = enemy.x;
+      b.y = enemy.y;
+      const offDegrees = -0.2 + (Math.random() * 0.4);
+      const heroDirection = Math.atan2(hero.x - enemy.x, hero.y - enemy.y) + offDegrees;
+      const direction = (Math.random() < 0.4) ?
+        heroDirection : Math.random() * 2 * Math.PI;
+      b.dy = Math.cos(direction);
+      b.dx = Math.sin(direction);
+      b.visible = true;
+      needNewBullet = false;
+      return b;
+    }
+    return bullet;
+  });
+  if (needNewBullet) {
+    createEnemyBullet(enemy);
+  }
+}
+
+// determines enemies that should fire
+function enemiesFire(delta) {
+  enemies.forEach((enemy) => {
+    const e = enemy;
+    if (e.visible && enemy.stagger === 0) {
+      e.bulletCooldown -= delta;
+      if (e.bulletCooldown < 0) {
+        enemyBullet(e);
+        if (!muted) {
+          // sound
+        }
+        e.bulletCooldown += enemyBulletCooldown;
+      }
+    }
+    return e;
+  });
 }

@@ -86,17 +86,17 @@ function handleMovementAndRotation(delta) {
 
 // moves single bullet
 function moveBullet(bullet, delta) {
-  const s = bullet;
-  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * heroBulletSpeed);
-  s.x = p.x;
-  s.y = p.y;
+  const b = bullet;
+  const p = calculateMovement(b.x, b.y, -2 * b.height, b.dx, b.dy, delta * heroBulletSpeed);
+  b.x = p.x;
+  b.y = p.y;
   if (
-    s.x < -s.height || s.x > window.innerWidth + s.height ||
-    s.y < -s.height || s.y > window.innerHeight + s.height
+    b.x < -b.height || b.x > window.innerWidth + b.height ||
+    b.y < -b.height || b.y > window.innerHeight + b.height
   ) {
-    s.visible = false;
+    b.visible = false;
   }
-  return s;
+  return b;
 }
 
 // moves visible bullets
@@ -217,5 +217,30 @@ function moveHitMarkers() {
       return moveMarker(marker);
     }
     return marker;
+  });
+}
+
+// moves a single enemy bullet
+function moveEnemyBullet(bullet, delta) {
+  const b = bullet;
+  const p = calculateMovement(b.x, b.y, -2 * b.height, b.dx, b.dy, delta * enemyBulletSpeed);
+  b.x = p.x;
+  b.y = p.y;
+  if (
+    b.x < -b.height || b.x > window.innerWidth + b.height ||
+    b.y < -b.height || b.y > window.innerHeight + b.height
+  ) {
+    b.visible = false;
+  }
+  return b;
+}
+
+// moves visible enemy bullets
+function moveEnemyBullets(delta) {
+  enemyBullets.forEach((bullet) => {
+    if (bullet.visible) {
+      return moveEnemyBullet(bullet, delta);
+    }
+    return bullet;
   });
 }
