@@ -45,9 +45,7 @@ function createEnemy() {
   enemy.drawRect(0, 0, 50, 50);
   enemy.endFill();
   enemy.x = Math.random() * window.innerWidth;
-  enemy.y = -10;
-  enemy.dy = Math.random() * 5;
-  enemy.dx = -5 + (Math.random() * 10);
+  enemy.y = -enemy.height;
   enemy.hp = enemyHp;
   enemy.stagger = 0;
   enemies.push(enemy);
@@ -61,9 +59,7 @@ function spawnEnemy() {
     if (needNewEnemy && !enemy.visible) {
       const e = enemy;
       e.x = Math.random() * window.innerWidth;
-      e.y = -10;
-      e.dy = Math.random() * 5;
-      e.dx = -5 + (Math.random() * 10);
+      e.y = -e.height;
       e.hp = enemyHp;
       e.visible = true;
       e.stagger = 0;

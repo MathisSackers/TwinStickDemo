@@ -109,19 +109,60 @@ function moveBullets(delta) {
   });
 }
 
+
+function updateGoal(enemy) {
+  const e = enemy;
+  const fifthOfScreenW = window.innerWidth / 5;
+  const fifthOfScreenH = window.innerHeight / 5;
+  e.goalX = fifthOfScreenW + (Math.random() * fifthOfScreenW * 3);
+  e.goalY = fifthOfScreenH + (Math.random() * fifthOfScreenH * 3);
+  return e;
+}
+
+// updates the desired direction of the enemy
+function updateDirection(enemy) {
+  let e = enemy;
+  if (e.goalX === undefined || (Math.abs(e.x - e.goalX) < 20 && Math.abs(e.y - e.goalY) < 20)) {
+    e = updateGoal(e);
+  }
+  let goalX = (e.x < e.goalX) ? 1 : -1;
+  let goalY = (e.y < e.goalY) ? 1 : -1;
+  if (Math.abs(e.x - e.goalX) < 300) {
+    goalX *= (Math.abs(e.x - e.goalX) / 300);
+  }
+  if (Math.abs(e.y - e.goalY) < 300) {
+    goalY *= (Math.abs(e.y - e.goalY) / 300);
+  }
+  e.dx = goalX;
+  e.dy = goalY;
+  const distToHeroX = Math.abs(e.x - hero.x);
+  const distToHeroY = Math.abs(e.y - hero.y);
+  const distToHero = Math.sqrt((distToHeroX * distToHeroX) + (distToHeroY * distToHeroY));
+  if (distToHero < 300) {
+    let heroX = (e.x < hero.x) ? -1 : 1;
+    let heroY = (e.y < hero.y) ? -1 : 1;
+    heroX *= 1 - (Math.abs(e.x - hero.x) / 300);
+    heroY *= 1 - (Math.abs(e.y - hero.y) / 300);
+    e.dx += heroX;
+    e.dy += heroY;
+  }
+  return e;
+}
+
+
 // moves single enemy
 function moveEnemy(enemy, delta) {
-  const s = enemy;
-  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * enemySpeed);
-  s.x = p.x;
-  s.y = p.y;
+  const e = updateDirection(enemy);
+  const p = calculateMovement(e.x, e.y, -2 * e.height, e.dx, e.dy, delta * enemySpeed);
+  e.x = p.x;
+  e.y = p.y;
   if (
-    s.x < -s.height || s.x > window.innerWidth + s.height ||
-    s.y < -s.height || s.y > window.innerHeight + s.height
+    e.x < -e.height || e.x > window.innerWidth + e.height ||
+    e.y < -e.height || e.y > window.innerHeight + e.height
   ) {
-    s.visible = false;
+    e.visible = false;
   }
-  return s;
+  return e;
 }
 
 // moves visible enemies

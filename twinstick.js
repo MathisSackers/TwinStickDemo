@@ -87,7 +87,6 @@ function setup() {
     sprites: shootLongSprites,
     preload: true,
   });
-  // sound.add('opponentHit', 'sounds/opponentHit.mp3');
 
   // create hero
   createHero();
