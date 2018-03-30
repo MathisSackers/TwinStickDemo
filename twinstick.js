@@ -31,7 +31,19 @@ let t;
 let gameContainer;
 let hero;
 const bullets = [];
-
+const enemies = [];
+// most pixels enemies can move per frame
+const enemySpeed = 4;
+// most pixels you can move per frame
+const heroSpeed = 5;
+// most pixels your bullet can move per frame
+const heroBulletSpeed = 7;
+// frames until you can shoot again
+const heroBulletCooldown = 3;
+// most rads you can turn per frame
+const heroRotationSpeed = 0.2;
+// when the next bullet is possible
+let heroBulletCurrentCooldown = -1;
 
 // this calculates the new position given the current one
 function calculateMovement(currx, curry, bounds, x, y, speed) {
@@ -107,14 +119,14 @@ function handleMovementAndRotation(delta) {
     hero.x, hero.y,
     hero.height,
     input.left_x, input.left_y,
-    delta * hero.speed,
+    delta * heroSpeed,
   );
   hero.x = move.x;
   hero.y = move.y;
   // Roatation
   if (Math.abs(input.right_y) > 0.5 || Math.abs(input.right_x) > 0.5) {
     // amount we can rotate _this_ frame
-    const speed = hero.rotation_speed * delta;
+    const speed = heroRotationSpeed * delta;
     hero.rotation = calculateRotation(input.right_x, -input.right_y, hero.rotation, speed);
   }
 }
@@ -122,7 +134,7 @@ function handleMovementAndRotation(delta) {
 // moves single bullet
 function moveBullet(bullet, delta) {
   const s = bullet;
-  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * hero.bullet_speed);
+  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * heroBulletSpeed);
   s.x = p.x;
   s.y = p.y;
   if (
@@ -182,6 +194,119 @@ function fire() {
   }
 }
 
+// moves single enemy
+function moveEnemy(enemy, delta) {
+  const s = enemy;
+  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * enemySpeed);
+  s.x = p.x;
+  s.y = p.y;
+  if (
+    s.x < -s.height || s.x > window.innerWidth + s.height ||
+    s.y < -s.height || s.y > window.innerHeight + s.height
+  ) {
+    s.visible = false;
+  }
+  return s;
+}
+
+// moves visible enemies
+function moveEnemies(delta) {
+  enemies.forEach((enemy) => {
+    if (enemy.visible) {
+      return moveEnemy(enemy, delta);
+    }
+    return enemy;
+  });
+}
+
+// create an Enemy
+function createEnemy() {
+  const enemy = new Graphics();
+  enemy.beginFill(lightGrey);
+  enemy.drawRect(0, 0, 50, 50);
+  enemy.endFill();
+  enemy.x = Math.random() * window.innerWidth;
+  enemy.y = -10;
+  enemy.dy = Math.random() * 5;
+  enemy.dx = -5 + (Math.random() * 10);
+  enemies.push(enemy);
+  gameContainer.addChild(enemy);
+}
+
+// gets an enemy or creates a new one
+function spawnEnemy() {
+  let needNewEnemy = true;
+  enemies.forEach((enemy) => {
+    if (needNewEnemy && !enemy.visible) {
+      const e = enemy;
+      e.x = Math.random() * window.innerWidth;
+      e.y = -10;
+      e.dy = Math.random() * 5;
+      e.dx = -5 + (Math.random() * 10);
+      e.visible = true;
+      needNewEnemy = false;
+      return e;
+    }
+    return enemy;
+  });
+  if (needNewEnemy) {
+    createEnemy();
+  }
+}
+
+// adapted from https://github.com/kittykatattack/learningPixi#collision
+function rectHit(rect1, rect2) {
+  const r1 = rect1;
+  const r2 = rect2;
+  // Find the center points of each rectangle
+  r1.centerX = r1.x + (r1.width / 2);
+  r1.centerY = r1.y + (r1.height / 2);
+  r2.centerX = r2.x + (r2.width / 2);
+  r2.centerY = r2.y + (r2.height / 2);
+  // Find the half-widths and half-heights of each sprite
+  r1.halfWidth = r1.width / 2;
+  r1.halfHeight = r1.height / 2;
+  r2.halfWidth = r2.width / 2;
+  r2.halfHeight = r2.height / 2;
+  // Calculate the distance vector between the sprites
+  const vx = r1.centerX - r2.centerX;
+  const vy = r1.centerY - r2.centerY;
+  // Figure out the combined half-widths and half-heights
+  const combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+  const combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+  // Check for a collision on the x axis
+  if (Math.abs(vx) < combinedHalfWidths) {
+    // A collision might be occuring. Check for a collision on the y axis
+    if (Math.abs(vy) < combinedHalfHeights) {
+      // There's definitely a collision happening
+      return true;
+    }
+  }
+  return false;
+}
+
+// detect whether a bullet touches an enemy
+function hitScan() {
+  enemies.forEach((enemy) => {
+    if (enemy.visible) {
+      const e = enemy;
+      bullets.forEach((bullet) => {
+        if (bullet.visible) {
+          if (rectHit(enemy, bullet)) {
+            const b = bullet;
+            e.visible = false;
+            b.visible = false;
+            return b;
+          }
+        }
+        return bullet;
+      });
+      return e;
+    }
+    return enemy;
+  });
+}
+
 // This function is called every frame
 function gameLoop(delta) {
   if (state === 'control') {
@@ -206,17 +331,22 @@ function gameLoop(delta) {
       t.visible = true;
       gameContainer.alpha = 0.3;
     }
-    hero.bullet_current_cooldown -= delta;
-    if (hero.bullet_current_cooldown < -1) {
-      hero.bullet_current_cooldown = -(Math.abs(hero.bullet_current_cooldown) % 1);
+    heroBulletCurrentCooldown -= delta;
+    if (heroBulletCurrentCooldown < -1) {
+      heroBulletCurrentCooldown = -(Math.abs(heroBulletCurrentCooldown) % 1);
     }
     if (input.fire_down) {
-      if (hero.bullet_current_cooldown < 0) {
+      if (heroBulletCurrentCooldown < 0) {
         fire();
-        hero.bullet_current_cooldown += hero.bullet_cooldown;
+        heroBulletCurrentCooldown += heroBulletCooldown;
       }
     }
+    if (input.ok_press) {
+      spawnEnemy();
+    }
+    hitScan();
     moveBullets(delta);
+    moveEnemies(delta);
   } else if (state === 'pause') {
     getInput();
     if (input.pause_press) {
@@ -272,15 +402,3 @@ function setup() {
 loader
   .add([]) // nothing to load yet
   .load(setup);
-
-// most pixels you can move per frame
-hero.speed = 5;
-// most pixels your bullet can move per frame
-hero.bullet_speed = 7;
-// frames until you can shoot again
-hero.bullet_cooldown = 3;
-// most rads you can turn per frame
-hero.rotation_speed = 0.2;
-// when the next bullet is possible
-hero.bullet_current_cooldown = -1;
-
