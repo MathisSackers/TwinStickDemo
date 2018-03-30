@@ -33,6 +33,8 @@ var bullets = [];
 var enemies = [];
 // most pixels enemies can move per frame
 var enemySpeed = 4;
+// amount of times enemy needs to be hit to die
+var enemyHp = 10;
 // most pixels you can move per frame
 var heroSpeed = 5;
 // most pixels your bullet can move per frame

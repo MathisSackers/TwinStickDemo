@@ -38,8 +38,11 @@ function hitScan() {
         if (bullet.visible) {
           if (rectHit(enemy, bullet)) {
             const b = bullet;
-            e.visible = false;
             b.visible = false;
+            e.hp -= 1;
+            if (e.hp <= 0) {
+              e.visible = false;
+            }
             return b;
           }
         }
