@@ -48,6 +48,7 @@ function gameLoop(delta) {
     if (input.fire_down) {
       if (heroBulletCurrentCooldown < 0) {
         fire();
+        sound.play('shoot');
         heroBulletCurrentCooldown += heroBulletCooldown;
       }
     }
@@ -96,5 +97,6 @@ function setup() {
 
 // load the images and run the 'setup' function when it's done
 loader
-  .add([]) // nothing to load yet
+  .add('opponentHit', 'sounds/opponentHit.mp3')
+  .add('shoot', 'sounds/shoot.mp3')
   .load(setup);

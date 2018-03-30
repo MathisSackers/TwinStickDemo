@@ -1,6 +1,6 @@
 // Aliases
 var {
-  Application, loader, Text, Container, Graphics,
+  Application, loader, sound, Text, Container, Graphics,
 } = PIXI;
 // const resources = PIXI.loader.resources;
 // const Sprite = PIXI.Sprite;
