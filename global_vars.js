@@ -33,6 +33,8 @@ var staggerColor = 0xffb195;
 var markerColor = 0x00ffff;
 // current gamestate
 var state = 'load';
+// whether the game is muted or not
+var muted = true;
 // text object
 var t;
 // container for all elements of the game

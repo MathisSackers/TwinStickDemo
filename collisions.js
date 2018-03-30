@@ -37,7 +37,9 @@ function hitScan() {
       bullets.forEach((bullet) => {
         if (bullet.visible) {
           if (rectHit(enemy, bullet)) {
-            sound.play('opponentHit');
+            if (!muted) {
+              sound.play('opponentHit');
+            }
             const b = bullet;
             hitMarker(b);
             b.visible = false;

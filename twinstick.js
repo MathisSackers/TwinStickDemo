@@ -48,7 +48,9 @@ function gameLoop(delta) {
     if (input.fire_down) {
       if (heroBulletCurrentCooldown < 0) {
         fire();
-        sound.play('shoot');
+        if (!muted) {
+          sound.play('shoot');
+        }
         heroBulletCurrentCooldown += heroBulletCooldown;
       }
     }
@@ -66,6 +68,10 @@ function gameLoop(delta) {
       t.visible = false;
       t.style = { fill: textColor };
       gameContainer.alpha = 1;
+    }
+    if (input.ok_press) {
+      muted = sound.toggleMuteAll();
+      console.log(muted);
     }
   } else if (state === 'continue?') {
     // TODO
