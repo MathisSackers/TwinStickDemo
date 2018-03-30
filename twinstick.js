@@ -119,6 +119,31 @@ function handleMovementAndRotation(delta) {
   }
 }
 
+// moves single shot
+function moveShot(shot, delta) {
+  const s = shot;
+  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * hero.shot_speed);
+  s.x = p.x;
+  s.y = p.y;
+  if (
+    s.x < -s.height || s.x > window.innerWidth + s.height ||
+    s.y < -s.height || s.y > window.innerHeight + s.height
+  ) {
+    s.visible = false;
+  }
+  return s;
+}
+
+// moves visible shots
+function moveShots(delta) {
+  shots.forEach((shot) => {
+    if (shot.visible) {
+      return moveShot(shot, delta);
+    }
+    return shot;
+  });
+}
+
 // create shot
 function createShot() {
   const shot = new Graphics();
@@ -157,26 +182,6 @@ function fire() {
   }
 }
 
-// moves visible shots
-function moveShots(delta) {
-  shots.forEach((shot) => {
-    if (shot.visible) {
-      const s = shot;
-      const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * hero.shot_speed);
-      s.x = p.x;
-      s.y = p.y;
-      if (
-        s.x < -s.height || s.x > window.innerWidth + s.height ||
-        s.y < -s.height || s.y > window.innerHeight + s.height
-      ) {
-        s.visible = false;
-      }
-      return s;
-    }
-    return shot;
-  });
-}
-
 // This function is called every frame
 function gameLoop(delta) {
   if (state === 'control') {
@@ -201,8 +206,15 @@ function gameLoop(delta) {
       t.visible = true;
       gameContainer.alpha = 0.3;
     }
+    hero.shot_current_cooldown -= delta;
+    if (hero.shot_current_cooldown < -1) {
+      hero.shot_current_cooldown = -(Math.abs(hero.shot_current_cooldown) % 1);
+    }
     if (input.fire_down) {
-      fire();
+      if (hero.shot_current_cooldown < 0) {
+        fire();
+        hero.shot_current_cooldown += hero.shot_cooldown;
+      }
     }
     moveShots(delta);
   } else if (state === 'pause') {
@@ -263,8 +275,12 @@ loader
 
 // most pixels you can move per frame
 hero.speed = 5;
-// most pixels you can move per frame
+// most pixels your shot can move per frame
 hero.shot_speed = 7;
+// frames until you can shoot again
+hero.shot_cooldown = 3;
 // most rads you can turn per frame
 hero.rotation_speed = 0.2;
+// when the next shot is possible
+hero.shot_current_cooldown = -1;
 
