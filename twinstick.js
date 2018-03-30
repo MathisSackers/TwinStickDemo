@@ -30,7 +30,7 @@ let state = 'load';
 let t;
 let gameContainer;
 let hero;
-const shots = [];
+const bullets = [];
 
 
 // this calculates the new position given the current one
@@ -119,10 +119,10 @@ function handleMovementAndRotation(delta) {
   }
 }
 
-// moves single shot
-function moveShot(shot, delta) {
-  const s = shot;
-  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * hero.shot_speed);
+// moves single bullet
+function moveBullet(bullet, delta) {
+  const s = bullet;
+  const p = calculateMovement(s.x, s.y, -2 * s.height, s.dx, s.dy, delta * hero.bullet_speed);
   s.x = p.x;
   s.y = p.y;
   if (
@@ -134,51 +134,51 @@ function moveShot(shot, delta) {
   return s;
 }
 
-// moves visible shots
-function moveShots(delta) {
-  shots.forEach((shot) => {
-    if (shot.visible) {
-      return moveShot(shot, delta);
+// moves visible bullets
+function moveBullets(delta) {
+  bullets.forEach((bullet) => {
+    if (bullet.visible) {
+      return moveBullet(bullet, delta);
     }
-    return shot;
+    return bullet;
   });
 }
 
-// create shot
-function createShot() {
-  const shot = new Graphics();
-  shot.beginFill(lightGrey);
-  shot.drawRect(0, 0, 6, 12);
-  shot.endFill();
-  shot.pivot.set(3, 25);
-  shot.x = hero.x;
-  shot.y = hero.y;
-  shot.rotation = hero.rotation;
-  shot.dy = -Math.cos(shot.rotation);
-  shot.dx = Math.sin(shot.rotation);
-  shots.push(shot);
-  gameContainer.addChild(shot);
+// create bullet
+function createBullet() {
+  const bullet = new Graphics();
+  bullet.beginFill(lightGrey);
+  bullet.drawRect(0, 0, 6, 12);
+  bullet.endFill();
+  bullet.pivot.set(3, 25);
+  bullet.x = hero.x;
+  bullet.y = hero.y;
+  bullet.rotation = hero.rotation;
+  bullet.dy = -Math.cos(bullet.rotation);
+  bullet.dx = Math.sin(bullet.rotation);
+  bullets.push(bullet);
+  gameContainer.addChild(bullet);
 }
 
-// gets a shot or creates a new one
+// gets a bullet or creates a new one
 function fire() {
-  let needNewShot = true;
-  shots.forEach((shot) => {
-    if (needNewShot && !shot.visible) {
-      const s = shot;
+  let needNewBullet = true;
+  bullets.forEach((bullet) => {
+    if (needNewBullet && !bullet.visible) {
+      const s = bullet;
       s.x = hero.x;
       s.y = hero.y;
       s.rotation = hero.rotation;
       s.dy = -Math.cos(s.rotation);
       s.dx = Math.sin(s.rotation);
       s.visible = true;
-      needNewShot = false;
+      needNewBullet = false;
       return s;
     }
-    return shot;
+    return bullet;
   });
-  if (needNewShot) {
-    createShot();
+  if (needNewBullet) {
+    createBullet();
   }
 }
 
@@ -206,17 +206,17 @@ function gameLoop(delta) {
       t.visible = true;
       gameContainer.alpha = 0.3;
     }
-    hero.shot_current_cooldown -= delta;
-    if (hero.shot_current_cooldown < -1) {
-      hero.shot_current_cooldown = -(Math.abs(hero.shot_current_cooldown) % 1);
+    hero.bullet_current_cooldown -= delta;
+    if (hero.bullet_current_cooldown < -1) {
+      hero.bullet_current_cooldown = -(Math.abs(hero.bullet_current_cooldown) % 1);
     }
     if (input.fire_down) {
-      if (hero.shot_current_cooldown < 0) {
+      if (hero.bullet_current_cooldown < 0) {
         fire();
-        hero.shot_current_cooldown += hero.shot_cooldown;
+        hero.bullet_current_cooldown += hero.bullet_cooldown;
       }
     }
-    moveShots(delta);
+    moveBullets(delta);
   } else if (state === 'pause') {
     getInput();
     if (input.pause_press) {
@@ -275,12 +275,12 @@ loader
 
 // most pixels you can move per frame
 hero.speed = 5;
-// most pixels your shot can move per frame
-hero.shot_speed = 7;
+// most pixels your bullet can move per frame
+hero.bullet_speed = 7;
 // frames until you can shoot again
-hero.shot_cooldown = 3;
+hero.bullet_cooldown = 3;
 // most rads you can turn per frame
 hero.rotation_speed = 0.2;
-// when the next shot is possible
-hero.shot_current_cooldown = -1;
+// when the next bullet is possible
+hero.bullet_current_cooldown = -1;
 
