@@ -34,7 +34,7 @@ var markerColor = 0x00ffff;
 // current gamestate
 var state = 'load';
 // whether the game is muted or not
-var muted = true;
+var muted = false;
 // text object
 var t;
 // container for all elements of the game
@@ -65,3 +65,16 @@ var heroBulletCooldown = 3;
 var heroRotationSpeed = 0.2;
 // when the next bullet is possible
 var heroBulletCurrentCooldown = -1;
+// SoundSprite
+var shootSound;
+// sprite information
+var shootLongSprites = {
+  'shoot1': { start: 0, end: 1 },
+  'shoot2': { start: 2, end: 3 },
+  'shoot3': { start: 4, end: 5 },
+  'shoot4': { start: 6, end: 7 },
+  'shoot5': { start: 8, end: 9 },
+  'shoot6': { start: 10, end: 11 },
+  'shoot7': { start: 12, end: 13 },
+  'shoot8': { start: 14, end: 15 },
+};

@@ -49,7 +49,7 @@ function gameLoop(delta) {
       if (heroBulletCurrentCooldown < 0) {
         fire();
         if (!muted) {
-          sound.play('shoot');
+          shootSound.play(`shoot${Math.ceil(Math.random() * 8)}`);
         }
         heroBulletCurrentCooldown += heroBulletCooldown;
       }
@@ -71,7 +71,6 @@ function gameLoop(delta) {
     }
     if (input.ok_press) {
       muted = sound.toggleMuteAll();
-      console.log(muted);
     }
   } else if (state === 'continue?') {
     // TODO
@@ -82,6 +81,14 @@ function gameLoop(delta) {
 
 // This setup function will run when the images have loaded
 function setup() {
+  // load additional sounds
+  shootSound = sound.Sound.from({
+    url: 'sounds/shoot_long.mp3',
+    sprites: shootLongSprites,
+    preload: true,
+  });
+  // sound.add('opponentHit', 'sounds/opponentHit.mp3');
+
   // create hero
   createHero();
   gameContainer = new Container();
@@ -101,8 +108,8 @@ function setup() {
   app.ticker.add(delta => gameLoop(delta));
 }
 
+
 // load the images and run the 'setup' function when it's done
 loader
   .add('opponentHit', 'sounds/opponentHit.mp3')
-  .add('shoot', 'sounds/shoot.mp3')
   .load(setup);
