@@ -17,6 +17,38 @@ app.renderer.backgroundColor = backgroundColor;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
+
+function setText(string) {
+  t.text = string;
+  t.x = (window.innerWidth / 2) - (t.width / 2);
+  t.visible = true;
+}
+
+function gameOver() {
+  enemies.forEach((enemy) => {
+    const e = enemy;
+    e.visible = false;
+    return e;
+  });
+  markers.forEach((marker) => {
+    const m = marker;
+    m.visible = false;
+    return m;
+  });
+  enemyBullets.forEach((bullet) => {
+    const b = bullet;
+    b.visible = false;
+    return b;
+  });
+  bullets.forEach((bullet) => {
+    const b = bullet;
+    b.visible = false;
+    return b;
+  });
+  hero.visible = false;
+  setText('Hit ok to try again.');
+}
+
 // This function is called every frame
 function gameLoop(delta) {
   if (state === 'control') {
@@ -27,20 +59,18 @@ function gameLoop(delta) {
       t.visible = false;
       gameContainer.visible = true;
     } else if (bindIn !== false) {
-      t.text = bindIn;
-      t.x = (window.innerWidth / 2) - (t.width / 2);
+      setText(bindIn);
     }
   } else if (state === 'play') {
     getInput();
     handleMovementAndRotation(delta);
     if (input.pause_press) {
       state = 'pause';
-      t.text = 'PAUSED';
       t.style = { fontSize: 65, fill: textColor, letterSpacing: window.innerWidth / 10 };
-      t.x = (window.innerWidth / 2) - (t.width / 2);
-      t.visible = true;
+      setText('PAUSED');
       gameContainer.alpha = 0.3;
     }
+    // hero shooting
     heroBulletCurrentCooldown -= delta;
     if (heroBulletCurrentCooldown < -1) {
       heroBulletCurrentCooldown = -(Math.abs(heroBulletCurrentCooldown) % 1);
@@ -53,6 +83,18 @@ function gameLoop(delta) {
         }
         heroBulletCurrentCooldown += heroBulletCooldown;
       }
+    }
+    // hero life
+    if (hero.invincible > 0) {
+      hero.invincible -= delta;
+    }
+    if (hero.invincible <= 0) {
+      hero.invincible = 0;
+      hero.tint = 0xffffff;
+    }
+    if (hero.hp <= 0) {
+      gameOver();
+      state = 'continue?';
     }
     if (input.ok_press) {
       spawnEnemy();
@@ -75,7 +117,12 @@ function gameLoop(delta) {
       muted = sound.toggleMuteAll();
     }
   } else if (state === 'continue?') {
-    // TODO
+    getInput();
+    if (input.ok_press) {
+      state = 'play';
+      t.visible = false;
+      createHero();
+    }
   } else if (state === 'won') {
     // TODO
   }

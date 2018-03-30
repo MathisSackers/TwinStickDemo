@@ -35,6 +35,17 @@ function circleRectHit(circle, rectangle) {
   return false;
 }
 
+// whether to circles collide
+function circleHit(c1, c2) {
+  const distanceX = c1.x - c2.x;
+  const distanceY = c1.y - c2.y;
+  const distance = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY));
+  if (distance < (c1.width / 2) + (c2.width / 2)) {
+    return true;
+  }
+  return false;
+}
+
 // detect whether a bullet touches an enemy
 function hitScan() {
   // scan hero bullets first
@@ -83,5 +94,38 @@ function hitScan() {
       return b;
     }
     return bullet;
+  });
+  // hit by bullet
+  enemyBullets.forEach((enemyBullet) => {
+    if (enemyBullet.visible && hero.invincible === 0) {
+      const eb = enemyBullet;
+      if (circleHit(eb, hero)) {
+        if (!muted) {
+          // sound
+        }
+        hero.hp -= 1;
+        hero.invincible = heroInvincibility;
+        hero.tint = staggerColor;
+        eb.visible = false;
+      }
+      return eb;
+    }
+    return enemyBullet;
+  });
+  // hit by enemy
+  enemies.forEach((enemy) => {
+    if (enemy.visible && hero.invincible === 0) {
+      const e = enemy;
+      if (circleRectHit(hero, enemy)) {
+        if (!muted) {
+          // sound
+        }
+        hero.hp -= 1;
+        hero.invincible = heroInvincibility;
+        hero.tint = staggerColor;
+      }
+      return e;
+    }
+    return enemy;
   });
 }

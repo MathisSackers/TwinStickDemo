@@ -79,17 +79,18 @@ function spawnEnemy() {
 
 // This function creates the graphic for the hero
 function createHero() {
-  hero = new Graphics();
-  hero.beginFill(heroColor);
-
-  hero.drawPolygon([-15, 50, 15, 50, 0, 0]);
-  hero.endFill();
-
-
+  if (hero === undefined) {
+    hero = new Graphics();
+    hero.beginFill(heroColor);
+    hero.drawPolygon([-15, 50, 15, 50, 0, 0]);
+    hero.endFill();
+  }
   hero.x = window.innerWidth / 2;
   hero.y = window.innerHeight / 2;
-
+  hero.hp = heroHp;
+  hero.invincible = 0;
   hero.pivot.set(0, 25);
+  hero.visible = true;
 }
 
 // creates a marker

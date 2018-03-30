@@ -43,6 +43,10 @@ var t;
 var gameContainer;
 // the player character
 var hero;
+// Starting hp of the player
+var heroHp = 3;
+// Frames the player is invincible after getting hit
+var heroInvincibility = 30;
 // array of all player bullets
 var bullets = [];
 // array of all enemy bullets
