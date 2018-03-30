@@ -1,17 +1,3 @@
-var input = {
-  ok_press: false,
-  ok_down: false,
-  ok_release: false,
-  fire_press: false,
-  fire_down: false,
-  fire_release: false,
-  pause_press: false,
-  pause_down: false,
-  pause_release: false,
-};
-var gamepad = {bindings: {}};
-
-
 function getPercentage(rest, max, curr) {
   if (max > rest) {
     if (curr < rest) { return false; }
