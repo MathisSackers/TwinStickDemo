@@ -1,3 +1,9 @@
+// Aliases
+var {
+  Application, loader, Text, Container, Graphics,
+} = PIXI;
+// const resources = PIXI.loader.resources;
+// const Sprite = PIXI.Sprite;
 // globals
 var input = {
   ok_press: false,
