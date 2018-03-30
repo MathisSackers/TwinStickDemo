@@ -122,7 +122,11 @@ function updateGoal(enemy) {
 // updates the desired direction of the enemy
 function updateDirection(enemy) {
   let e = enemy;
-  if (e.goalX === undefined || (Math.abs(e.x - e.goalX) < 20 && Math.abs(e.y - e.goalY) < 20)) {
+  if (
+    e.goalX === undefined ||
+    (Math.abs(e.x - e.goalX) < 20 && Math.abs(e.y - e.goalY) < 20) ||
+    (Math.abs(hero.x - e.goalX) < 30 && Math.abs(hero.y - e.goalY) < 30)
+  ) {
     e = updateGoal(e);
   }
   let goalX = (e.x < e.goalX) ? 1 : -1;
@@ -135,6 +139,7 @@ function updateDirection(enemy) {
   }
   e.dx = goalX;
   e.dy = goalY;
+  // avoid hero
   const distToHeroX = Math.abs(e.x - hero.x);
   const distToHeroY = Math.abs(e.y - hero.y);
   const distToHero = Math.sqrt((distToHeroX * distToHeroX) + (distToHeroY * distToHeroY));
