@@ -27,6 +27,8 @@ var textColor = 0xe1ddcf;
 var bulletColor = 0xf9efc7;
 // color for enemies
 var enemyColor = 0xe5b195;
+// color for staggered enemies
+var staggerColor = 0xffb195;
 // color for markers
 var markerColor = 0x00ffff;
 // current gamestate
@@ -47,6 +49,8 @@ var markers = [];
 var markerHp = 20;
 // most pixels enemies can move per frame
 var enemySpeed = 4;
+// frames an enemy is staggered after getting hit
+var enemyStagger = 5;
 // amount of times enemy needs to be hit to die
 var enemyHp = 10;
 // most pixels you can move per frame

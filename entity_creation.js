@@ -49,6 +49,7 @@ function createEnemy() {
   enemy.dy = Math.random() * 5;
   enemy.dx = -5 + (Math.random() * 10);
   enemy.hp = enemyHp;
+  enemy.stagger = 0;
   enemies.push(enemy);
   gameContainer.addChild(enemy);
 }
@@ -65,6 +66,8 @@ function spawnEnemy() {
       e.dx = -5 + (Math.random() * 10);
       e.hp = enemyHp;
       e.visible = true;
+      e.stagger = 0;
+      e.tint = 0xffffff;
       needNewEnemy = false;
       return e;
     }

@@ -128,6 +128,17 @@ function moveEnemy(enemy, delta) {
 function moveEnemies(delta) {
   enemies.forEach((enemy) => {
     if (enemy.visible) {
+      if (enemy.stagger > 1) {
+        const e = enemy;
+        e.stagger -= 1;
+        return e;
+      }
+      if (enemy.stagger === 1) {
+        const e = enemy;
+        e.stagger = 0;
+        e.tint = 0xffffff;
+        return e;
+      }
       return moveEnemy(enemy, delta);
     }
     return enemy;

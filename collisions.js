@@ -41,6 +41,8 @@ function hitScan() {
             hitMarker(b);
             b.visible = false;
             e.hp -= 1;
+            e.stagger = enemyStagger;
+            e.tint = staggerColor;
             if (e.hp <= 0) {
               e.visible = false;
             }
