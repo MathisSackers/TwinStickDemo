@@ -17,8 +17,18 @@ var input = {
   pause_release: false,
 };
 var gamepad = {bindings: {}};
-// color for foreground
-var lightGrey = 0xe1ddcf;
+// color for background
+var backgroundColor = 0x65635a;
+// color for hero
+var heroColor = 0xe1ddcf;
+// color for texts
+var textColor = 0xe1ddcf;
+// color for bullets
+var bulletColor = 0xf9efc7;
+// color for enemies
+var enemyColor = 0xe5b195;
+// color for markers
+var markerColor = 0x00ffff;
 // current gamestate
 var state = 'load';
 // text object
@@ -31,6 +41,10 @@ var hero;
 var bullets = [];
 // array of all enemies
 var enemies = [];
+// array of all hit markers
+var markers = [];
+// frames a marker is visible
+var markerHp = 20;
 // most pixels enemies can move per frame
 var enemySpeed = 4;
 // amount of times enemy needs to be hit to die

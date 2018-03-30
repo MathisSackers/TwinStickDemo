@@ -13,7 +13,7 @@ app.renderer.autoResize = true;
 window.addEventListener('resize', () => { app.renderer.resize(window.innerWidth, window.innerHeight); });
 app.renderer.resize(window.innerWidth, window.innerHeight);
 // Set the background dark grey
-app.renderer.backgroundColor = 0x65635a;
+app.renderer.backgroundColor = backgroundColor;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
@@ -36,7 +36,7 @@ function gameLoop(delta) {
     if (input.pause_press) {
       state = 'pause';
       t.text = 'PAUSED';
-      t.style = { fontSize: 65, fill: lightGrey, letterSpacing: window.innerWidth / 10 };
+      t.style = { fontSize: 65, fill: textColor, letterSpacing: window.innerWidth / 10 };
       t.x = (window.innerWidth / 2) - (t.width / 2);
       t.visible = true;
       gameContainer.alpha = 0.3;
@@ -57,12 +57,13 @@ function gameLoop(delta) {
     hitScan();
     moveBullets(delta);
     moveEnemies(delta);
+    moveHitMarkers();
   } else if (state === 'pause') {
     getInput();
     if (input.pause_press) {
       state = 'play';
       t.visible = false;
-      t.style = { fill: lightGrey };
+      t.style = { fill: textColor };
       gameContainer.alpha = 1;
     }
   } else if (state === 'continue?') {
@@ -82,7 +83,7 @@ function setup() {
   app.stage.addChild(gameContainer);
 
   t = new Text('...');
-  t.style = { fill: lightGrey };
+  t.style = { fill: textColor };
   t.x = (window.innerWidth / 2) - (t.width / 2);
   t.y = window.innerHeight / 3;
   app.stage.addChild(t);

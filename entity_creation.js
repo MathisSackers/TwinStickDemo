@@ -3,7 +3,7 @@
 // create bullet
 function createBullet() {
   const bullet = new Graphics();
-  bullet.beginFill(lightGrey);
+  bullet.beginFill(bulletColor);
   bullet.drawRect(0, 0, 6, 12);
   bullet.endFill();
   bullet.pivot.set(3, 25);
@@ -41,7 +41,7 @@ function fire() {
 // create an Enemy
 function createEnemy() {
   const enemy = new Graphics();
-  enemy.beginFill(lightGrey);
+  enemy.beginFill(enemyColor);
   enemy.drawRect(0, 0, 50, 50);
   enemy.endFill();
   enemy.x = Math.random() * window.innerWidth;
@@ -78,7 +78,7 @@ function spawnEnemy() {
 // This function creates the graphic for the hero
 function createHero() {
   hero = new Graphics();
-  hero.beginFill(lightGrey);
+  hero.beginFill(heroColor);
 
   hero.drawPolygon([-15, 50, 15, 50, 0, 0]);
   hero.endFill();
@@ -88,4 +88,43 @@ function createHero() {
   hero.y = window.innerHeight / 2;
 
   hero.pivot.set(0, 25);
+}
+
+// gets a marker
+function createHitMarker(bullet) {
+  const marker = new Graphics();
+  marker.lineStyle(3, markerColor, 1);
+  marker.drawRect(0, 0, 100, 100);
+  marker.pivot.set(50, 50);
+  marker.size = 0.5 + (0.5 * Math.random());
+  marker.scale.set(marker.size);
+  marker.x = bullet.x;
+  marker.y = bullet.y;
+  marker.rotation = Math.random() * Math.PI;
+  marker.hp = markerHp;
+  markers.push(marker);
+  gameContainer.addChild(marker);
+}
+
+// gets a marker or creates a new one
+function hitMarker(bullet) {
+  let needNewMarker = true;
+  markers.forEach((marker) => {
+    if (needNewMarker && !marker.visible) {
+      const m = marker;
+      m.x = bullet.x;
+      m.y = bullet.y;
+      m.rotation = Math.random() * Math.PI;
+      m.hp = markerHp;
+      m.size = 0.5 + (0.5 * Math.random());
+      m.scale.set(m.size);
+      m.visible = true;
+      needNewMarker = false;
+      return m;
+    }
+    return marker;
+  });
+  if (needNewMarker) {
+    createHitMarker(bullet);
+  }
 }

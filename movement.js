@@ -133,3 +133,32 @@ function moveEnemies(delta) {
     return enemy;
   });
 }
+
+// rotates a marker
+function moveMarker(marker) {
+  const m = marker;
+  m.hp -= 1;
+  if (m.hp % 10 === 0) {
+    m.rotation += 0.8;
+    m.size /= 2;
+    m.scale.set(m.size);
+  }
+  m.alpha -= 1.5 / markerHp;
+  if (m.hp < 0) {
+    m.alpha = 1;
+    m.size = 1;
+    m.scale.set(m.size);
+    m.visible = false;
+  }
+  return m;
+}
+
+// rotates visible markers
+function moveHitMarkers() {
+  markers.forEach((marker) => {
+    if (marker.visible) {
+      return moveMarker(marker);
+    }
+    return marker;
+  });
+}
