@@ -6,6 +6,10 @@ var {
 // const Sprite = PIXI.Sprite;
 // globals
 var input = {
+  left_x: 0,
+  left_y: 0,
+  right_x: 0,
+  right_y: 0,
   ok_press: false,
   ok_down: false,
   ok_release: false,
@@ -16,7 +20,6 @@ var input = {
   pause_down: false,
   pause_release: false,
 };
-var gamepad = {bindings: {}};
 // color for background
 var backgroundColor = 0x65635a;
 // color for hero
