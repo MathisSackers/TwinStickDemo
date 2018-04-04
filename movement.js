@@ -66,7 +66,7 @@ function calculateRotation(x, y, curr, speed) {
 }
 
 // Moves and rotates hero depending on input
-function handleMovementAndRotation(delta) {
+function handleMovementAndRotation(input, delta) {
   // Movement
   const move = calculateMovement(
     hero.x, hero.y,

@@ -17,6 +17,8 @@ app.renderer.backgroundColor = backgroundColor;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
+// connected controllers
+let connectedPads = [];
 
 function setText(string) {
   t.text = string;
@@ -52,30 +54,34 @@ function gameOver() {
 // This function is called every frame
 function gameLoop(delta) {
   if (state === 'control') {
-    // get input
-    const bindIn = bindControls();
-    if (bindIn === true) {
-      state = 'play';
-      t.visible = false;
-      gameContainer.visible = true;
-    } else if (bindIn !== false) {
-      setText(bindIn);
+    if (connectedPads.length === 0) {
+      connectedPads = connectedPads.concat(getPads());
+    } else {
+      // get input
+      const bindIn = bindControls(connectedPads[0]);
+      if (bindIn === true) {
+        state = 'play';
+        t.visible = false;
+        gameContainer.visible = true;
+      } else if (bindIn !== false) {
+        setText(bindIn);
+      }
     }
   } else if (state === 'play') {
-    getInput();
-    handleMovementAndRotation(delta);
-    if (input.pause_press) {
+    const input = getInput(connectedPads[0]);
+    if (input.B_press) {
       state = 'pause';
       t.style = { fontSize: 65, fill: textColor, letterSpacing: window.innerWidth / 10 };
       setText('PAUSED');
       gameContainer.alpha = 0.3;
     }
+    handleMovementAndRotation(input, delta);
     // hero shooting
     heroBulletCurrentCooldown -= delta;
     if (heroBulletCurrentCooldown < -1) {
       heroBulletCurrentCooldown = -(Math.abs(heroBulletCurrentCooldown) % 1);
     }
-    if (input.fire_down) {
+    if (input.R1_down) {
       if (heroBulletCurrentCooldown < 0) {
         fire();
         if (!muted) {
@@ -96,7 +102,7 @@ function gameLoop(delta) {
       gameOver();
       state = 'continue?';
     }
-    if (input.ok_press) {
+    if (input.A_press) {
       spawnEnemy();
     }
     hitScan();
@@ -106,19 +112,19 @@ function gameLoop(delta) {
     enemiesFire(delta);
     moveHitMarkers();
   } else if (state === 'pause') {
-    getInput();
-    if (input.pause_press) {
+    const input = getInput(connectedPads[0]);
+    if (input.B_press) {
       state = 'play';
       t.visible = false;
       t.style = { fill: textColor };
       gameContainer.alpha = 1;
     }
-    if (input.ok_press) {
+    if (input.A_press) {
       muted = sound.toggleMuteAll();
     }
   } else if (state === 'continue?') {
-    getInput();
-    if (input.ok_press) {
+    const input = getInput(connectedPads[0]);
+    if (input.A_press) {
       state = 'play';
       t.visible = false;
       createHero();
@@ -144,7 +150,7 @@ function setup() {
   gameContainer.visible = false;
   app.stage.addChild(gameContainer);
 
-  t = new Text('...');
+  t = new Text('Connect a controller (or press A to activate it)');
   t.style = { fill: textColor };
   t.x = (window.innerWidth / 2) - (t.width / 2);
   t.y = window.innerHeight / 3;
