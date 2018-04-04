@@ -1,3 +1,5 @@
+// handles all collision checks and their effects
+
 // adapted from https://github.com/kittykatattack/learningPixi#collision
 function rectHit(rect1, rect2) {
   const r1 = rect1;

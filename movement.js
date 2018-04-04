@@ -1,14 +1,16 @@
+// calculating movement and rotation of entities
+
 // this calculates the new position given the current one
-function calculateMovement(currx, curry, bounds, x, y, speed) {
-  let len = Math.sqrt((x * x) + (y * y));
-  const point = { x: currx, y: curry };
+function calculateMovement(object, bounds, delta) {
+  let len = Math.sqrt((object.dx * object.dx) + (object.dy * object.dy));
+  const point = { x: object.x, y: object.y };
   // if we're not too fast no need to slow us
   if (len < 1) {
     len = 1;
   }
   if (len !== 0) {
-    point.x += (speed * x) / len;
-    point.y += (speed * y) / len;
+    point.x += (object.speed * object.dx * delta) / len;
+    point.y += (object.speed * object.dy * delta) / len;
   }
 
   // check out of bounds
@@ -68,18 +70,19 @@ function calculateRotation(x, y, curr, speed) {
 // Moves and rotates hero depending on input
 function handleMovementAndRotation(input, delta) {
   // Movement
+  hero.dx = input.left_x;
+  hero.dy = input.left_y;
   const move = calculateMovement(
-    hero.x, hero.y,
+    hero,
     hero.height,
-    input.left_x, input.left_y,
-    delta * heroSpeed,
+    delta,
   );
   hero.x = move.x;
   hero.y = move.y;
   // Roatation
   if (Math.abs(input.right_y) > 0.5 || Math.abs(input.right_x) > 0.5) {
     // amount we can rotate _this_ frame
-    const speed = heroRotationSpeed * delta;
+    const speed = hero.rotationSpeed * delta;
     hero.rotation = calculateRotation(input.right_x, -input.right_y, hero.rotation, speed);
   }
 }
@@ -87,7 +90,7 @@ function handleMovementAndRotation(input, delta) {
 // moves single bullet
 function moveBullet(bullet, delta) {
   const b = bullet;
-  const p = calculateMovement(b.x, b.y, -2 * b.height, b.dx, b.dy, delta * heroBulletSpeed);
+  const p = calculateMovement(b, -2 * b.height, delta);
   b.x = p.x;
   b.y = p.y;
   if (
@@ -158,7 +161,7 @@ function updateDirection(enemy) {
 // moves single enemy
 function moveEnemy(enemy, delta) {
   const e = updateDirection(enemy);
-  const p = calculateMovement(e.x, e.y, -2 * e.height, e.dx, e.dy, delta * enemySpeed);
+  const p = calculateMovement(e, -2 * e.height, delta);
   e.x = p.x;
   e.y = p.y;
   if (
@@ -200,7 +203,7 @@ function moveMarker(marker) {
     m.size /= 2;
     m.scale.set(m.size);
   }
-  m.alpha -= 1.5 / markerHp;
+  m.alpha -= 1.5 / marker.maxHp;
   if (m.hp < 0) {
     m.alpha = 1;
     m.size = 1;
@@ -223,7 +226,7 @@ function moveHitMarkers() {
 // moves a single enemy bullet
 function moveEnemyBullet(bullet, delta) {
   const b = bullet;
-  const p = calculateMovement(b.x, b.y, -2 * b.height, b.dx, b.dy, delta * enemyBulletSpeed);
+  const p = calculateMovement(b, -2 * b.height, delta);
   b.x = p.x;
   b.y = p.y;
   if (

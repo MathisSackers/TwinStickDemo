@@ -1,5 +1,33 @@
 // handles creation of bullets, enemies and the player
 
+// entity parameters
+// Starting hp of the player
+const heroHp = 3;
+// Frames the player is invincible after getting hit
+const heroInvincibility = 30;
+// frames a marker is visible
+const markerHp = 20;
+// most pixels enemies can move per frame
+const enemySpeed = 4;
+// frames an enemy is staggered after getting hit
+const enemyStagger = 5;
+// amount of times enemy needs to be hit to die
+const enemyHp = 10;
+// enemy cooldown after shooting
+const enemyBulletCooldown = 30;
+// speed of enemy bullets
+const enemyBulletSpeed = 3;
+// most pixels you can move per frame
+const heroSpeed = 5;
+// most pixels your bullet can move per frame
+const heroBulletSpeed = 7;
+// frames until you can shoot again
+const heroBulletCooldown = 3;
+// most rads you can turn per frame
+const heroRotationSpeed = 0.2;
+// container for all elements of the game
+const gameContainer = new Container();
+
 // create bullet
 function createBullet() {
   const bullet = new Graphics();
@@ -12,6 +40,7 @@ function createBullet() {
   bullet.rotation = hero.rotation;
   bullet.dy = -Math.cos(bullet.rotation);
   bullet.dx = Math.sin(bullet.rotation);
+  bullet.speed = heroBulletSpeed;
   bullets.push(bullet);
   gameContainer.addChild(bullet);
 }
@@ -21,15 +50,16 @@ function fire() {
   let needNewBullet = true;
   bullets.forEach((bullet) => {
     if (needNewBullet && !bullet.visible) {
-      const s = bullet;
-      s.x = hero.x;
-      s.y = hero.y;
-      s.rotation = hero.rotation;
-      s.dy = -Math.cos(s.rotation);
-      s.dx = Math.sin(s.rotation);
-      s.visible = true;
+      const b = bullet;
+      b.x = hero.x;
+      b.y = hero.y;
+      b.rotation = hero.rotation;
+      b.dy = -Math.cos(b.rotation);
+      b.dx = Math.sin(b.rotation);
+      b.visible = true;
+      b.speed = heroBulletSpeed;
       needNewBullet = false;
-      return s;
+      return b;
     }
     return bullet;
   });
@@ -47,6 +77,9 @@ function createEnemy() {
   enemy.pivot.set(25, 25);
   enemy.x = Math.random() * window.innerWidth;
   enemy.y = -enemy.height;
+  enemy.maxBulletCooldown = enemyBulletCooldown;
+  enemy.maxStagger = enemyStagger;
+  enemy.speed = enemySpeed;
   enemy.hp = enemyHp;
   enemy.bulletCooldown = enemyBulletCooldown * 2;
   enemy.stagger = 0;
@@ -60,13 +93,16 @@ function spawnEnemy() {
   enemies.forEach((enemy) => {
     if (needNewEnemy && !enemy.visible) {
       const e = enemy;
+      e.visible = true;
       e.x = Math.random() * window.innerWidth;
       e.y = -e.height;
+      e.tint = 0xffffff;
+      e.maxBulletCooldown = enemyBulletCooldown;
+      e.maxStagger = enemyStagger;
+      e.speed = enemySpeed;
       e.hp = enemyHp;
       e.bulletCooldown = enemyBulletCooldown * 2;
-      e.visible = true;
       e.stagger = 0;
-      e.tint = 0xffffff;
       needNewEnemy = false;
       return e;
     }
@@ -87,10 +123,16 @@ function createHero() {
   }
   hero.x = window.innerWidth / 2;
   hero.y = window.innerHeight / 2;
+  hero.maxInvincibility = heroInvincibility;
   hero.hp = heroHp;
+  hero.speed = heroSpeed;
+  hero.maxBulletCooldown = heroBulletCooldown;
+  hero.rotationSpeed = heroRotationSpeed;
+  hero.bulletCooldown = -1;
   hero.invincible = 0;
   hero.pivot.set(0, 25);
   hero.visible = true;
+  gameContainer.addChild(hero);
 }
 
 // creates a marker
@@ -105,6 +147,7 @@ function createHitMarker(bullet) {
   marker.y = bullet.y;
   marker.rotation = Math.random() * Math.PI;
   marker.hp = markerHp;
+  marker.maxHp = markerHp;
   markers.push(marker);
   gameContainer.addChild(marker);
 }
@@ -119,6 +162,7 @@ function hitMarker(bullet) {
       m.y = bullet.y;
       m.rotation = Math.random() * Math.PI;
       m.hp = markerHp;
+      m.maxHp = markerHp;
       m.size = 0.5 + (0.5 * Math.random());
       m.scale.set(m.size);
       m.visible = true;
@@ -146,6 +190,7 @@ function createEnemyBullet(enemy) {
   const direction = (Math.random() < 0.4) ? heroDirection : Math.random() * 2 * Math.PI;
   bullet.dy = Math.cos(direction);
   bullet.dx = Math.sin(direction);
+  bullet.speed = enemyBulletSpeed;
   enemyBullets.push(bullet);
   gameContainer.addChild(bullet);
 }
@@ -164,6 +209,7 @@ function enemyBullet(enemy) {
         heroDirection : Math.random() * 2 * Math.PI;
       b.dy = Math.cos(direction);
       b.dx = Math.sin(direction);
+      b.speed = enemyBulletSpeed;
       b.visible = true;
       needNewBullet = false;
       return b;
@@ -191,4 +237,42 @@ function enemiesFire(delta) {
     }
     return e;
   });
+}
+
+// sets everything invisible
+function setEntitiesInvisible() {
+  enemies.forEach((enemy) => {
+    const e = enemy;
+    e.visible = false;
+    return e;
+  });
+  markers.forEach((marker) => {
+    const m = marker;
+    m.visible = false;
+    return m;
+  });
+  enemyBullets.forEach((bullet) => {
+    const b = bullet;
+    b.visible = false;
+    return b;
+  });
+  bullets.forEach((bullet) => {
+    const b = bullet;
+    b.visible = false;
+    return b;
+  });
+  hero.visible = false;
+}
+
+function setGameAlpha(pct) {
+  if (pct === 0.0) {
+    gameContainer.visible = false;
+    return;
+  }
+  gameContainer.alpha = pct;
+  gameContainer.visible = true;
+}
+
+function getContainer() {
+  return gameContainer;
 }

@@ -1,3 +1,12 @@
+// 'main' class, contains the game setup and loop
+
+// Vars for this file
+// connected controllers
+let connectedPads = [];
+// current gamestate
+let state = 'load';
+// text object
+let t;
 // Create a Pixi Application
 const app = new Application({
   width: 1,
@@ -17,8 +26,6 @@ app.renderer.backgroundColor = backgroundColor;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
-// connected controllers
-let connectedPads = [];
 
 function setText(string) {
   t.text = string;
@@ -27,27 +34,7 @@ function setText(string) {
 }
 
 function gameOver() {
-  enemies.forEach((enemy) => {
-    const e = enemy;
-    e.visible = false;
-    return e;
-  });
-  markers.forEach((marker) => {
-    const m = marker;
-    m.visible = false;
-    return m;
-  });
-  enemyBullets.forEach((bullet) => {
-    const b = bullet;
-    b.visible = false;
-    return b;
-  });
-  bullets.forEach((bullet) => {
-    const b = bullet;
-    b.visible = false;
-    return b;
-  });
-  hero.visible = false;
+  setEntitiesInvisible();
   setText('Hit ok to try again.');
 }
 
@@ -62,7 +49,7 @@ function gameLoop(delta) {
       if (bindIn === true) {
         state = 'play';
         t.visible = false;
-        gameContainer.visible = true;
+        setGameAlpha(1.0);
       } else if (bindIn !== false) {
         setText(bindIn);
       }
@@ -73,21 +60,21 @@ function gameLoop(delta) {
       state = 'pause';
       t.style = { fontSize: 65, fill: textColor, letterSpacing: window.innerWidth / 10 };
       setText('PAUSED');
-      gameContainer.alpha = 0.3;
+      setGameAlpha(0.3);
     }
     handleMovementAndRotation(input, delta);
     // hero shooting
-    heroBulletCurrentCooldown -= delta;
-    if (heroBulletCurrentCooldown < -1) {
-      heroBulletCurrentCooldown = -(Math.abs(heroBulletCurrentCooldown) % 1);
+    hero.bulletCooldown -= delta;
+    if (hero.bulletCooldown < -1) {
+      hero.bulletCooldown = -(Math.abs(hero.bulletCooldown) % 1);
     }
     if (input.R1_down) {
-      if (heroBulletCurrentCooldown < 0) {
+      if (hero.bulletCooldown < 0) {
         fire();
         if (!muted) {
           shootSound.play(`shoot${Math.ceil(Math.random() * 8)}`);
         }
-        heroBulletCurrentCooldown += heroBulletCooldown;
+        hero.bulletCooldown += hero.maxBulletCooldown;
       }
     }
     // hero life
@@ -145,10 +132,8 @@ function setup() {
 
   // create hero
   createHero();
-  gameContainer = new Container();
-  gameContainer.addChild(hero);
-  gameContainer.visible = false;
-  app.stage.addChild(gameContainer);
+  app.stage.addChild(getContainer());
+  setGameAlpha(0.0);
 
   t = new Text('Connect a controller (or press A to activate it)');
   t.style = { fill: textColor };
