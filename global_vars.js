@@ -20,6 +20,7 @@ var input = {
   pause_down: false,
   pause_release: false,
 };
+var gamepad = {bindings: {}};
 // color for background
 var backgroundColor = 0x65635a;
 // color for hero

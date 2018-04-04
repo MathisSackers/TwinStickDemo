@@ -17,4 +17,3 @@ Check it out live over [here.](https://mathissackers.github.io/TwinStickDemo/)
 Currently this Demo is using:
 * [Pixi.js](http://www.pixijs.com/) for everything you see.
 * [Pixi-sound](https://github.com/pixijs/pixi-sound) for everything you hear.
-* [Kallaspriit's gamepad library](https://github.com/kallaspriit/HTML5-JavaScript-Gamepad-Controller-Library) for all the input.
