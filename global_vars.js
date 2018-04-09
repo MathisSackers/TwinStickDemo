@@ -10,26 +10,12 @@ const {
 } = PIXI;
 
 // globals
-// color for background
-const backgroundColor = 0x65635a;
-// color for hero
-const heroColor = 0xe1ddcf;
-// color for texts
-const textColor = 0xe1ddcf;
-// color for bullets
-const bulletColor = 0xf9efc7;
-// color for enemies
-const enemyColor = 0xe5b195;
-// color for enemy bullets
-const enemyBulletColor = 0xffb195;
-// color for staggered enemies
-const staggerColor = 0xffb195;
-// color for markers
-const markerColor = 0x00ffff;
 // whether the game is muted or not
 let muted = false;
 // the player character
 let hero;
+// container for all elements of the game
+const gameContainer = new Container();
 // array of all player bullets
 const bullets = [];
 // array of all enemy bullets

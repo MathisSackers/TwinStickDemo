@@ -53,81 +53,41 @@ function hitScan() {
   // scan hero bullets first
   bullets.forEach((bullet) => {
     // bullet hit
-    const b = bullet;
-    if (b.visible) {
+    if (bullet.onScreen) {
       enemyBullets.forEach((enemyBullet) => {
-        if (enemyBullet.visible && b.visible) {
-          const eb = enemyBullet;
-          if (circleRectHit(enemyBullet, bullet)) {
-            if (!muted) {
-              // sound
-            }
-            b.visible = false;
-            eb.visible = false;
+        if (enemyBullet.onScreen && bullet.onScreen && bullet.collides(enemyBullet.graphic, 'circle')) {
+          if (!muted) {
+            // sound
           }
-          return eb;
+          bullet.remove();
+          enemyBullet.remove();
         }
-        return enemyBullet;
       });
     }
     // enemy hit
-    if (b.visible) {
+    if (bullet.onScreen) {
       enemies.forEach((enemy) => {
-        if (enemy.visible && b.visible) {
-          const e = enemy;
-          if (rectHit(enemy, bullet)) {
-            if (!muted) {
-              sound.play('opponentHit');
-            }
-            hitMarker(b);
-            b.visible = false;
-            e.hp -= 1;
-            if (e.hp <= 0) {
-              e.visible = false;
-              return e;
-            }
-            e.stagger = enemyStagger;
-            e.tint = staggerColor;
-          }
-          return e;
+        if (enemy.onScreen && bullet.onScreen && bullet.collides(enemy.graphic, 'rectangle')) {
+          hitMarker(bullet);
+          bullet.remove();
+          enemy.hit(1);
         }
-        return enemy;
       });
-      return b;
     }
-    return bullet;
   });
   // hit by bullet
   enemyBullets.forEach((enemyBullet) => {
-    if (enemyBullet.visible && hero.invincible === 0) {
-      const eb = enemyBullet;
-      if (circleHit(eb, hero)) {
-        if (!muted) {
-          // sound
-        }
-        hero.hp -= 1;
-        hero.invincible = heroInvincibility;
-        hero.tint = staggerColor;
-        eb.visible = false;
-      }
-      return eb;
+    if (enemyBullet.onScreen && hero.invincible === 0 && enemyBullet.collides(hero.graphic, 'circle')) {
+      hero.hit();
+      enemyBullet.remove();
     }
-    return enemyBullet;
   });
   // hit by enemy
   enemies.forEach((enemy) => {
-    if (enemy.visible && hero.invincible === 0) {
-      const e = enemy;
-      if (circleRectHit(hero, enemy)) {
-        if (!muted) {
-          // sound
-        }
-        hero.hp -= 1;
-        hero.invincible = heroInvincibility;
-        hero.tint = staggerColor;
+    if (enemy.onScreen) {
+      if (enemy.collides(hero.graphic, 'circle')) {
+        hero.hit();
       }
-      return e;
     }
-    return enemy;
   });
 }

@@ -1,12 +1,17 @@
 // 'main' class, contains the game setup and loop
 
 // Vars for this file
+// color for background
+const BACKGROUND_COLOR = 0x65635a;
+// color for texts
+const TEXT_COLOR = 0xe1ddcf;
 // connected controllers
 let connectedPads = [];
 // current gamestate
 let state = 'load';
 // text object
 let t;
+
 // Create a Pixi Application
 const app = new Application({
   width: 1,
@@ -22,7 +27,7 @@ app.renderer.autoResize = true;
 window.addEventListener('resize', () => { app.renderer.resize(window.innerWidth, window.innerHeight); });
 app.renderer.resize(window.innerWidth, window.innerHeight);
 // Set the background dark grey
-app.renderer.backgroundColor = backgroundColor;
+app.renderer.backgroundColor = BACKGROUND_COLOR;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 
@@ -49,61 +54,43 @@ function gameLoop(delta) {
       if (bindIn === true) {
         state = 'play';
         t.visible = false;
-        setGameAlpha(1.0);
+        gameContainer.alpha = 1.0;
+        gameContainer.visible = true;
       } else if (bindIn !== false) {
         setText(bindIn);
       }
     }
   } else if (state === 'play') {
     const input = getInput(connectedPads[0]);
+    // global inputs
+    // pause
     if (input.B_press) {
       state = 'pause';
-      t.style = { fontSize: 65, fill: textColor, letterSpacing: window.innerWidth / 10 };
+      t.style = { fontSize: 65, fill: TEXT_COLOR, letterSpacing: window.innerWidth / 10 };
       setText('PAUSED');
-      setGameAlpha(0.3);
+      gameContainer.alpha = 0.3;
     }
-    handleMovementAndRotation(input, delta);
-    // hero shooting
-    hero.bulletCooldown -= delta;
-    if (hero.bulletCooldown < -1) {
-      hero.bulletCooldown = -(Math.abs(hero.bulletCooldown) % 1);
+    // spawning enemies
+    if (input.A_press) {
+      spawnEnemy();
     }
-    if (input.R1_down) {
-      if (hero.bulletCooldown < 0) {
-        fire();
-        if (!muted) {
-          shootSound.play(`shoot${Math.ceil(Math.random() * 8)}`);
-        }
-        hero.bulletCooldown += hero.maxBulletCooldown;
-      }
-    }
-    // hero life
-    if (hero.invincible > 0) {
-      hero.invincible -= delta;
-    }
-    if (hero.invincible <= 0) {
-      hero.invincible = 0;
-      hero.tint = 0xffffff;
-    }
+    // this guy handdles his own input
+    hero.update(input, delta);
     if (hero.hp <= 0) {
       gameOver();
       state = 'continue?';
     }
-    if (input.A_press) {
-      spawnEnemy();
-    }
     hitScan();
     moveBullets(delta);
     moveEnemyBullets(delta);
-    moveEnemies(delta);
-    enemiesFire(delta);
+    updateEnemies(delta);
     moveHitMarkers();
   } else if (state === 'pause') {
     const input = getInput(connectedPads[0]);
     if (input.B_press) {
       state = 'play';
       t.visible = false;
-      t.style = { fill: textColor };
+      t.style = { fill: TEXT_COLOR };
       gameContainer.alpha = 1;
     }
     if (input.A_press) {
@@ -132,11 +119,11 @@ function setup() {
 
   // create hero
   createHero();
-  app.stage.addChild(getContainer());
-  setGameAlpha(0.0);
+  app.stage.addChild(gameContainer);
+  gameContainer.visible = false;
 
   t = new Text('Connect a controller (or press A to activate it)');
-  t.style = { fill: textColor };
+  t.style = { fill: TEXT_COLOR };
   t.x = (window.innerWidth / 2) - (t.width / 2);
   t.y = window.innerHeight / 3;
   app.stage.addChild(t);
