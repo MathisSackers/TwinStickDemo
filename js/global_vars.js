@@ -10,12 +10,14 @@ const {
 } = PIXI;
 
 // globals
-// whether the game is muted or not
-let muted = false;
 // the player character
 let hero;
 // container for all elements of the game
 const gameContainer = new Container();
+// object for gamerelated variables;
+const game = {};
+// whether the game is muted or not
+let muted = false;
 // array of all player bullets
 const bullets = [];
 // array of all enemy bullets

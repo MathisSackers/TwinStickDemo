@@ -3,14 +3,8 @@
 // Vars for this file
 // color for background
 const BACKGROUND_COLOR = 0x65635a;
-// color for texts
-const TEXT_COLOR = 0xe1ddcf;
 // connected controllers
-let connectedPads = [];
-// current gamestate
-let state = 'load';
-// text object
-let t;
+game.connectedPads = [];
 
 // Create a Pixi Application
 const app = new Application({
@@ -32,80 +26,9 @@ app.renderer.backgroundColor = BACKGROUND_COLOR;
 document.body.appendChild(app.view);
 
 
-function setText(string) {
-  t.text = string;
-  t.x = (window.innerWidth / 2) - (t.width / 2);
-  t.visible = true;
-}
-
-function gameOver() {
-  setEntitiesInvisible();
-  setText('Hit ok to try again.');
-}
-
 // This function is called every frame
 function gameLoop(delta) {
-  if (state === 'control') {
-    if (connectedPads.length === 0) {
-      connectedPads = connectedPads.concat(getPads());
-    } else {
-      // get input
-      const bindIn = bindControls(connectedPads[0]);
-      if (bindIn === true) {
-        state = 'play';
-        t.visible = false;
-        gameContainer.alpha = 1.0;
-        gameContainer.visible = true;
-      } else if (bindIn !== false) {
-        setText(bindIn);
-      }
-    }
-  } else if (state === 'play') {
-    const input = getInput(connectedPads[0]);
-    // global inputs
-    // pause
-    if (input.B_press) {
-      state = 'pause';
-      t.style = { fontSize: 65, fill: TEXT_COLOR, letterSpacing: window.innerWidth / 10 };
-      setText('PAUSED');
-      gameContainer.alpha = 0.3;
-    }
-    // spawning enemies
-    if (input.A_press) {
-      spawnEnemy();
-    }
-    // this guy handdles his own input
-    hero.update(input, delta);
-    if (hero.hp <= 0) {
-      gameOver();
-      state = 'continue?';
-    }
-    hitScan();
-    moveBullets(delta);
-    moveEnemyBullets(delta);
-    updateEnemies(delta);
-    moveHitMarkers();
-  } else if (state === 'pause') {
-    const input = getInput(connectedPads[0]);
-    if (input.B_press) {
-      state = 'play';
-      t.visible = false;
-      t.style = { fill: TEXT_COLOR };
-      gameContainer.alpha = 1;
-    }
-    if (input.A_press) {
-      muted = sound.toggleMuteAll();
-    }
-  } else if (state === 'continue?') {
-    const input = getInput(connectedPads[0]);
-    if (input.A_press) {
-      state = 'play';
-      t.visible = false;
-      createHero();
-    }
-  } else if (state === 'won') {
-    // TODO
-  }
+  game.statemachine.update(delta);
 }
 
 // This setup function will run when the images have loaded
@@ -117,19 +40,15 @@ function setup() {
     preload: true,
   });
 
-  // create hero
-  createHero();
+  // easier access;
+  game.stage = app.stage;
+
+  // container for all graphics
   app.stage.addChild(gameContainer);
   gameContainer.visible = false;
 
-  t = new Text('Connect a controller (or press A to activate it)');
-  t.style = { fill: TEXT_COLOR };
-  t.x = (window.innerWidth / 2) - (t.width / 2);
-  t.y = window.innerHeight / 3;
-  app.stage.addChild(t);
-
-  state = 'control';
-
+  // current gamestate
+  game.statemachine = new StateMachine();
   // start the gameloop
   app.ticker.add(delta => gameLoop(delta));
 }
