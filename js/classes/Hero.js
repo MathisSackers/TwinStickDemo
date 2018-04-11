@@ -151,7 +151,7 @@ class Hero {
   hit(damage = 1) {
     if (this.invincible === 0) {
       if (!muted) {
-        // sound
+        sound.play('heroHit');
       }
       this.hp -= damage;
       this.invincible = H_INVINCIBILITY;

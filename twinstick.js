@@ -35,7 +35,7 @@ function gameLoop(delta) {
 function setup() {
   // load additional sounds
   shootSound = sound.Sound.from({
-    url: 'sounds/shoot_long.mp3',
+    url: 'sounds/shoot_long.wav',
     sprites: shootLongSprites,
     preload: true,
   });
@@ -56,5 +56,6 @@ function setup() {
 
 // load the images and run the 'setup' function when it's done
 loader
-  .add('opponentHit', 'sounds/opponentHit.mp3')
+  .add('opponentHit', 'sounds/opponentHit.wav')
+  .add('heroHit', 'sounds/heroHit.wav')
   .load(setup);
