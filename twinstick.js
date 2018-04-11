@@ -24,6 +24,36 @@ app.renderer.resize(window.innerWidth, window.innerHeight);
 app.renderer.backgroundColor = BACKGROUND_COLOR;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
+// toggle fullscreen with 'f'
+document.onkeydown = (e) => {
+  if (e.key === 'f') {
+    const isFullscreen =
+      document.fullScreenElement ||
+      document.mozFullScreen ||
+      document.webkitIsFullScreen ||
+      document.msIsFullScreen ||
+      false;
+    app.view.requestFullScreen =
+      app.view.requestFullScreen ||
+      app.view.webkitRequestFullScreen ||
+      app.view.mozRequestFullScreen ||
+      app.view.msRequestFullscreen ||
+      function () { return false; };
+    document.cancelFullScreen =
+      document.cancelFullScreen ||
+      document.webkitCancelFullScreen ||
+      document.mozCancelFullScreen ||
+      document.msCancelFullScreen ||
+      function () { return false; };
+    if (isFullscreen) {
+      document.cancelFullScreen();
+    } else {
+      app.view.requestFullScreen();
+    }
+  } else if (e.key === 'm') {
+    muted = !muted;
+  }
+};
 
 
 // This function is called every frame

@@ -11,7 +11,8 @@ Check it out live over [here.](https://mathissackers.github.io/TwinStickDemo/)
 * Pressing `A` spawns an enemy
 * Hold down `R1` to fire
 * Pressing `B` will toggle pause on/off
-* Pressing `A` while in the pause screen toggles sound
+* Pressing `A` while in the pause screen toggles sound (Alternatively you can press `M` on your keyboard)
+* You can toggle fullscreen by pressing `F` on your keyboard
 
 ## Libraries
 Currently this Demo is using:
