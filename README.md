@@ -16,4 +16,5 @@ Check it out live over [here.](https://mathissackers.github.io/TwinStickDemo/)
 ## Libraries
 Currently this Demo is using:
 * [Pixi.js](http://www.pixijs.com/) for everything you see.
+* [Pixi-filters](https://github.com/pixijs/pixi-filters) for some 🔥 visual effects.
 * [Pixi-sound](https://github.com/pixijs/pixi-sound) for everything you hear.
