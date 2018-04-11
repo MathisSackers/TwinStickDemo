@@ -13,8 +13,6 @@ const H_BULLET_COOLDOWN = 3;
 const H_ROTATION_SPEED = 0.2;
 // color for hero
 const H_COLOR = 0xe1ddcf;
-// color when invincible (after hit)
-const H_INVINCIBLE_COLOR = 0xeea084;
 
 // This function calculates the rotation given x and y input and the
 // current rotation
@@ -71,6 +69,8 @@ class Hero {
     graphic.endFill();
     graphic.pivot.set(0, 25);
     graphic.speed = H_SPEED;
+    // TODO: resize on window.resize
+    graphic.filterArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
     this.reset();
   }
 
@@ -82,10 +82,23 @@ class Hero {
     }
     // life
     if (this.invincible > 0) {
+      const pct = (H_INVINCIBILITY - this.invincible) / H_INVINCIBILITY;
+      const distortion =
+        (0.05952381 + (7.259921 * pct) + (6.597222 * pct * pct * pct)) - (13.86905 * pct * pct);
+      const x = Math.sin(this.glitchDirection);
+      const y = Math.cos(this.glitchDirection);
+      this.graphic.filters = [new PIXI.filters.GlitchFilter({
+        offset: 50,
+        blue: [distortion * 50 * x, distortion * 5 * y],
+        red: [-distortion * 20 * x, -distortion * 50 * y],
+        green: [distortion * 20 * x, -distortion * 5 * y],
+      })];
       this.invincible -= delta;
     }
     if (this.invincible <= 0) {
       this.invincible = 0;
+      this.glitchDirection = Math.random() * 2 * Math.PI;
+      this.graphic.filters = null;
       this.graphic.tint = 0xffffff;
     }
     // input
@@ -132,6 +145,7 @@ class Hero {
     graphic.y = window.innerHeight / 2;
     graphic.rotation = 0;
     graphic.visible = true;
+    graphic.filters = null;
   }
 
   hit(damage = 1) {
@@ -141,7 +155,6 @@ class Hero {
       }
       this.hp -= damage;
       this.invincible = H_INVINCIBILITY;
-      this.graphic.tint = H_INVINCIBLE_COLOR;
     }
   }
   remove() {
