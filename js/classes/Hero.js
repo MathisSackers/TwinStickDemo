@@ -99,7 +99,6 @@ class Hero {
       this.invincible = 0;
       this.glitchDirection = Math.random() * 2 * Math.PI;
       this.graphic.filters = null;
-      this.graphic.tint = 0xffffff;
     }
     // input
     this.inputHandling(input, delta);
