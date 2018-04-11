@@ -1,6 +1,6 @@
 // The (hero-)bullet class
 
-const BULLET_SPEED = 20;
+const BULLET_SPEED = 10;
 const BULLET_COLOR = 0xf9efc7;
 
 class Bullet {

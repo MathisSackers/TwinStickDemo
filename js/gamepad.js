@@ -163,10 +163,12 @@ function bindControls(padIndex) {
       gamepad[padIndex].bindings.resting = gamepad[padIndex].pad.axes;
       return 'Press the A button.';
     } else if (gamepad[padIndex].bindings.L2_button === undefined) {
-      // identify noise axes (e.g. accelometer)
-      const iAxis = identifyMovedAxis(padIndex);
-      if (iAxis.difference > 0.3) {
-        gamepad[padIndex].noise_axes.push(iAxis.axis);
+      if (gamepad[padIndex].bindings.Y_button === undefined) {
+        // while binding the first three buttons identify noise axes (e.g. accelometer)
+        const iAxis = identifyMovedAxis(padIndex);
+        if (iAxis.difference > 0.3) {
+          gamepad[padIndex].noise_axes.push(iAxis.axis);
+        }
       }
       // bind the four face buttons, start, select and the shoulder buttons;
       let returnVal = false;
