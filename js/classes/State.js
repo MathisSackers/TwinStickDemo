@@ -42,7 +42,7 @@ class PlayState extends State {
   constructor(lastState) {
     super();
     this.name = 'PlayState';
-    if (lastState !== 'PauseState') {
+    if (lastState !== 'PauseState' && lastState !== 'PlayState') {
       createHero();
     }
   }

@@ -52,6 +52,14 @@ document.onkeydown = (e) => {
     }
   } else if (e.key === 'm') {
     muted = !muted;
+  } else if (e.key === 's') {
+    window.localStorage.setItem('bindings', JSON.stringify(bindingToString()));
+  } else if (e.key === 'l') {
+    const bindings = window.localStorage.getItem('bindings');
+    if (bindings !== null) {
+      bindingFromString(JSON.parse(bindings));
+      game.statemachine.transition('PlayState');
+    }
   }
 };
 
