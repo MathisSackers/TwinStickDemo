@@ -169,6 +169,6 @@ function spawnEnemy() {
   if (needNewEnemy) {
     const enemy = new Enemy();
     enemies.push(enemy);
-    gameContainer.addChild(enemy.graphic);
+    enemyContainer.addChild(enemy.graphic);
   }
 }

@@ -82,6 +82,6 @@ function enemyFire(enemy, target) {
   if (needNewBullet) {
     const bullet = new EnemyBullet(enemy, target);
     enemyBullets.push(bullet);
-    gameContainer.addChild(bullet.graphic);
+    enemyBulletContainer.addChild(bullet.graphic);
   }
 }

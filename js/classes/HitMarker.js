@@ -70,6 +70,6 @@ function hitMarker(bullet) {
   if (needNewMarker) {
     const marker = new HitMarker(bullet.graphic);
     markers.push(marker);
-    gameContainer.addChild(marker.graphic);
+    hitMarkerContainer.addChild(marker.graphic);
   }
 }

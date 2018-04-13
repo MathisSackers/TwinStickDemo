@@ -24,8 +24,8 @@ app.renderer.resize(window.innerWidth, window.innerHeight);
 app.renderer.backgroundColor = BACKGROUND_COLOR;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
-// toggle fullscreen with 'f'
 document.onkeydown = (e) => {
+  // toggle fullscreen with 'f'
   if (e.key === 'f') {
     const isFullscreen =
       document.fullScreenElement ||
@@ -50,10 +50,13 @@ document.onkeydown = (e) => {
     } else {
       app.view.requestFullScreen();
     }
+  // toggle mute with 'm'
   } else if (e.key === 'm') {
     muted = !muted;
+  // save binding with 's'
   } else if (e.key === 's') {
     window.localStorage.setItem('bindings', JSON.stringify(bindingToString()));
+  // load binding with 'l'
   } else if (e.key === 'l') {
     const bindings = window.localStorage.getItem('bindings');
     if (bindings !== null) {
@@ -62,7 +65,6 @@ document.onkeydown = (e) => {
     }
   }
 };
-
 
 // This function is called every frame
 function gameLoop(delta) {
@@ -77,14 +79,16 @@ function setup() {
     sprites: shootLongSprites,
     preload: true,
   });
-
   // easier access;
   game.stage = app.stage;
-
   // container for all graphics
   app.stage.addChild(gameContainer);
   gameContainer.visible = false;
-
+  // defines the drawing order
+  gameContainer.addChild(enemyBulletContainer);
+  gameContainer.addChild(bulletContainer);
+  gameContainer.addChild(enemyContainer);
+  gameContainer.addChild(hitMarkerContainer);
   // current gamestate
   game.statemachine = new StateMachine();
   // start the gameloop

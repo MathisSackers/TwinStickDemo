@@ -75,6 +75,6 @@ function fire(origin) {
   if (needNewBullet) {
     const bullet = new Bullet(origin);
     bullets.push(bullet);
-    gameContainer.addChild(bullet.graphic);
+    bulletContainer.addChild(bullet.graphic);
   }
 }
