@@ -45,7 +45,11 @@ const templateInput = {
 // buttons that are supported
 const buttonsArray = ['A', 'B', 'Y', 'X', 'Start', 'Select', 'R1', 'L1', 'R2', 'L2'];
 // array of gamepads last state
-const input = [templateInput, templateInput, templateInput, templateInput];
+const input = [
+  { ...templateInput },
+  { ...templateInput },
+  { ...templateInput },
+  { ...templateInput }];
 // array of gamepads and their bindings
 const gamepad = [{ bindings: {}, bound_buttons: [], noise_axes: [] },
   { bindings: {}, bound_buttons: [], noise_axes: [] },
