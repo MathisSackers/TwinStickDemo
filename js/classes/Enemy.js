@@ -87,7 +87,7 @@ class Enemy {
       if (
         this.goal.x === undefined ||
         (Math.abs(graphic.x - this.goal.x) < 20 && Math.abs(graphic.y - this.goal.y) < 20) ||
-        (Math.abs(hero.x - this.goal.x) < 30 && Math.abs(hero.y - this.goal.y) < 30)
+        (Math.abs(hero.graphic.x - this.goal.x) < 30 && Math.abs(hero.graphic.y - this.goal.y) < 30)
       ) {
         this.goal = getGoal();
       }
@@ -104,18 +104,20 @@ class Enemy {
     graphic.dx = goalX;
     graphic.dy = goalY;
     // avoid heroes
-    heroes.forEach((hero) => {
-      const distToHeroX = Math.abs(graphic.x - hero.x);
-      const distToHeroY = Math.abs(graphic.y - hero.y);
+    heroes.some((hero) => {
+      const distToHeroX = Math.abs(graphic.x - hero.graphic.x);
+      const distToHeroY = Math.abs(graphic.y - hero.graphic.y);
       const distToHero = Math.sqrt((distToHeroX * distToHeroX) + (distToHeroY * distToHeroY));
       if (distToHero < 300) {
-        let heroX = (graphic.x < hero.x) ? -1 : 1;
-        let heroY = (graphic.y < hero.y) ? -1 : 1;
-        heroX *= 1 - (Math.abs(graphic.x - hero.x) / 300);
-        heroY *= 1 - (Math.abs(graphic.y - hero.y) / 300);
+        let heroX = (graphic.x < hero.graphic.x) ? -1 : 1;
+        let heroY = (graphic.y < hero.graphic.y) ? -1 : 1;
+        heroX *= 1 - (Math.abs(graphic.x - hero.graphic.x) / 300);
+        heroY *= 1 - (Math.abs(graphic.y - hero.graphic.y) / 300);
         graphic.dx += heroX;
         graphic.dy += heroY;
+        return true;
       }
+      return false;
     });
   }
 
