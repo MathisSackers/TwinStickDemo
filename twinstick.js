@@ -3,8 +3,6 @@
 // Vars for this file
 // color for background
 const BACKGROUND_COLOR = 0x65635a;
-// connected controllers
-game.connectedPads = [];
 // used controllers
 game.usedPads = [];
 

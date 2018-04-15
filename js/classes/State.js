@@ -25,7 +25,7 @@ class PlayState extends State {
     }
   }
   update(delta) {
-    const input = getInput(game.connectedPads[0]);
+    const input = getInput(game.usedPads[0]);
     // global inputs
     // pause
     if (input.B_press) {
@@ -58,7 +58,7 @@ class PauseState extends State {
     gameContainer.alpha = 0.3;
   }
   update() {
-    const input = getInput(game.connectedPads[0]);
+    const input = getInput(game.usedPads[0]);
     if (input.B_press) {
       game.statemachine.transition('PlayState');
     }
@@ -83,7 +83,7 @@ class DeathState extends State {
     game.text.show();
   }
   update() {
-    const input = getInput(game.connectedPads[0]);
+    const input = getInput(game.usedPads[0]);
     if (input.A_press) {
       game.statemachine.transition('PlayState');
     }
@@ -102,18 +102,20 @@ class BindingState extends State {
     this.numPlayers = 0;
     game.text.setText('Connect a controller (or press A to activate it)', 0);
     game.text.show();
+    // connected controllers
+    this.connectedPads = [];
   }
   update() {
     // update the connected gamepads
-    game.connectedPads = [...new Set(game.connectedPads.concat(getPads()))];
-    if (game.connectedPads.length !== this.numPlayers) {
+    this.connectedPads = [...new Set(this.connectedPads.concat(getPads()))];
+    if (this.connectedPads.length !== this.numPlayers) {
       // new layout
-      this.numPlayers = game.connectedPads.length;
+      this.numPlayers = this.connectedPads.length;
       game.text.setNumTexts(this.numPlayers);
     }
     // binding
     let counter = 0;
-    game.connectedPads.forEach((connectedPad) => {
+    this.connectedPads.forEach((connectedPad) => {
       // get input
       const bindIn = bindControls(connectedPad);
       if (bindIn === true) {
