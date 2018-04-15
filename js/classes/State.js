@@ -1,27 +1,5 @@
 // The state base-class and its implemntations
 
-// color for texts
-const TEXT_COLOR = 0xe1ddcf;
-
-function setText(string, wide = false) {
-  if (game.t === undefined) {
-    // text object
-    game.t = new Text('...');
-    game.t.style = { fill: TEXT_COLOR };
-    game.t.x = (window.innerWidth / 2) - (game.t.width / 2);
-    game.t.y = window.innerHeight / 3;
-    game.stage.addChild(game.t);
-  }
-  if (wide) {
-    game.t.style = { fontSize: 65, fill: TEXT_COLOR, letterSpacing: window.innerWidth / 10 };
-  } else {
-    game.t.style = { fill: TEXT_COLOR };
-  }
-  game.t.text = string;
-  game.t.x = (window.innerWidth / 2) - (game.t.width / 2);
-  game.t.visible = true;
-}
-
 // Base class
 class State {
   constructor() {
@@ -75,7 +53,8 @@ class PauseState extends State {
   constructor() {
     super();
     this.name = 'PauseState';
-    setText('PAUSED', true);
+    game.text.setText('PAUSED', 0, true);
+    game.text.show();
     gameContainer.alpha = 0.3;
   }
   update() {
@@ -89,7 +68,7 @@ class PauseState extends State {
     return this;
   }
   exit() {
-    game.t.visible = false;
+    game.text.hide();
     gameContainer.alpha = 1;
     return this.name;
   }
@@ -100,7 +79,8 @@ class DeathState extends State {
     super();
     this.name = 'DeathState';
     setEntitiesInvisible();
-    setText('Hit ok to try again.');
+    game.text.setText('Hit ok to try again.');
+    game.text.show();
   }
   update() {
     const input = getInput(game.connectedPads[0]);
@@ -110,7 +90,7 @@ class DeathState extends State {
     return this;
   }
   exit() {
-    game.t.visible = false;
+    game.text.hide();
     return this.name;
   }
 }
@@ -119,24 +99,43 @@ class BindingState extends State {
   constructor() {
     super();
     this.name = 'BindingState';
-    setText('Connect a controller (or press A to activate it)');
+    this.numPlayers = 0;
+    game.text.setText('Connect a controller (or press A to activate it)', 0);
+    game.text.show();
   }
   update() {
-    if (game.connectedPads.length === 0) {
-      game.connectedPads = game.connectedPads.concat(getPads());
-    } else {
-      // get input
-      const bindIn = bindControls(game.connectedPads[0]);
-      if (bindIn === true) {
-        game.statemachine.transition('PlayState');
-      } else if (bindIn !== false) {
-        setText(bindIn);
-      }
+    // update the connected gamepads
+    game.connectedPads = [...new Set(game.connectedPads.concat(getPads()))];
+    if (game.connectedPads.length !== this.numPlayers) {
+      // new layout
+      this.numPlayers = game.connectedPads.length;
+      game.text.setNumTexts(this.numPlayers);
     }
+    // binding
+    let counter = 0;
+    game.connectedPads.forEach((connectedPad) => {
+      // get input
+      const bindIn = bindControls(connectedPad);
+      if (bindIn === true) {
+        game.usedPads.push(connectedPad);
+        game.text.setText('Press A to start the game.', counter);
+      } else if (bindIn !== false) {
+        game.text.setText(bindIn, counter);
+      }
+      counter += 1;
+    });
+    // start game
+    game.usedPads.forEach((pad) => {
+      const input = getInput(pad);
+      if (input.A_press) {
+        game.statemachine.transition('PlayState');
+      }
+    });
     return this;
   }
   exit() {
-    game.t.visible = false;
+    game.text.setNumTexts(1);
+    game.text.hide();
     gameContainer.alpha = 1.0;
     gameContainer.visible = true;
     return this.name;

@@ -34,6 +34,8 @@ const enemyContainer = new Container();
 const markers = [];
 // (visual) container of hitMarkers
 const hitMarkerContainer = new Container();
+// (visual) container of hitMarkers
+const textContainer = new Container();
 // SoundSprite
 let shootSound;
 // sprite information

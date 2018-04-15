@@ -5,6 +5,8 @@
 const BACKGROUND_COLOR = 0x65635a;
 // connected controllers
 game.connectedPads = [];
+// used controllers
+game.usedPads = [];
 
 // Create a Pixi Application
 const app = new Application({
@@ -84,11 +86,15 @@ function setup() {
   // container for all graphics
   app.stage.addChild(gameContainer);
   gameContainer.visible = false;
+  // and for the text
+  app.stage.addChild(textContainer);
   // defines the drawing order
   gameContainer.addChild(enemyBulletContainer);
   gameContainer.addChild(bulletContainer);
   gameContainer.addChild(enemyContainer);
   gameContainer.addChild(hitMarkerContainer);
+  // text manager
+  game.text = new GameText();
   // current gamestate
   game.statemachine = new StateMachine();
   // start the gameloop
