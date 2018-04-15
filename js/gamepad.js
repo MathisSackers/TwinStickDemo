@@ -300,13 +300,15 @@ function bindingToString() {
     }
     array.push(myObj);
   });
-  const string = JSON.stringify(array);
+  const string = JSON.stringify({ bindings: array, pads: game.usedPads });
   return string;
 }
 
 // converts/applies a string into the binding
 function bindingFromString(string) {
-  const bindings = JSON.parse(string);
+  const json = JSON.parse(string);
+  const { bindings } = json;
+  game.usedPads = json.pads;
   for (let i = 0; i < bindings.length; i += 1) {
     if (bindings[i].bound) {
       // sticks
