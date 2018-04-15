@@ -14,5 +14,7 @@ function setEntitiesInvisible() {
   bullets.forEach((bullet) => {
     bullet.remove();
   });
-  hero.remove();
+  heroes.forEach((hero) => {
+    hero.remove();
+  });
 }

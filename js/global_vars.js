@@ -1,3 +1,4 @@
+/* eslint no-unused-vars:0 */
 // Aliases
 // Alias
 const {
@@ -10,14 +11,16 @@ const {
 } = PIXI;
 
 // globals
-// the player character
-let hero;
 // object for gamerelated variables;
 const game = {};
 // whether the game is muted or not
-let muted = false;
+let muted;
 // container for all (visual) elements of the game
 const gameContainer = new Container();
+// the player characters
+const heroes = [];
+// (visual) container of heroes
+const heroContainer = new Container();
 // array of all player bullets
 const bullets = [];
 // (visual) container of bullets

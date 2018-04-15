@@ -77,17 +77,21 @@ function hitScan() {
   });
   // hit by bullet
   enemyBullets.forEach((enemyBullet) => {
-    if (enemyBullet.onScreen && hero.invincible === 0 && enemyBullet.collides(hero.graphic, 'circle')) {
-      hero.hit();
-      enemyBullet.remove();
-    }
+    heroes.forEach((hero) => {
+      if (enemyBullet.onScreen && hero.invincible === 0 && enemyBullet.collides(hero.graphic, 'circle')) {
+        hero.hit();
+        enemyBullet.remove();
+      }
+    });
   });
   // hit by enemy
   enemies.forEach((enemy) => {
-    if (enemy.onScreen) {
-      if (enemy.collides(hero.graphic, 'circle')) {
-        hero.hit();
+    heroes.forEach((hero) => {
+      if (enemy.onScreen) {
+        if (enemy.collides(hero.graphic, 'circle')) {
+          hero.hit();
+        }
       }
-    }
+    });
   });
 }

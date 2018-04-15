@@ -83,13 +83,15 @@ class Enemy {
 
   updateDirection() {
     const { graphic } = this;
-    if (
-      this.goal.x === undefined ||
-      (Math.abs(graphic.x - this.goal.x) < 20 && Math.abs(graphic.y - this.goal.y) < 20) ||
-      (Math.abs(hero.x - this.goal.x) < 30 && Math.abs(hero.y - this.goal.y) < 30)
-    ) {
-      this.goal = getGoal();
-    }
+    heroes.forEach((hero) => {
+      if (
+        this.goal.x === undefined ||
+        (Math.abs(graphic.x - this.goal.x) < 20 && Math.abs(graphic.y - this.goal.y) < 20) ||
+        (Math.abs(hero.x - this.goal.x) < 30 && Math.abs(hero.y - this.goal.y) < 30)
+      ) {
+        this.goal = getGoal();
+      }
+    });
     // desire to move to the goal
     let goalX = (graphic.x < this.goal.x) ? 1 : -1;
     let goalY = (graphic.y < this.goal.y) ? 1 : -1;
@@ -101,22 +103,25 @@ class Enemy {
     }
     graphic.dx = goalX;
     graphic.dy = goalY;
-    // avoid hero
-    const distToHeroX = Math.abs(graphic.x - hero.x);
-    const distToHeroY = Math.abs(graphic.y - hero.y);
-    const distToHero = Math.sqrt((distToHeroX * distToHeroX) + (distToHeroY * distToHeroY));
-    if (distToHero < 300) {
-      let heroX = (graphic.x < hero.x) ? -1 : 1;
-      let heroY = (graphic.y < hero.y) ? -1 : 1;
-      heroX *= 1 - (Math.abs(graphic.x - hero.x) / 300);
-      heroY *= 1 - (Math.abs(graphic.y - hero.y) / 300);
-      graphic.dx += heroX;
-      graphic.dy += heroY;
-    }
+    // avoid heroes
+    heroes.forEach((hero) => {
+      const distToHeroX = Math.abs(graphic.x - hero.x);
+      const distToHeroY = Math.abs(graphic.y - hero.y);
+      const distToHero = Math.sqrt((distToHeroX * distToHeroX) + (distToHeroY * distToHeroY));
+      if (distToHero < 300) {
+        let heroX = (graphic.x < hero.x) ? -1 : 1;
+        let heroY = (graphic.y < hero.y) ? -1 : 1;
+        heroX *= 1 - (Math.abs(graphic.x - hero.x) / 300);
+        heroY *= 1 - (Math.abs(graphic.y - hero.y) / 300);
+        graphic.dx += heroX;
+        graphic.dy += heroY;
+      }
+    });
   }
 
   fire() {
-    enemyFire(this.graphic, hero.graphic);
+    const target = Math.floor(Math.random() * heroes.length);
+    enemyFire(this.graphic, heroes[target].graphic);
     if (!muted) {
       // sound
     }

@@ -61,7 +61,7 @@ function calculateRotation(x, y, curr, speed) {
 }
 
 class Hero {
-  constructor() {
+  constructor(index, totalHeroes) {
     this.graphic = new Graphics();
     const { graphic } = this;
     graphic.beginFill(H_COLOR);
@@ -71,7 +71,7 @@ class Hero {
     graphic.speed = H_SPEED;
     // TODO: resize on window.resize
     graphic.filterArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
-    this.reset();
+    this.reset(index, totalHeroes);
   }
 
   update(input, delta) {
@@ -107,12 +107,12 @@ class Hero {
   inputHandling(input, delta) {
     // shooting
     if (input.R1_down) {
-      if (hero.bulletCooldown < 0) {
+      if (this.bulletCooldown < 0) {
         fire(this.graphic);
         if (!muted) {
           shootSound.play(`shoot${Math.ceil(Math.random() * 8)}`);
         }
-        hero.bulletCooldown += H_BULLET_COOLDOWN;
+        this.bulletCooldown += H_BULLET_COOLDOWN;
       }
     }
     const { graphic } = this;
@@ -134,7 +134,7 @@ class Hero {
     }
   }
 
-  reset() {
+  reset(index, totalHeroes) {
     this.onScreen = true;
     this.hp = H_HP;
     this.bulletCooldown = -1;
@@ -142,6 +142,34 @@ class Hero {
     const { graphic } = this;
     graphic.x = window.innerWidth / 2;
     graphic.y = window.innerHeight / 2;
+    if (totalHeroes > 1) {
+      if (totalHeroes === 3) {
+        if (index === 0) {
+          graphic.y -= graphic.height;
+        } else {
+          graphic.y += graphic.height;
+          if (index === 1) {
+            graphic.x += graphic.width;
+          } else {
+            graphic.x -= graphic.width;
+          }
+        }
+      } else {
+        // 2 or 4
+        if (index % 2 === 0) {
+          graphic.x -= graphic.width;
+        } else {
+          graphic.x += graphic.width;
+        }
+        if (totalHeroes === 4) {
+          if (index < 2) {
+            graphic.y -= graphic.height;
+          } else {
+            graphic.y += graphic.height;
+          }
+        }
+      }
+    }
     graphic.rotation = 0;
     graphic.visible = true;
     graphic.filters = null;
@@ -157,18 +185,24 @@ class Hero {
     }
   }
   remove() {
-    this.onScreen = true;
+    this.onScreen = false;
     this.graphic.visible = false;
   }
 }
 
 
 // This function creates the graphic for the hero
-function createHero() {
-  if (hero === undefined) {
-    hero = new Hero();
-    gameContainer.addChild(hero.graphic);
-  } else {
-    hero.reset();
+function createHeroes(num = 1) {
+  for (let i = 0; i < num; i += 1) {
+    if (heroes[i] === undefined) {
+      heroes[i] = new Hero(i, num);
+      heroContainer.addChild(heroes[i].graphic);
+    } else {
+      heroes[i].reset(i, num);
+    }
+  }
+  while (heroes.length > num) {
+    heroContainer.removeChild(heroes[heroes.length].graphic);
+    heroes.pop();
   }
 }

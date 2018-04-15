@@ -79,6 +79,7 @@ function setup() {
     sprites: shootLongSprites,
     preload: true,
   });
+  muted = false;
   // easier access;
   game.stage = app.stage;
   // container for all graphics
@@ -91,6 +92,7 @@ function setup() {
   gameContainer.addChild(bulletContainer);
   gameContainer.addChild(enemyContainer);
   gameContainer.addChild(hitMarkerContainer);
+  gameContainer.addChild(heroContainer);
   // text manager
   game.text = new GameText();
   // current gamestate

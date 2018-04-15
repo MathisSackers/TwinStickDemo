@@ -21,25 +21,29 @@ class PlayState extends State {
     super();
     this.name = 'PlayState';
     if (lastState !== 'PauseState' && lastState !== 'PlayState') {
-      createHero();
+      createHeroes(game.usedPads.length);
     }
   }
   update(delta) {
-    const input = getInput(game.usedPads[0]);
-    // global inputs
-    // pause
-    if (input.B_press) {
-      game.statemachine.transition('PauseState');
-    }
-    // spawning enemies
-    if (input.A_press) {
-      spawnEnemy();
-    }
-    // this guy handdles his own input
-    hero.update(input, delta);
-    if (hero.hp <= 0) {
-      game.statemachine.transition('DeathState');
-    }
+    let counter = 0;
+    game.usedPads.forEach((pad) => {
+      const input = getInput(pad);
+      // global inputs
+      // pause
+      if (input.B_press) {
+        game.statemachine.transition('PauseState');
+      }
+      // spawning enemies
+      if (input.A_press) {
+        spawnEnemy();
+      }
+      // this guy handdles his own input
+      heroes[counter].update(input, delta);
+      if (heroes[counter].hp <= 0) {
+        game.statemachine.transition('DeathState');
+      }
+      counter += 1;
+    });
     hitScan();
     moveBullets(delta);
     moveEnemyBullets(delta);
@@ -58,13 +62,15 @@ class PauseState extends State {
     gameContainer.alpha = 0.3;
   }
   update() {
-    const input = getInput(game.usedPads[0]);
-    if (input.B_press) {
-      game.statemachine.transition('PlayState');
-    }
-    if (input.A_press) {
-      muted = sound.toggleMuteAll();
-    }
+    game.usedPads.forEach((pad) => {
+      const input = getInput(pad);
+      if (input.B_press) {
+        game.statemachine.transition('PlayState');
+      }
+      if (input.A_press) {
+        muted = sound.toggleMuteAll();
+      }
+    });
     return this;
   }
   exit() {
@@ -83,10 +89,12 @@ class DeathState extends State {
     game.text.show();
   }
   update() {
-    const input = getInput(game.usedPads[0]);
-    if (input.A_press) {
-      game.statemachine.transition('PlayState');
-    }
+    game.usedPads.forEach((pad) => {
+      const input = getInput(pad);
+      if (input.A_press) {
+        game.statemachine.transition('PlayState');
+      }
+    });
     return this;
   }
   exit() {
