@@ -78,7 +78,7 @@ function hitScan() {
   // hit by bullet
   enemyBullets.forEach((enemyBullet) => {
     heroes.forEach((hero) => {
-      if (enemyBullet.onScreen && hero.invincible === 0 && enemyBullet.collides(hero.graphic, 'circle')) {
+      if (enemyBullet.onScreen && hero.invincible <= 0 && enemyBullet.collides(hero.graphic, 'circle')) {
         hero.hit();
         enemyBullet.remove();
       }

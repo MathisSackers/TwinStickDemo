@@ -77,33 +77,40 @@ class Hero {
   }
 
   update(input, delta) {
-    // shooting
-    this.bulletCooldown -= delta;
-    if (this.bulletCooldown < -1) {
-      this.bulletCooldown = -(Math.abs(this.bulletCooldown) % 1);
+    if (this.onScreen) {
+      if (this.hp > 0) {
+        // shooting
+        this.bulletCooldown -= delta;
+        if (this.bulletCooldown < -1) {
+          this.bulletCooldown = -(Math.abs(this.bulletCooldown) % 1);
+        }
+        // life
+        if (this.invincible > 0) {
+          const pct = (H_INVINCIBILITY - this.invincible) / H_INVINCIBILITY;
+          const distortion =
+            (0.05952381 + (7.259921 * pct) + (6.597222 * pct * pct * pct)) - (13.86905 * pct * pct);
+          const x = Math.sin(this.glitchDirection);
+          const y = Math.cos(this.glitchDirection);
+          this.graphic.filters = [new PIXI.filters.GlitchFilter({
+            offset: 50,
+            blue: [distortion * 50 * x, distortion * 5 * y],
+            red: [-distortion * 20 * x, -distortion * 50 * y],
+            green: [distortion * 20 * x, -distortion * 5 * y],
+          })];
+          this.invincible -= delta;
+          this.invincible = this.invincible <= 0 ? 0 : this.invincible;
+        }
+        if (this.invincible === 0) {
+          this.invincible = -1;
+          this.glitchDirection = Math.random() * 2 * Math.PI;
+          this.graphic.filters = null;
+        }
+        // input
+        this.inputHandling(input, delta);
+      } else {
+        this.die();
+      }
     }
-    // life
-    if (this.invincible > 0) {
-      const pct = (H_INVINCIBILITY - this.invincible) / H_INVINCIBILITY;
-      const distortion =
-        (0.05952381 + (7.259921 * pct) + (6.597222 * pct * pct * pct)) - (13.86905 * pct * pct);
-      const x = Math.sin(this.glitchDirection);
-      const y = Math.cos(this.glitchDirection);
-      this.graphic.filters = [new PIXI.filters.GlitchFilter({
-        offset: 50,
-        blue: [distortion * 50 * x, distortion * 5 * y],
-        red: [-distortion * 20 * x, -distortion * 50 * y],
-        green: [distortion * 20 * x, -distortion * 5 * y],
-      })];
-      this.invincible -= delta;
-    }
-    if (this.invincible <= 0) {
-      this.invincible = 0;
-      this.glitchDirection = Math.random() * 2 * Math.PI;
-      this.graphic.filters = null;
-    }
-    // input
-    this.inputHandling(input, delta);
   }
 
   inputHandling(input, delta) {
@@ -174,12 +181,13 @@ class Hero {
       }
     }
     graphic.rotation = 0;
+    graphic.scale.set(1);
     graphic.visible = true;
     graphic.filters = null;
   }
 
   hit(damage = 1) {
-    if (this.invincible === 0) {
+    if (this.invincible <= 0) {
       if (!muted) {
         sound.play('heroHit');
       }
@@ -187,6 +195,15 @@ class Hero {
       this.invincible = H_INVINCIBILITY;
     }
   }
+
+  die() {
+    this.hp -= 1;
+    this.graphic.scale.set(1 + (this.hp / 60));
+    if (this.hp < -60) {
+      this.remove();
+    }
+  }
+
   remove() {
     this.onScreen = false;
     this.graphic.visible = false;

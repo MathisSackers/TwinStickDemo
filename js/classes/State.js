@@ -39,9 +39,6 @@ class PlayState extends State {
       }
       // this guy handdles his own input
       heroes[counter].update(input, delta);
-      if (heroes[counter].hp <= 0) {
-        game.statemachine.transition('DeathState');
-      }
       counter += 1;
     });
     hitScan();
@@ -49,6 +46,17 @@ class PlayState extends State {
     moveEnemyBullets(delta);
     updateEnemies(delta);
     moveHitMarkers();
+    // check if all are dead
+    if (
+      heroes.every((hero) => {
+        if (hero.onScreen) {
+          return false;
+        }
+        return true;
+      })
+    ) {
+      game.statemachine.transition('DeathState');
+    }
     return this;
   }
 }
