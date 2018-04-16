@@ -166,16 +166,19 @@ function updateEnemies(delta) {
 
 // gets an enemy or creates a new one
 function spawnEnemy() {
-  let needNewEnemy = true;
-  enemies.forEach((enemy) => {
-    if (needNewEnemy && !enemy.onScreen) {
+  let newEnemy = null;
+  enemies.some((enemy) => {
+    if (newEnemy === null && !enemy.onScreen) {
       enemy.reset();
-      needNewEnemy = false;
+      newEnemy = enemy;
+      return true;
     }
+    return false;
   });
-  if (needNewEnemy) {
-    const enemy = new Enemy();
-    enemies.push(enemy);
-    enemyContainer.addChild(enemy.graphic);
+  if (newEnemy === null) {
+    newEnemy = new Enemy();
+    enemies.push(newEnemy);
+    enemyContainer.addChild(newEnemy.graphic);
   }
+  return newEnemy;
 }
