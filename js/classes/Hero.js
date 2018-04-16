@@ -11,8 +11,10 @@ const H_SPEED = 5;
 const H_BULLET_COOLDOWN = 3;
 // most rads you can turn per frame
 const H_ROTATION_SPEED = 0.2;
-// color for hero
+// color for heroes
 const H_COLOR = 0xe1ddcf;
+// different tints for heroes 1 - 4
+const H_TINTS = [0xb2cfff, 0x92ea8f, 0xdc8fef, 0xf7dc65];
 
 // This function calculates the rotation given x and y input and the
 // current rotation
@@ -140,6 +142,7 @@ class Hero {
     this.bulletCooldown = -1;
     this.invincible = 0;
     const { graphic } = this;
+    graphic.tint = H_TINTS[index];
     graphic.x = window.innerWidth / 2;
     graphic.y = window.innerHeight / 2;
     if (totalHeroes > 1) {
