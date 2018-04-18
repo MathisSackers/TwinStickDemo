@@ -29,7 +29,7 @@ const level0 = `
   <wait type='time'>60</wait>
   <!-- Part 2 -->
   <!-- Spawn 6 enemies/second; they die after ~8s -->
-  <action type='fast'>
+  <action type='slow'>
     <ttl>500</ttl>
     <repeat type='slow'>
       <times>9999</times>

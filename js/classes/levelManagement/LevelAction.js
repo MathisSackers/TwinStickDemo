@@ -123,6 +123,7 @@ class LevelAction extends LevelObject {
     this.actions.forEach((action) => {
       action.kill();
     });
+    this.isDone = true;
     this.actions = [];
     this.currentChild = null;
   }
