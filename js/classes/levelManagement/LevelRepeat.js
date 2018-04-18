@@ -79,10 +79,6 @@ class LevelRepeat extends LevelObject {
     // last action running / already done?
     if (this.times === 0) {
       this.isDone = this.actions.every(action => action.done());
-      if (this.isDone && this.debug === undefined) {
-        alert('woop');
-        this.debug = true;
-      }
     }
     // remove unneeded actions
     for (let i = this.actions.length - 1; i >= 0; i -= 1) {
