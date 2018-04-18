@@ -1,11 +1,11 @@
 # Twin Stick Demo
 
-'Quick' Demo to for a twin stick shooter.
+'Quick' Demo to for a (up-to-4-player) twin stick shooter.
 
 ## Try it out!
 
-Check it out live over [here.](https://mathissackers.github.io/TwinStickDemo/)  
-Hint: The difficulty depends on the size of your monitor(/browser window). Play in a smaller window for added difficulty.
+Connect up to 4 gamepads and check it out live over [here.](https://mathissackers.github.io/TwinStickDemo/)  
+Hint: The difficulty depends on the size of your monitor(/browser window). Play in a smaller window for added difficulty.  
 [It's not a bug; It's a feature]
 
 ### Controlls
