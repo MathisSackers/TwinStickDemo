@@ -97,6 +97,8 @@ function setup() {
   game.text = new GameText();
   // current gamestate
   game.statemachine = new StateMachine();
+  // current level
+  game.levelmachine = new LevelMachine();
   // start the gameloop
   app.ticker.add(delta => gameLoop(delta));
 }

@@ -46,7 +46,9 @@ class PlayState extends State {
     moveEnemyBullets(delta);
     updateEnemies(delta);
     moveHitMarkers();
-    // check if all are dead
+    // update the level
+    game.levelmachine.update(delta);
+    // check if all heroes are dead
     if (
       heroes.every((hero) => {
         if (hero.onScreen) {
