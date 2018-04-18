@@ -104,7 +104,9 @@ class LevelRepeat extends LevelObject {
     this.actions.forEach((action) => {
       action.kill();
     });
+    this.isDone = true;
     this.actions = [];
+    this.times = 0;
     this.currentChild = null;
   }
 }

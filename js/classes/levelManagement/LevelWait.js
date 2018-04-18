@@ -68,5 +68,6 @@ class LevelWait extends LevelObject {
     if (this.time !== undefined) {
       this.time = 0;
     }
+    this.isDone = true;
   }
 }
