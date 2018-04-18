@@ -13,7 +13,7 @@ class LevelMachine {
       if (this.action.done()) {
         this.action.kill();
         this.action = null;
-        console.log('level cleared');
+        game.statemachine.transition('WinState');
       }
     }
     return this;
@@ -23,7 +23,6 @@ class LevelMachine {
     if (this.action !== null) {
       this.action.kill();
       this.action = null;
-      console.log('Level killed to load new one.');
     }
     const parser = new DOMParser();
     [this.level] = parser.parseFromString(newLevel, 'application/xml').documentElement.children;

@@ -2,7 +2,7 @@
 
 class StateMachine {
   constructor() {
-    this.state = new BindingState ();
+    this.state = new BindingState();
   }
 
   update(delta) {
@@ -18,6 +18,8 @@ class StateMachine {
       this.state = new DeathState(this.state.exit());
     } else if (newState === 'BindingState') {
       this.state = new BindingState(this.state.exit());
+    } else if (newState === 'WinState') {
+      this.state = new WinState(this.state.exit());
     }
   }
 }

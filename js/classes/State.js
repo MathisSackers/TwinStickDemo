@@ -25,6 +25,7 @@ class PlayState extends State {
       game.levelmachine.loadLevel(level0);
     }
   }
+
   update(delta) {
     let counter = 0;
     game.usedPads.forEach((pad) => {
@@ -47,8 +48,6 @@ class PlayState extends State {
     moveEnemyBullets(delta);
     updateEnemies(delta);
     moveHitMarkers();
-    // update the level
-    game.levelmachine.update(delta);
     // check if all heroes are dead
     if (
       heroes.every((hero) => {
@@ -60,10 +59,13 @@ class PlayState extends State {
     ) {
       game.statemachine.transition('DeathState');
     }
+    // update the level
+    game.levelmachine.update(delta);
     return this;
   }
 }
 
+// when the game is paused (duh!)
 class PauseState extends State {
   constructor() {
     super();
@@ -91,12 +93,13 @@ class PauseState extends State {
   }
 }
 
+// when all heroes have died
 class DeathState extends State {
   constructor() {
     super();
     this.name = 'DeathState';
     setEntitiesInvisible();
-    game.text.setText('Hit ok to try again.');
+    game.text.setText('Hit A to try again.');
     game.text.show();
   }
   update() {
@@ -114,6 +117,31 @@ class DeathState extends State {
   }
 }
 
+// when the level has been cleared
+class WinState extends State {
+  constructor() {
+    super();
+    this.name = 'WinState';
+    setEntitiesInvisible();
+    game.text.setText('You won - Hit A to try again.');
+    game.text.show();
+  }
+  update() {
+    game.usedPads.forEach((pad) => {
+      const input = getInput(pad);
+      if (input.A_press) {
+        game.statemachine.transition('PlayState');
+      }
+    });
+    return this;
+  }
+  exit() {
+    game.text.hide();
+    return this.name;
+  }
+}
+
+// before playing the game, to bind(/calibrate) the gamepads
 class BindingState extends State {
   constructor() {
     super();

@@ -41,5 +41,6 @@ const level0 = `
       </action>
     </repeat>
   </action>
+  <wait type='time'>240</wait>
 </action>
 </document>`;
