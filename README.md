@@ -5,6 +5,8 @@
 ## Try it out!
 
 Check it out live over [here.](https://mathissackers.github.io/TwinStickDemo/)  
+Hint: The difficulty depends on the size of your monitor(/browser window). Play in a smaller window for added difficulty.
+[It's not a bug; It's a feature]
 
 ### Controlls
 
@@ -12,7 +14,7 @@ After binding your controller, you can perform the following actions
 
 * Move with the `left stick`
 * Aim with the `right stick`
-* Pressing `A` spawns an enemy
+* Pressing `A` resets the level
 * Hold down `R1` to fire
 * Pressing `B` will toggle pause on/off
 * Pressing `A` while in the pause screen toggles sound

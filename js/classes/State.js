@@ -22,6 +22,7 @@ class PlayState extends State {
     this.name = 'PlayState';
     if (lastState !== 'PauseState' && lastState !== 'PlayState') {
       createHeroes(game.usedPads.length);
+      game.levelmachine.loadLevel(level0);
     }
   }
   update(delta) {
@@ -35,7 +36,7 @@ class PlayState extends State {
       }
       // spawning enemies
       if (input.A_press) {
-        spawnEnemy();
+        game.levelmachine.loadLevel(level0);
       }
       // this guy handdles his own input
       heroes[counter].update(input, delta);
