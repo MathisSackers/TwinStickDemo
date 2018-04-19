@@ -9,7 +9,7 @@ const level0 = `
   <!-- 3 enemies. Each spawns 5 more 2 seconds after death. -->
     <action type='slow'>
       <repeat type='fast'>
-        <times>3</times>
+        <times>3 + _($rand * 5)</times>
         <action type='slow'>
           <spawn>
             <enemy/>
@@ -28,9 +28,9 @@ const level0 = `
     </action>
   <wait type='time'>60</wait>
   <!-- Part 2 -->
-  <!-- Spawn 6 enemies/second; they die after ~8s -->
+  <!-- Spawn 6 enemies/second; they die after 8s~25s with ~16s being the most probable -->
   <action type='slow'>
-    <ttl>500</ttl>
+    <ttl>(500) + _($clt * 1000)</ttl>
     <repeat type='slow'>
       <times>9999</times>
       <action type='fast'>
@@ -41,6 +41,6 @@ const level0 = `
       </action>
     </repeat>
   </action>
-  <wait type='time'>240</wait>
+  <wait type='time'>480</wait>
 </action>
 </document>`;

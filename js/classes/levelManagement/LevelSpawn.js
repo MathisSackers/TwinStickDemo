@@ -23,7 +23,7 @@ class LevelSpawn extends LevelObject {
       if (node.nodeName === 'enemy') {
         this.enemy = spawnEnemy(node);
       } else if (node.nodeName === 'ttl') {
-        this.ttl = node.innerHTML;
+        this.ttl = LevelExpression.eval(node.innerHTML);
       } else if (node.nodeName === 'enemyRef') {
         // TODO
       } else {

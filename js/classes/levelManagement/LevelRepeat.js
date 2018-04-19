@@ -46,10 +46,9 @@ class LevelRepeat extends LevelObject {
     for (let i = 0; i < this.node.children.length; i += 1) {
       const node = this.node.children[i];
       if (node.nodeName === 'times') {
-        // TODO expression evaluation
-        this.times += node.innerHTML;
+        this.times = LevelExpression.eval(node.innerHTML);
       } else if (node.nodeName === 'ttl') {
-        this.ttl = node.innerHTML;
+        this.ttl = LevelExpression.eval(node.innerHTML);
       } else if (node.nodeName === 'action') {
         this.actionNode = node;
       } else if (node.nodeName === 'actionRef') {

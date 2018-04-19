@@ -27,8 +27,7 @@ class LevelWait extends LevelObject {
       const attribute = this.node.attributes[i];
       if (attribute.name === 'type') {
         if (attribute.value === 'time') {
-          // TODO expression evaluation
-          this.time = this.node.innerHTML;
+          this.time = LevelExpression.eval(this.node.innerHTML);
         } else if (attribute.value === 'condition') {
           // TODO
         } else {

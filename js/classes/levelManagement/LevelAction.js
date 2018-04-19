@@ -37,7 +37,7 @@ class LevelAction extends LevelObject {
   scanNodes() {
     for (let i = 0; i < this.node.children.length; i += 1) {
       if (this.node.children[i].nodeName === 'ttl') {
-        this.ttl = this.node.children[i].innerHTML;
+        this.ttl = LevelExpression.eval(this.node.children[i].innerHTML);
       }
     }
   }
