@@ -19,7 +19,7 @@ class BindingState extends State {
     }
     // binding
     let counter = 0;
-    this.connectedPads.forEach((connectedPad) => {
+    this.connectedPads.every((connectedPad) => {
       // needs binding
       if (!game.usedPads.includes(connectedPad)) {
         // get input
@@ -36,9 +36,11 @@ class BindingState extends State {
         if (input.A_press) {
           // start game
           game.statemachine.transition('PlayState');
+          return false;
         }
       }
       counter += 1;
+      return true;
     });
     return this;
   }
