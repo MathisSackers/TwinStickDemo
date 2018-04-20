@@ -68,7 +68,7 @@ const LevelExpression = {
   // returns the string that starts at i and returns it and the index where it ends
   getString(exp, start) {
     let i = start;
-    while (i < exp.length && exp.charAt(i).match(/[a-z|A-Z]/) !== null) {
+    while (i < exp.length && exp.charAt(i).match(/[a-zA-Z]/) !== null) {
       i += 1;
     }
     return [exp.substring(start, i), i - start];
