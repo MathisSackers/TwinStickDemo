@@ -28,23 +28,23 @@ document.onkeydown = (e) => {
   // toggle fullscreen with 'f'
   if (e.key === 'f') {
     const isFullscreen =
-      document.fullScreenElement ||
-      document.mozFullScreen ||
-      document.webkitIsFullScreen ||
-      document.msIsFullScreen ||
-      false;
+      document.fullScreenElement
+      || document.mozFullScreen
+      || document.webkitIsFullScreen
+      || document.msIsFullScreen
+      || false;
     app.view.requestFullScreen =
-      app.view.requestFullScreen ||
-      app.view.webkitRequestFullScreen ||
-      app.view.mozRequestFullScreen ||
-      app.view.msRequestFullscreen ||
-      function () { return false; };
+      app.view.requestFullScreen
+      || app.view.webkitRequestFullScreen
+      || app.view.mozRequestFullScreen
+      || app.view.msRequestFullscreen
+      || function () { return false; };
     document.cancelFullScreen =
-      document.cancelFullScreen ||
-      document.webkitCancelFullScreen ||
-      document.mozCancelFullScreen ||
-      document.msCancelFullScreen ||
-      function () { return false; };
+      document.cancelFullScreen
+      || document.webkitCancelFullScreen
+      || document.mozCancelFullScreen
+      || document.msCancelFullScreen
+      || function () { return false; };
     if (isFullscreen) {
       document.cancelFullScreen();
     } else {

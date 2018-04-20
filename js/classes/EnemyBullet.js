@@ -24,8 +24,8 @@ class EnemyBullet {
       graphic.x = p.x;
       graphic.y = p.y;
       if (
-        graphic.x < -graphic.height || graphic.x > window.innerWidth + graphic.height ||
-        graphic.y < -graphic.height || graphic.y > window.innerHeight + graphic.height
+        graphic.x < -graphic.height || graphic.x > window.innerWidth + graphic.height
+        || graphic.y < -graphic.height || graphic.y > window.innerHeight + graphic.height
       ) {
         this.remove();
       }

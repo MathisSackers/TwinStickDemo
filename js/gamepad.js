@@ -69,8 +69,8 @@ function getPercentage(rest, max, curr) {
 // binds a button
 function bindButton(buttonName, padIndex) {
   for (let i = 0; i < gamepad[padIndex].pad.buttons.length; i += 1) {
-    if (gamepad[padIndex].pad.buttons[i].pressed &&
-      !gamepad[padIndex].bound_buttons.includes(gamepad[padIndex].pad.buttons[i])
+    if (gamepad[padIndex].pad.buttons[i].pressed
+      && !gamepad[padIndex].bound_buttons.includes(gamepad[padIndex].pad.buttons[i])
     ) {
       gamepad[padIndex].bindings[`${buttonName}_button`] = gamepad[padIndex].pad.buttons[i];
       gamepad[padIndex].bound_buttons.push(gamepad[padIndex].pad.buttons[i]);
@@ -100,11 +100,11 @@ function identifyMovedAxis(padIndex) {
 function bindStick(stickName, otherStick, padIndex) {
   if (gamepad[padIndex].bindings[`${stickName}_v`] === undefined) {
     const iAxis = identifyMovedAxis(padIndex);
-    if (iAxis.difference > 0.3 &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
+    if (iAxis.difference > 0.3
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
     ) {
       gamepad[padIndex].bindings[`${stickName}_v`] = iAxis.axis;
       gamepad[padIndex].bindings[`${stickName}_up`] = gamepad[padIndex].pad.axes[iAxis.axis];
@@ -112,12 +112,12 @@ function bindStick(stickName, otherStick, padIndex) {
     }
   } else if (gamepad[padIndex].bindings[`${stickName}_h`] === undefined) {
     const iAxis = identifyMovedAxis(padIndex);
-    if (iAxis.difference > 0.3 &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
+    if (iAxis.difference > 0.3
+      && iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
     ) {
       gamepad[padIndex].bindings[`${stickName}_h`] = iAxis.axis;
       gamepad[padIndex].bindings[`${stickName}_right`] = gamepad[padIndex].pad.axes[iAxis.axis];
@@ -125,12 +125,12 @@ function bindStick(stickName, otherStick, padIndex) {
     }
   } else if (gamepad[padIndex].bindings[`${stickName}_down`] === undefined) {
     const iAxis = identifyMovedAxis(padIndex);
-    if (iAxis.difference > 0.3 &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_h`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
+    if (iAxis.difference > 0.3
+      && iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_h`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
     ) {
       if (iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v`]) {
         gamepad[padIndex].bindings[`${stickName}_v2`] = iAxis.axis;
@@ -140,13 +140,13 @@ function bindStick(stickName, otherStick, padIndex) {
     }
   } else if (gamepad[padIndex].bindings[`${stickName}_left`] === undefined) {
     const iAxis = identifyMovedAxis(padIndex);
-    if (iAxis.difference > 0.3 &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v2`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`] &&
-      iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
+    if (iAxis.difference > 0.3
+      && iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_v2`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_v2`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h`]
+      && iAxis.axis !== gamepad[padIndex].bindings[`${otherStick}_h2`]
     ) {
       if (iAxis.axis !== gamepad[padIndex].bindings[`${stickName}_h`]) {
         gamepad[padIndex].bindings[`${stickName}_h2`] = iAxis.axis;

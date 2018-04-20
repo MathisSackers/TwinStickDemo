@@ -67,9 +67,9 @@ class LevelRepeat extends LevelObject {
     });
     // add new actions
     while (
-      this.times > 0 &&
-      (!this.slow ||
-        (this.currentAction === undefined || this.currentAction.done()))
+      this.times > 0
+      && (!this.slow
+        || (this.currentAction === undefined || this.currentAction.done()))
     ) {
       this.actions.push(new LevelAction(this.actionNode));
       this.currentAction = this.actions[this.actions.length - 1];

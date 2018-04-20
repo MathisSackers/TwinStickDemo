@@ -72,8 +72,8 @@ class Enemy {
         graphic.x = p.x;
         graphic.y = p.y;
         if (
-          graphic.x < -graphic.height || graphic.x > window.innerWidth + graphic.height ||
-          graphic.y < -graphic.height || graphic.y > window.innerHeight + graphic.height
+          graphic.x < -graphic.height || graphic.x > window.innerWidth + graphic.height
+          || graphic.y < -graphic.height || graphic.y > window.innerHeight + graphic.height
         ) {
           this.remove();
         }
@@ -85,9 +85,9 @@ class Enemy {
     const { graphic } = this;
     heroes.forEach((hero) => {
       if (
-        this.goal.x === undefined ||
-        (Math.abs(graphic.x - this.goal.x) < 20 && Math.abs(graphic.y - this.goal.y) < 20) ||
-        (Math.abs(hero.graphic.x - this.goal.x) < 30 && Math.abs(hero.graphic.y - this.goal.y) < 30)
+        this.goal.x === undefined
+        || (Math.abs(graphic.x - this.goal.x) < 20 && Math.abs(graphic.y - this.goal.y) < 20)
+        || (Math.abs(hero.graphic.x - this.goal.x) < 30 && Math.abs(hero.graphic.y - this.goal.y) < 30)
       ) {
         this.goal = getGoal();
       }
