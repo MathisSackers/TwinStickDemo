@@ -1,7 +1,8 @@
 // Evaluation of EXPRESSIONs
 
-// Contents - (), +, -, /, *, _, %, NUMBER, $rand, $clt, $pi, $playerNum, $rank, $var
+// Contents - (), +, -, /, *, _, %, NUMBER, $rand, $clt, $pi, $playerNum, $playersAlive, $rank, $var
 // where NUMBER is any real number
+// you can see the prioritisation below
 
 // Example
 // 34
@@ -10,6 +11,14 @@
 // 180-_($rank*20)
 // (2+$myvariable)*0.3
 
+// _ floors the following value
+// $rand = any number in [0,1]
+// $clt = any number in [0,1], but the middle ones are more probable (see line 167 below)
+// $pi = 3.14..
+// $playerNum = players in the current game
+// $playersAlive = players currently alive in the game
+// $rank = difficulty of the game in [0,1] with 0 = easiest, 1 = hardest
+// $var = value of a variable previously set with <var>
 
 const LevelExpression = {
   eval(expression) {
