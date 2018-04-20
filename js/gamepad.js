@@ -283,9 +283,8 @@ function getPads() {
 function bindingToString() {
   const array = [];
   gamepad.forEach((boundPad) => {
-    const myObj = { bound: false };
-    if (boundPad.pad !== undefined) {
-      myObj.bound = true;
+    if (boundPad.pad !== undefined && boundPad.bindings.right_left !== undefined) {
+      const myObj = { id: boundPad.pad.id };
       // sticks
       ['left', 'right'].forEach((beginning) => {
         ['up', 'down', 'left', 'right', 'v', 'h'].forEach((ending) => {
@@ -299,12 +298,10 @@ function bindingToString() {
       buttonsArray.forEach((buttonName) => {
         myObj[`${buttonName}_button`] = boundPad.pad.buttons.indexOf(boundPad.bindings[`${buttonName}_button`]);
       });
-      // resting
-      myObj.resting = boundPad.bindings.resting;
+      array.push(myObj);
     }
-    array.push(myObj);
   });
-  const string = JSON.stringify({ bindings: array, pads: game.usedPads });
+  const string = JSON.stringify({ bindings: array });
   return string;
 }
 
@@ -312,24 +309,26 @@ function bindingToString() {
 function bindingFromString(string) {
   const json = JSON.parse(string);
   const { bindings } = json;
-  game.usedPads = json.pads;
-  for (let i = 0; i < bindings.length; i += 1) {
-    if (bindings[i].bound) {
-      // sticks
-      ['left', 'right'].forEach((beginning) => {
-        ['up', 'down', 'left', 'right', 'v', 'h'].forEach((ending) => {
-          gamepad[i].bindings[`${beginning}_${ending}`] = bindings[i][`${beginning}_${ending}`];
-          if (bindings[i][`${beginning}_${ending}2`] !== undefined) {
-            gamepad[i].bindings[`${beginning}_${ending}2`] = bindings[i][`${beginning}_${ending}2`];
-          }
+  const gamepads = navigator.getGamepads();
+  for (let p = 0; p < gamepads.length; p += 1) {
+    for (let i = 0; i < bindings.length; i += 1) {
+      if (gamepads[p] !== null && gamepads[p].id === bindings[i].id) {
+        // sticks
+        ['left', 'right'].forEach((beginning) => {
+          ['up', 'down', 'left', 'right', 'v', 'h'].forEach((ending) => {
+            gamepad[p].bindings[`${beginning}_${ending}`] = bindings[i][`${beginning}_${ending}`];
+            if (bindings[i][`${beginning}_${ending}2`] !== undefined) {
+              gamepad[p].bindings[`${beginning}_${ending}2`] = bindings[i][`${beginning}_${ending}2`];
+            }
+          });
         });
-      });
-      // buttons
-      buttonsArray.forEach((buttonName) => {
-        gamepad[i].bindings[`${buttonName}_button`] = gamepad[i].pad.buttons[bindings[i][`${buttonName}_button`]];
-      });
-      // resting
-      gamepad[i].bindings.resting = bindings[i].resting;
+        // buttons
+        buttonsArray.forEach((buttonName) => {
+          gamepad[p].bindings[`${buttonName}_button`] = gamepad[p].pad.buttons[bindings[i][`${buttonName}_button`]];
+        });
+        // init resting; might differ per controller
+        gamepad[p].bindings.resting = gamepad[p].pad.axes;
+      }
     }
   }
 }
