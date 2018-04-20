@@ -37,8 +37,8 @@ class PlayState extends State {
     ) {
       game.statemachine.transition('DeathState');
     }
-    // check if all heroes are alive
-    if (heroes.every(hero => hero.hp > 0)) {
+    // check if at least one hero is alive
+    if (heroes.some(hero => hero.hp > 0)) {
       // update the level
       game.levelmachine.update(delta);
     }
