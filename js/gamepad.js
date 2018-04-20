@@ -164,7 +164,13 @@ function bindControls(padIndex) {
   const gamepads = navigator.getGamepads();
   gamepad[padIndex].pad = gamepads[padIndex];
   if (gamepad[padIndex].pad !== null) {
-    if (gamepad[padIndex].bindings.resting === undefined) {
+    if (gamepad[padIndex].waitRelease !== undefined) {
+      // we should wait til the user releases this button
+      if (!gamepad[padIndex].waitRelease.pressed) {
+        gamepad[padIndex].waitRelease = undefined;
+      }
+      return 'Unbound the controller.';
+    } else if (gamepad[padIndex].bindings.resting === undefined) {
       gamepad[padIndex].bindings.resting = gamepad[padIndex].pad.axes;
       return 'Press the A button.';
     } else if (gamepad[padIndex].bindings.L2_button === undefined) {
@@ -221,6 +227,16 @@ function getStickPct(padIndex, stickName, maxName, axisName) {
     return pct;
   }
   return 0.0;
+}
+
+// resets the binding for a specific pad
+function resetBinding(padIndex) {
+  gamepad[padIndex] = {
+    bindings: {},
+    bound_buttons: [],
+    noise_axes: [],
+    waitRelease: gamepad[padIndex].bindings.B_button,
+  };
 }
 
 // returns the current state of the specefied stick and gamepad

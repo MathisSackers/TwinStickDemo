@@ -8,17 +8,23 @@ class BindingState extends State {
     game.text.show();
     // connected controllers
     this.connectedPads = [];
+    this.leaving = [];
   }
-  update() {
+  update(delta) {
     // update the connected gamepads
     this.connectedPads = [...new Set(this.connectedPads.concat(getPads()))];
     if (this.connectedPads.length !== this.numPlayers) {
       // new layout
       this.numPlayers = this.connectedPads.length;
+      // adjust number of texts
       game.text.setNumTexts(this.numPlayers);
+      // reset leaving;
+      for (let i = 0; i < this.numPlayers; i += 1) {
+        this.leaving[i] = 0;
+      }
     }
     // binding
-    let counter = 0;
+    let padIndex = 0;
     this.connectedPads.every((connectedPad) => {
       // needs binding
       if (!game.usedPads.includes(connectedPad)) {
@@ -27,19 +33,27 @@ class BindingState extends State {
         if (bindIn === true) {
           game.usedPads.push(connectedPad);
         } else if (bindIn !== false) {
-          game.text.setText(bindIn, counter);
+          game.text.setText(bindIn, padIndex);
         }
       } else {
         // already bound
-        game.text.setText('Press A to start the game.', counter);
+        game.text.setText('Press A to start the game. Hold B to leave', padIndex);
         const input = getInput(connectedPad);
         if (input.A_press) {
           // start game
           game.statemachine.transition('PlayState');
           return false;
+        } else if (input.B_down) {
+          this.leaving[padIndex] += delta;
+          if (this.leaving[padIndex] > 60) {
+            game.usedPads.splice(game.usedPads.indexOf(connectedPad), 1);
+            resetBinding(connectedPad);
+          }
+        } else if (input.B_release) {
+          this.leaving[padIndex] = 0;
         }
       }
-      counter += 1;
+      padIndex += 1;
       return true;
     });
     return this;
