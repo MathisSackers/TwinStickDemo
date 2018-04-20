@@ -2,8 +2,11 @@
 
 class LevelMachine {
   constructor() {
+    if (game.levelmachine !== undefined) {
+      console.error('You shouldn\'t create multiple instances of LevelMachine');
+    }
     this.action = null;
-    // this.loadLevel(level0);
+    this.variables = {};
     return this;
   }
 
@@ -24,6 +27,12 @@ class LevelMachine {
       this.action.kill();
       this.action = null;
     }
+    // reset variables...
+    this.variables = {
+      playerNum: game.usedPads.length,
+      playersAlive: game.usedPads.length,
+      rank: 0.5,
+    };
     const parser = new DOMParser();
     [this.level] = parser.parseFromString(newLevel, 'application/xml').documentElement.children;
     this.action = new LevelAction(this.level);

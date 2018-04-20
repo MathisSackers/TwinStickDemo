@@ -6,17 +6,18 @@ const level0 = `
 <action type='slow'>
   <wait type='time'>60</wait>
   <!-- Part 1 -->
-  <!-- 3 enemies. Each spawns 5 more 2 seconds after death. -->
+  <!-- 3 + (2 per player) enemies. Each spawns 3-5(same for all enemies) more 2 seconds after death. -->
     <action type='slow'>
+      <var type='set' name='children'>3 + _($rand * 2)</var>
       <repeat type='fast'>
-        <times>3 + _($rand * 5)</times>
+        <times>3 + _($playerNum * 2)</times>
         <action type='slow'>
           <spawn>
             <enemy/>
           </spawn>
           <wait type='time'>120</wait>
           <repeat type='fast'>
-            <times>5</times>
+            <times>$children</times>
             <action type='slow'>
               <spawn>
                 <enemy/>

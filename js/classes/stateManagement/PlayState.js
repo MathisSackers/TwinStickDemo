@@ -37,6 +37,9 @@ class PlayState extends State {
     ) {
       game.statemachine.transition('DeathState');
     }
+    let hAlive = 0;
+    heroes.forEach((hero) => { hAlive += hero.onScreen ? 1 : 0; });
+    game.levelmachine.variables.playernum = hAlive;
     // check if at least one hero is alive
     if (heroes.some(hero => hero.hp > 0)) {
       // update the level

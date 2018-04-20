@@ -3,7 +3,7 @@
 // Attributes - type = (time | condition)
 
 // time: wait for specified frames
-// Contents - NUMBER
+// Contents - EXPRESSION
 
 // condition: TODO: wait until the condition is met
 // Contents - CONDITION

@@ -72,6 +72,8 @@ class LevelAction extends LevelObject {
           this.actions.push(new LevelSpawn(node));
         } else if (node.nodeName === 'action') {
           this.actions.push(new LevelAction(node));
+        } else if (node.nodeName === 'var') {
+          this.actions.push(new LevelVariable(node));
         } else {
           // Invalid input
           console.error('Unknown node: ', node);
