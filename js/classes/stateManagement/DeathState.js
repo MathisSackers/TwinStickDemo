@@ -9,7 +9,7 @@ class DeathState extends State {
   }
   update() {
     game.usedPads.forEach((pad) => {
-      const input = getInput(pad);
+      const input = GamepadUtil.getInput(pad);
       if (input.A_press) {
         game.statemachine.transition('PlayState');
       }

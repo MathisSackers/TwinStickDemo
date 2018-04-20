@@ -12,7 +12,7 @@ class PlayState extends State {
   update(delta) {
     let counter = 0;
     game.usedPads.forEach((pad) => {
-      const input = getInput(pad);
+      const input = GamepadUtil.getInput(pad);
       // global inputs
       // pause
       if (input.B_press) {

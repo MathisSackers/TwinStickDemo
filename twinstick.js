@@ -55,12 +55,12 @@ document.onkeydown = (e) => {
     muted = !muted;
   // save binding with 's'
   } else if (e.key === 's') {
-    window.localStorage.setItem('bindings', JSON.stringify(bindingToString()));
+    window.localStorage.setItem('bindings', JSON.stringify(GamepadUtil.bindingToString()));
   // load binding with 'l'
   } else if (e.key === 'l') {
     const bindings = window.localStorage.getItem('bindings');
     if (bindings !== null) {
-      bindingFromString(JSON.parse(bindings));
+      GamepadUtil.bindingFromString(JSON.parse(bindings));
     }
   }
 };

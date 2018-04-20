@@ -12,7 +12,7 @@ class BindingState extends State {
   }
   update(delta) {
     // update the connected gamepads
-    this.connectedPads = [...new Set(this.connectedPads.concat(getPads()))];
+    this.connectedPads = [...new Set(this.connectedPads.concat(GamepadUtil.getPads()))];
     if (this.connectedPads.length !== this.numPlayers) {
       // new layout
       this.numPlayers = this.connectedPads.length;
@@ -29,7 +29,7 @@ class BindingState extends State {
       // needs binding
       if (!game.usedPads.includes(connectedPad)) {
         // get input
-        const bindIn = bindControls(connectedPad);
+        const bindIn = GamepadUtil.bindControls(connectedPad);
         if (bindIn === true) {
           game.usedPads.push(connectedPad);
         } else if (bindIn !== false) {
@@ -38,7 +38,7 @@ class BindingState extends State {
       } else {
         // already bound
         game.text.setText('Press A to start the game. Hold B to leave', padIndex);
-        const input = getInput(connectedPad);
+        const input = GamepadUtil.getInput(connectedPad);
         if (input.A_press) {
           // start game
           game.statemachine.transition('PlayState');
@@ -47,7 +47,7 @@ class BindingState extends State {
           this.leaving[padIndex] += delta;
           if (this.leaving[padIndex] > 60) {
             game.usedPads.splice(game.usedPads.indexOf(connectedPad), 1);
-            resetBinding(connectedPad);
+            GamepadUtil.resetBinding(connectedPad);
           }
         } else if (input.B_release) {
           this.leaving[padIndex] = 0;

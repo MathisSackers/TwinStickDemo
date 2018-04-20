@@ -9,7 +9,7 @@ class PauseState extends State {
   }
   update() {
     game.usedPads.forEach((pad) => {
-      const input = getInput(pad);
+      const input = GamepadUtil.getInput(pad);
       if (input.B_press) {
         game.statemachine.transition('PlayState');
       }
