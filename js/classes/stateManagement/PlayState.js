@@ -33,17 +33,15 @@ class PlayState extends State {
     moveHitMarkers();
     // check if all heroes are dead
     if (
-      heroes.every((hero) => {
-        if (hero.onScreen) {
-          return false;
-        }
-        return true;
-      })
+      heroes.every(hero => !hero.onScreen)
     ) {
       game.statemachine.transition('DeathState');
     }
-    // update the level
-    game.levelmachine.update(delta);
+    // check if all heroes are alive
+    if (heroes.every(hero => hero.hp > 0)) {
+      // update the level
+      game.levelmachine.update(delta);
+    }
     return this;
   }
 }

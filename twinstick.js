@@ -61,7 +61,6 @@ document.onkeydown = (e) => {
     const bindings = window.localStorage.getItem('bindings');
     if (bindings !== null) {
       bindingFromString(JSON.parse(bindings));
-      game.statemachine.transition('PlayState');
     }
   }
 };

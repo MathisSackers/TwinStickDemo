@@ -20,22 +20,25 @@ class BindingState extends State {
     // binding
     let counter = 0;
     this.connectedPads.forEach((connectedPad) => {
-      // get input
-      const bindIn = bindControls(connectedPad);
-      if (bindIn === true) {
-        game.usedPads.push(connectedPad);
+      // needs binding
+      if (!game.usedPads.includes(connectedPad)) {
+        // get input
+        const bindIn = bindControls(connectedPad);
+        if (bindIn === true) {
+          game.usedPads.push(connectedPad);
+        } else if (bindIn !== false) {
+          game.text.setText(bindIn, counter);
+        }
+      } else {
+        // already bound
         game.text.setText('Press A to start the game.', counter);
-      } else if (bindIn !== false) {
-        game.text.setText(bindIn, counter);
+        const input = getInput(connectedPad);
+        if (input.A_press) {
+          // start game
+          game.statemachine.transition('PlayState');
+        }
       }
       counter += 1;
-    });
-    // start game
-    game.usedPads.forEach((pad) => {
-      const input = getInput(pad);
-      if (input.A_press) {
-        game.statemachine.transition('PlayState');
-      }
     });
     return this;
   }

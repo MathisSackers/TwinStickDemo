@@ -204,7 +204,7 @@ function bindControls(padIndex) {
       return bindStick('right', 'left', padIndex);
     }
   }
-  return false;
+  return gamepad[padIndex].bindings.right_left !== undefined;
 }
 
 // gets the percentage of one stick in one direction
