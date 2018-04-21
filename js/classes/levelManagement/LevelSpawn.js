@@ -1,6 +1,6 @@
 // Implementation of the <spawn> tag
 
-// Contents - ttl?, (enemy | enemyRef)
+// Contents - ttl?, ctl?, (enemy | enemyRef)
 
 // Example
 // <spawn>
@@ -24,6 +24,8 @@ class LevelSpawn extends LevelObject {
         this.enemy = spawnEnemy(node);
       } else if (node.nodeName === 'ttl') {
         this.ttl = LevelExpression.eval(node.innerHTML);
+      } else if (this.node.children[i].nodeName === 'ctl') {
+        this.ctl = this.node.children[i].innerHTML;
       } else if (node.nodeName === 'enemyRef') {
         // TODO
       } else {
@@ -44,6 +46,9 @@ class LevelSpawn extends LevelObject {
       if (this.ttl <= 0) {
         this.kill();
       }
+    }
+    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+      this.kill();
     }
     return this;
   }

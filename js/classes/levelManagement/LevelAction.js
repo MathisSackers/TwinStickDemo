@@ -4,7 +4,7 @@
 // slow: wait for the action(s) to be .done()
 // fast: run all actions in parallel (except wait)
 
-// Contents - ttl?, (repeat | spawn | wait | action | actionRef)*
+// Contents - ttl?, ctl?, (repeat | spawn | wait | action | actionRef)*
 
 // Example
 
@@ -38,6 +38,8 @@ class LevelAction extends LevelObject {
     for (let i = 0; i < this.node.children.length; i += 1) {
       if (this.node.children[i].nodeName === 'ttl') {
         this.ttl = LevelExpression.eval(this.node.children[i].innerHTML);
+      } else if (this.node.children[i].nodeName === 'ctl') {
+        this.ctl = this.node.children[i].innerHTML;
       }
     }
   }
@@ -58,7 +60,7 @@ class LevelAction extends LevelObject {
     const node = this.node.children[this.currentChildIndex];
     this.currentChildIndex += 1;
     if (node !== undefined) {
-      if (node.nodeName === 'ttl') {
+      if (node.nodeName === 'ttl' || node.nodeName === 'ctl') {
         // skip
         this.readNextNode();
       } else {
@@ -113,6 +115,9 @@ class LevelAction extends LevelObject {
       if (this.ttl <= 0) {
         this.kill();
       }
+    }
+    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+      this.kill();
     }
     return this;
   }

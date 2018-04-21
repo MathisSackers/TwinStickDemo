@@ -4,7 +4,7 @@
 // slow: wait for the action to be .done()
 // fast: run all actions in parallel
 
-// Contents - times, ttl?, (action | actionRef)
+// Contents - times, ttl?, ctl?, (action | actionRef)
 
 // Example
 // <repeat type='slow'>
@@ -49,6 +49,8 @@ class LevelRepeat extends LevelObject {
         this.times = LevelExpression.eval(node.innerHTML);
       } else if (node.nodeName === 'ttl') {
         this.ttl = LevelExpression.eval(node.innerHTML);
+      } else if (this.node.children[i].nodeName === 'ctl') {
+        this.ctl = this.node.children[i].innerHTML;
       } else if (node.nodeName === 'action') {
         this.actionNode = node;
       } else if (node.nodeName === 'actionRef') {
@@ -91,6 +93,9 @@ class LevelRepeat extends LevelObject {
       if (this.ttl <= 0) {
         this.kill();
       }
+    }
+    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+      this.kill();
     }
     return this;
   }

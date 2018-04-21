@@ -29,7 +29,7 @@ class LevelWait extends LevelObject {
         if (attribute.value === 'time') {
           this.time = LevelExpression.eval(this.node.innerHTML);
         } else if (attribute.value === 'condition') {
-          // TODO
+          this.condition = this.node.innerHTML;
         } else {
           console.error('Unknown type: ', attribute.value);
         }
@@ -37,14 +37,18 @@ class LevelWait extends LevelObject {
         console.error('Unknown attribute: ', attribute);
       }
     }
-    if (this.time === undefined) {
+    if (this.time === undefined && this.condition === undefined) {
       console.error('No type specified:', this.node);
     }
   }
 
   update(delta) {
-    if (this.time > 0) {
-      this.time -= delta;
+    if (!this.isDone) {
+      if (this.time > 0) {
+        this.time -= delta;
+      } else if (this.condition !== undefined) {
+        this.isDone = LevelEvaluation.eval(this.condition);
+      }
     }
     return this;
   }
@@ -64,9 +68,8 @@ class LevelWait extends LevelObject {
   }
 
   kill() {
-    if (this.time !== undefined) {
-      this.time = 0;
-    }
+    this.time = undefined;
+    this.condition = undefined;
     this.isDone = true;
   }
 }
