@@ -237,7 +237,25 @@ input {
 	background-color: #4e4e;
 }
 
-.main{
+.document {
+	position: absolute;
+	min-height: 50px;
+	margin: 20px;
+	padding: 5px;
+	padding: 10px;
+	display: inline-block;
+	color: #fff;
+	border: solid 2px #fff;
+	background-color: #e6beff	;
+}
+
+.document button {
+	width: 80px;
+	color: #fafafa;
+	background: #9438ce;
+}
+
+.main {
 	height: 50px;
 	margin: 20px;
 }
@@ -247,7 +265,7 @@ input {
 	background-color: #4e4e;
 }
 
-.main p{
-	color: #e6194b;
+.main p {
+	color: #000000;
 	opacity: 1;
 }

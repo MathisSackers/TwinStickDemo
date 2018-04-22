@@ -10,11 +10,16 @@
 		<script src="js/levelEditor/PositionUtil.js"></script>
 		<script src="js/levelEditor/DragUtil.js"></script>
 		<script src="js/levelEditor/DOMUtil.js"></script>
+		<script src="js/levelEditor/copy.js"></script>
 		<script src="js/levelEditor/levelEditor.js"></script>
 	</head>
 	<body style='background-color: #65635a;'>
 		<div class="trashcan">TRASH</div>
-		<div id ="main" class="dropzone main"><p>Drop the main action of your level here.</p></div>
+		<div class="document">
+			<div class="blocktitle">Document</div>
+			<div id ="main" class="dropzone main"><p>Drop the main action of your level here.</p></div>
+			<button type="button" onclick="copyToClipboard()">Copy to Clipboard</button>
+		</div>
 
 		<div class="action untouched draggable drag-drop">
 			<div class="blocktitle">Action</div>
