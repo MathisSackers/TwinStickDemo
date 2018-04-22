@@ -56,21 +56,27 @@ const DOMUtil = {
   },
 
   // creates an HTML <input>
-  generateExpression(text = '_$rand + 4') {
+  generateExpression(text = '_$rand + 4', csss = []) {
     const expression = document.createElement('input');
     expression.setAttribute('type', 'text');
     expression.setAttribute('title', 'expression');
     expression.setAttribute('placeholder', text);
     expression.classList.add('expression');
+    csss.forEach((css) => {
+      expression.classList.add(css);
+    });
     return expression;
   },
 
-  generateEvaluation(text = '4 == 4') {
+  generateEvaluation(text = '4 == 4', csss = []) {
     const evaluation = document.createElement('input');
     evaluation.setAttribute('type', 'text');
     evaluation.setAttribute('title', 'evaluation');
     evaluation.setAttribute('placeholder', text);
     evaluation.classList.add('evaluation');
+    csss.forEach((css) => {
+      evaluation.classList.add(css);
+    });
     return evaluation;
   },
 
@@ -87,7 +93,7 @@ const DOMUtil = {
   appendTTLandCTL(elem) {
     // <button type="button">Click Me!</button>
     let ctlShown = false;
-    const ctlInput = this.generateEvaluation('(CTL)');
+    const ctlInput = this.generateEvaluation('(CTL)', ['ctl']);
     const ctl = this.generateButton('CTL', () => {
       ctlShown = !ctlShown;
       if (ctlShown) {
@@ -97,7 +103,7 @@ const DOMUtil = {
       }
     });
     let ttlShown = false;
-    const ttlInput = this.generateExpression('(TTL)');
+    const ttlInput = this.generateExpression('(TTL)', ['ttl']);
     const ttl = this.generateButton('TTL', () => {
       ttlShown = !ttlShown;
       if (ttlShown) {
@@ -113,14 +119,15 @@ const DOMUtil = {
   // adds child elements to box
   expandBox(elem) {
     if (elem.classList.contains('action')) {
-      // <select><option value='fast'>Fast</option><option value='slow'>Slow</option></select>
+      // dropdown fast/slow
       elem.appendChild(this.generateSelection(['fast', 'slow'], ['Fast', 'Slow']));
-      // <input type="text" name="label" pattern="[A-Za-z]" title="Label">
+      // input label
       const label = this.generateLabel();
       elem.appendChild(label);
       // new line
       const br = document.createElement('br');
       elem.appendChild(br);
+      // TTL and CTL
       this.appendTTLandCTL(elem);
       // <div class="dropzone"></div>
       const div = document.createElement('div');
@@ -129,6 +136,16 @@ const DOMUtil = {
       HierarchyUtil.setChildren(div, []);
       HierarchyUtil.addToHierarchy(elem, div);
     } else if (elem.classList.contains('repeat')) {
+      elem.appendChild(this.generateSelection(['fast', 'slow'], ['Fast', 'Slow']));
+      const label = this.generateLabel();
+      elem.appendChild(label);
+      // new line
+      const br = document.createElement('br');
+      elem.appendChild(br);
+      // TTL and CTL
+      this.appendTTLandCTL(elem);
+      // times
+      elem.appendChild(this.generateExpression('Times*', ['times']));
       // <div class="action"><div>Action</div></div>
       const actionDiv = document.createElement('div');
       actionDiv.classList.add('action');

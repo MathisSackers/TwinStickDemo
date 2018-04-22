@@ -6,8 +6,22 @@
 }
 
 ::placeholder {
-    color: #cacaca;
+    color: #dadada;
     opacity: 1;
+}
+
+button {
+	margin: 5px;
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+input {
+	margin: 5px;
+	border: none;
+	background: none;
+	box-shadow: none;
 }
 
 .action {
@@ -21,49 +35,50 @@
 .action button {
 	width: 80px;
 	color: #fafafa;
-	background: #e6194b;
+	background: #ef859e;
 }
 
 .action input {
 	width: 80px;
 	color: #fafafa;
-	background: #e6194b;
+	background: #ef859e;
 }
 
 .action select {
 	color: #fafafa;
-	background: #e6194b;
+	background: #ef859e;
 }
 
 .action select option {
 	color: #fafafa;
-	background: #e6194b;
-}
-
-.action.static button {
-	width: 80px;
-	color: #fafafa;
-	background: #9E6070;
+	background: #ef859e;
 }
 
 .action.static {
 	background-color: #9E6070;
 }
 
+.action.static button {
+	width: 80px;
+	color: #fafafa;
+	background: #ca93a1;
+}
+
+
 .action.static select {
 	color: #fafafa;
-	background: #9E6070;
+	background: #ca93a1;
 }
 
 .action.static select option {
 	color: #fafafa;
-	background: #9E6070;
+	background: #ca93a1;
 }
 
 .action.static input {
 	width: 80px;
 	color: #fafafa;
-	background: #9E6070;
+	background: #ca93a1;
 }
 
 .repeat {
@@ -72,6 +87,35 @@
 	background-color: #0082c8;
 	right: 10px;
 	top: 60px;
+}
+
+.repeat button {
+	width: 80px;
+	color: #fafafa;
+	background: #68b2da;
+}
+
+.repeat input {
+	width: 80px;
+	color: #fafafa;
+	background: #68b2da;
+}
+
+.repeat input.times {
+	width: 170px;
+	display: block;
+	color: #fafafa;
+	background: #68b2da;
+}
+
+.repeat select {
+	color: #fafafa;
+	background: #68b2da;
+}
+
+.repeat select option {
+	color: #fafafa;
+	background: #68b2da;
 }
 
 .blocktitle {
