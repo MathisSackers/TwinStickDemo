@@ -7,6 +7,7 @@
 
 .action {
 	position: fixed;
+	padding: 5px;
 	background-color: #e6194b;
 	right: 10px;
 	top: 10px;
@@ -31,6 +32,7 @@
 }
 
 .dropzone {
+	margin: 10px;
 	background-color: #fafafa;
 	opacity: 0.3;
 	height: 5px;

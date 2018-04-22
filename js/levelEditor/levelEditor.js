@@ -3,8 +3,6 @@
 
 interact('.draggable')
   .draggable({
-    // enable inertial throwing
-    inertia: false,
     // enable autoScroll
     autoScroll: true,
 
@@ -40,7 +38,7 @@ interact('.draggable')
       }
       DragUtil.activateDropzones(target);
       const parent = HierarchyUtil.removeParent(target);
-      DOMUtil.childRemoved(parent);
+      DOMUtil.childResize(parent);
       PositionUtil.setHighestZ(target);
       target.classList.add('dragging');
     },
@@ -56,7 +54,8 @@ interact('.draggable')
         } else if (event.relatedTarget.classList.contains('drop-active')) {
           // dropped somewhere
           HierarchyUtil.addToHierarchy(event.relatedTarget, event.target);
-          DOMUtil.childAdded(event.relatedTarget);
+          DOMUtil.childResize(event.relatedTarget);
+          DOMUtil.splitBox(event.relatedTarget);
         }
       }
       if (!trashed) {
@@ -75,20 +74,16 @@ interact('.drop-active')
     },
 
     ondropdeactivate: (event) => {
+      // reset snapping
       if (event.draggable.draggable().snap.targets.length !== 0
         && event.target !== undefined
       ) {
-        const dropRect = interact.getElementRect(event.target);
-        const dropTarget = { x: dropRect.left, y: dropRect.top };
-        const { x, y } = event.draggable.draggable().snap.targets[0];
-        if (x === dropTarget.x && y === dropTarget.y) {
-          event.draggable.draggable({
-            snap: {
-              targets: [],
-              range: 500,
-            },
-          });
-        }
+        event.draggable.draggable({
+          snap: {
+            targets: [],
+            range: 500,
+          },
+        });
       }
     },
 

@@ -15,17 +15,20 @@ const PositionUtil = {
   moveChildren(elem) {
     if (elem !== undefined) {
       if (elem.classList.contains('dropzone')) {
-        if (HierarchyUtil.getChildren(elem).length !== 0) {
-          const child = HierarchyUtil.getChildren(elem)[0];
-          const { left, top } = this.absolutePosition(elem);
-          child.style.top = `${top}px`;
-          child.style.left = `${left}px`;
-          this.moveChildren(child, true);
+        const children = HierarchyUtil.getChildren(elem);
+        if (children.length !== 0) {
+          for (let i = 0; i < children.length; i += 1) {
+            const child = children[i];
+            const { left, top } = this.absolutePosition(elem);
+            child.style.top = `${top}px`;
+            child.style.left = `${left}px`;
+            this.moveChildren(child);
+          }
         }
       } else {
         elem.classList.add('dragging');
         HierarchyUtil.getChildren(elem).forEach((child) => {
-          this.moveChildren(child, true);
+          this.moveChildren(child);
         });
       }
     }

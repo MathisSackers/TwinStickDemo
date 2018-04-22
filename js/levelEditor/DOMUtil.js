@@ -2,23 +2,32 @@
 /* global HierarchyUtil */
 
 const DOMUtil = {
-  // a child was added to this element, resize it!
-  childAdded(elem) {
+  // resize dependent on child size
+  childResize(elem) {
     if (elem !== undefined) {
       const e = elem;
       if (elem.classList.contains('dropzone')) {
-        let { width, height, padding } = getComputedStyle(HierarchyUtil.getChildren(elem)[0], null);
-        // to numbers
-        height = Number(height.slice(0, height.length - 2));
-        width = Number(width.slice(0, width.length - 2));
-        padding = Number(padding.slice(0, padding.length - 2));
-        const totalHeight = height + (2 * padding);
-        const totalWidth = width + (2 * padding);
-        e.style.height = `${totalHeight}px`;
-        e.style.width = `${totalWidth}px`;
-        this.childAdded(HierarchyUtil.getParent(elem));
+        const children = HierarchyUtil.getChildren(elem);
+        if (children.length !== 0) {
+          // resize dependent on child
+          let {
+            borderWidth, width, height, padding,
+          } = getComputedStyle(HierarchyUtil.getChildren(elem)[0], null);
+          // to numbers
+          height = Number(height.slice(0, height.length - 2));
+          width = Number(width.slice(0, width.length - 2));
+          padding = Number(padding.slice(0, padding.length - 2));
+          borderWidth = Number(borderWidth.slice(0, borderWidth.length - 2));
+          const totalHeight = height + (2 * padding) + (2 * borderWidth);
+          const totalWidth = width + (2 * padding) + (2 * borderWidth);
+          e.style.height = `${totalHeight}px`;
+          e.style.width = `${totalWidth}px`;
+          this.childResize(HierarchyUtil.getParent(elem));
+        } else {
+          e.style = undefined;
+        }
       } else {
-        this.childAdded(HierarchyUtil.getParent(elem));
+        this.childResize(HierarchyUtil.getParent(elem));
       }
     }
   },
@@ -35,6 +44,20 @@ const DOMUtil = {
     }
   },
 
+  // adds child elements to box
+  splitBox(elem) {
+    if (elem.parentNode.classList.contains('action')) {
+      // <div class="dropzone"></div>
+      const div = document.createElement('div');
+      div.classList.add('dropzone');
+      elem.after(div);
+      const oldChildren = HierarchyUtil.getChildren(elem.parentNode);
+      oldChildren.push(div);
+      HierarchyUtil.setChildren(div, []);
+      HierarchyUtil.setParent(div, elem.parentNode);
+    }
+  },
+
   // trashes all children
   trash(elem) {
     if (elem !== undefined) {
@@ -45,32 +68,4 @@ const DOMUtil = {
     HierarchyUtil.remove(elem);
     elem.parentNode.removeChild(elem);
   },
-
-  // a child was removed from this element, resize it!
-  childRemoved(elem) {
-    if (elem !== undefined) {
-      const e = elem;
-      if (elem.classList.contains('main')) {
-        e.style.height = '50px';
-        e.style.width = '150px';
-      } else if (elem.classList.contains('dropzone')) {
-        if (HierarchyUtil.getChildren(elem).length !== 0) {
-          let { width, height, padding } = getComputedStyle(HierarchyUtil
-            .getChildren(elem)[0], null);
-          // to numbers
-          height = Number(height.slice(0, height.length - 2));
-          width = Number(width.slice(0, width.length - 2));
-          padding = Number(padding.slice(0, padding.length - 2));
-          const totalHeight = height + (2 * padding);
-          const totalWidth = width + (2 * padding);
-          e.style.height = `${totalHeight}px`;
-          e.style.width = `${totalWidth}px`;
-        } else {
-          e.style = {};
-        }
-        this.childAdded(HierarchyUtil.getParent(elem));
-      }
-    }
-  },
-
 };
