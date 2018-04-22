@@ -36,10 +36,19 @@ interact('.draggable')
         // don't do this again
         target.classList.remove('untouched');
       }
+      // activate the zones
       DragUtil.activateDropzones(target);
+      // now remove the parent of dragged node: the zone it came from is not active
       const parent = HierarchyUtil.removeParent(target);
+      // remove the boxes above and below where we came from
+      DOMUtil.fuseBox(parent);
       DOMUtil.childResize(parent);
+      // reset positioning
+      PositionUtil.moveChildren(parent);
+      DragUtil.dropChildren(parent);
+      // finally move us to top
       PositionUtil.setHighestZ(target);
+      // set opacity (css)
       target.classList.add('dragging');
     },
     // call this function on every dragmove event

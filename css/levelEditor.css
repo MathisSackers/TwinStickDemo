@@ -48,13 +48,18 @@
 }
 
 .dropzone.drop-active {
-	height: 50px;
+	height: 30px;
 	background-color: #4e4e;
 }
 
 .main{
 	height: 50px;
 	margin: 20px;
+}
+
+.main.drop-active {
+	height: 150px;
+	background-color: #4e4e;
 }
 
 .main p{

@@ -44,17 +44,46 @@ const DOMUtil = {
     }
   },
 
-  // adds child elements to box
+  // adds empty dropzones before and after elem
   splitBox(elem) {
     if (elem.parentNode.classList.contains('action')) {
       // <div class="dropzone"></div>
-      const div = document.createElement('div');
-      div.classList.add('dropzone');
-      elem.after(div);
-      const oldChildren = HierarchyUtil.getChildren(elem.parentNode);
-      oldChildren.push(div);
-      HierarchyUtil.setChildren(div, []);
-      HierarchyUtil.setParent(div, elem.parentNode);
+      // one before the selcted one
+      const divBefore = document.createElement('div');
+      divBefore.classList.add('dropzone');
+      elem.before(divBefore);
+      // one after the selcted one
+      const divAfter = document.createElement('div');
+      divAfter.classList.add('dropzone');
+      elem.after(divAfter);
+      // splice into the children array
+      const children = HierarchyUtil.getChildren(elem.parentNode);
+      const middleIndex = children.indexOf(elem);
+      children.splice(middleIndex + 1, 0, divBefore);
+      children.splice(middleIndex, 0, divAfter);
+      // and put them into the hierarchy
+      HierarchyUtil.setChildren(divBefore, []);
+      HierarchyUtil.setParent(divBefore, elem.parentNode);
+      HierarchyUtil.setChildren(divAfter, []);
+      HierarchyUtil.setParent(divAfter, elem.parentNode);
+    }
+  },
+
+  // fuses empty dropzones before and after elem
+  fuseBox(elem) {
+    if (elem !== undefined && elem.parentNode.classList.contains('action')) {
+      // <div class="dropzone"></div>
+      // splice out of the children array
+      const children = HierarchyUtil.getChildren(elem.parentNode);
+      const middleIndex = children.indexOf(elem);
+      const [divAfter] = children.splice(middleIndex - 1, 1);
+      const [divBefore] = children.splice(middleIndex, 1);
+      children.splice(middleIndex, 1);
+      // and remove them from the hierarchy
+      HierarchyUtil.remove(divBefore);
+      HierarchyUtil.remove(divAfter);
+      this.trash(divAfter);
+      this.trash(divBefore);
     }
   },
 
