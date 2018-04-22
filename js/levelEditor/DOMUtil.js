@@ -33,8 +33,9 @@ const DOMUtil = {
   },
 
   // creates an HTML <select>
-  generateSelection(values, texts) {
+  generateSelection(values, texts, onChange) {
     const select = document.createElement('select');
+    select.onchange = onChange;
     let counter = 0;
     values.forEach((value) => {
       const option = document.createElement('option');
@@ -80,13 +81,19 @@ const DOMUtil = {
     return evaluation;
   },
 
-  generateLabel(text = 'Label') {
-    const label = document.createElement('input');
-    label.setAttribute('type', 'text');
-    label.setAttribute('title', 'optional label');
-    label.setAttribute('placeholder', text);
-    label.classList.add('label');
-    return label;
+  generateInput(text = 'Type here.', placeholder = 'Type here.', csss = []) {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'text');
+    input.setAttribute('title', text);
+    input.setAttribute('placeholder', placeholder);
+    csss.forEach((css) => {
+      input.classList.add(css);
+    });
+    return input;
+  },
+
+  generateLabel() {
+    return this.generateInput('optional label', '(Label)', ['label']);
   },
 
   // appends a button for ttl and one for ctl
@@ -158,6 +165,24 @@ const DOMUtil = {
       HierarchyUtil.setChildren(actionDiv, []);
       HierarchyUtil.addToHierarchy(elem, actionDiv);
       this.expandBox(actionDiv);
+    } else if (elem.classList.contains('wait')) {
+      const conditionInput = this.generateInput('Condition', 'Condition', ['condition']);
+      const timeInput = this.generateInput('Time', 'Time', ['time']);
+      elem.appendChild(this.generateSelection(['time', 'condition'], ['Time', 'Condition'], (e) => {
+        if (e.target.value === 'time') {
+          conditionInput.after(timeInput);
+          elem.removeChild(conditionInput);
+        } else {
+          timeInput.after(conditionInput);
+          elem.removeChild(timeInput);
+        }
+      }));
+      elem.appendChild(timeInput);
+      // new line
+      const br = document.createElement('br');
+      elem.appendChild(br);
+      // TTL and CTL
+      this.appendTTLandCTL(elem);
     }
   },
 

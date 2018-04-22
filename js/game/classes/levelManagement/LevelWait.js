@@ -5,8 +5,8 @@
 // time: wait for specified frames
 // Contents - EXPRESSION
 
-// condition: TODO: wait until the condition is met
-// Contents - CONDITION
+// condition: wait until the condition is met
+// Contents - EVALUATION
 
 // Example
 // <wait type="time">($rand * $playerNum) + 10</wait>
