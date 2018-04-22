@@ -144,8 +144,6 @@ const DOMUtil = {
       HierarchyUtil.addToHierarchy(elem, div);
     } else if (elem.classList.contains('repeat')) {
       elem.appendChild(this.generateSelection(['fast', 'slow'], ['Fast', 'Slow']));
-      const label = this.generateLabel();
-      elem.appendChild(label);
       // new line
       const br = document.createElement('br');
       elem.appendChild(br);
@@ -183,6 +181,18 @@ const DOMUtil = {
       elem.appendChild(br);
       // TTL and CTL
       this.appendTTLandCTL(elem);
+    } else if (elem.classList.contains('spawn')) {
+      this.appendTTLandCTL(elem);
+      const enemyDiv = document.createElement('div');
+      enemyDiv.classList.add('enemy');
+      enemyDiv.classList.add('static');
+      elem.appendChild(enemyDiv);
+      const textDiv = document.createElement('div');
+      textDiv.innerHTML = 'Enemy';
+      textDiv.classList.add('blocktitle');
+      enemyDiv.appendChild(textDiv);
+      HierarchyUtil.setChildren(enemyDiv, []);
+      HierarchyUtil.addToHierarchy(elem, enemyDiv);
     }
   },
 
@@ -237,6 +247,8 @@ const DOMUtil = {
       });
     }
     HierarchyUtil.remove(elem);
-    elem.parentNode.removeChild(elem);
+    if (elem.parentNode !== undefined) {
+      elem.parentNode.removeChild(elem);
+    }
   },
 };
