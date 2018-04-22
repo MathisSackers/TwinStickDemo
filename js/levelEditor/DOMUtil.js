@@ -211,8 +211,8 @@ const DOMUtil = {
       // splice into the children array
       const children = HierarchyUtil.getChildren(elem.parentNode);
       const middleIndex = children.indexOf(elem);
-      children.splice(middleIndex + 1, 0, divBefore);
-      children.splice(middleIndex, 0, divAfter);
+      children.splice(middleIndex + 1, 0, divAfter);
+      children.splice(middleIndex, 0, divBefore);
       // and put them into the hierarchy
       HierarchyUtil.setChildren(divBefore, []);
       HierarchyUtil.setParent(divBefore, elem.parentNode);
