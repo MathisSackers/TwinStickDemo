@@ -18,6 +18,7 @@ const HierarchyUtil = {
       this.hierarchy.get(parent).children.splice(index, 1);
       this.hierarchy.get(child).parent = undefined;
     }
+    return parent;
   },
 
   // whether parent is an ancestor of child

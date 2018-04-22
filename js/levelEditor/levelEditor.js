@@ -39,7 +39,8 @@ interact('.draggable')
         target.classList.remove('untouched');
       }
       DragUtil.activateDropzones(target);
-      HierarchyUtil.removeParent(target);
+      const parent = HierarchyUtil.removeParent(target);
+      DOMUtil.childRemoved(parent);
       PositionUtil.setHighestZ(target);
       target.classList.add('dragging');
     },

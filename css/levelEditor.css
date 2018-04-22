@@ -5,15 +5,6 @@
 	color: #fafafa;
 }
 
-#main{
-	margin: 20px;
-}
-
-#main p{
-	color: #e6194b;
-	opacity: 1;
-}
-
 .action {
 	position: fixed;
 	background-color: #e6194b;
@@ -42,7 +33,7 @@
 .dropzone {
 	background-color: #fafafa;
 	opacity: 0.3;
-	height: 80px;
+	height: 5px;
 	width: 150px;
 }
 
@@ -54,11 +45,17 @@
 	background-color: red;
 }
 
-.drop-active {
-  background-color: #4e4e;
+.dropzone.drop-active {
+	height: 50px;
+	background-color: #4e4e;
 }
 
-.drag-drop.can-drop {
-  color: #000;
-  background-color: #4e4;
+.main{
+	height: 50px;
+	margin: 20px;
+}
+
+.main p{
+	color: #e6194b;
+	opacity: 1;
 }

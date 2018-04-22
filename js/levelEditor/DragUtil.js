@@ -25,11 +25,15 @@ const DragUtil = {
   },
 
   // deactivates all dropzones
-  deactivateDropzones() {
+  deactivateDropzones(done = 15) {
     const zones = document.getElementsByClassName('drop-active');
     for (let i = 0; i < zones.length; i += 1) {
       const elem = zones[i];
       elem.classList.remove('drop-active');
+    }
+    if (done > 0) {
+      // do this 15 times to catch all
+      this.deactivateDropzones(done - 1);
     }
   },
 
