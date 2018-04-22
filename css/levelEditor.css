@@ -5,6 +5,11 @@
 	color: #fafafa;
 }
 
+::placeholder {
+    color: #cacaca;
+    opacity: 1;
+}
+
 .action {
 	position: fixed;
 	padding: 5px;
@@ -13,6 +18,66 @@
 	top: 10px;
 }
 
+.action button {
+	width: 80px;
+	color: #fafafa;
+	background: #e6194b;
+}
+
+.action input {
+	width: 80px;
+	color: #fafafa;
+	background: #e6194b;
+}
+
+.action select {
+	color: #fafafa;
+	background: #e6194b;
+}
+
+.action select option {
+	color: #fafafa;
+	background: #e6194b;
+}
+
+.action.static button {
+	width: 80px;
+	color: #fafafa;
+	background: #9E6070;
+}
+
+.action.static {
+	background-color: #9E6070;
+}
+
+.action.static select {
+	color: #fafafa;
+	background: #9E6070;
+}
+
+.action.static select option {
+	color: #fafafa;
+	background: #9E6070;
+}
+
+.action.static input {
+	width: 80px;
+	color: #fafafa;
+	background: #9E6070;
+}
+
+.repeat {
+	position: fixed;
+	padding: 5px;
+	background-color: #0082c8;
+	right: 10px;
+	top: 60px;
+}
+
+.blocktitle {
+	display: inline-block;
+	margin-right: 3px;
+}
 
 .drag-drop {
 	padding: 10px;
@@ -21,11 +86,22 @@
 	min-height: 20px;
 	color: #fff;
 	border: solid 2px #fff;
-	-webkit-transform: translate(0px, 0px);
-	transform: translate(0px, 0px);
-	transition: padding 2s, width 2s, height 4s;
 }
 
+.static {
+	opacity: 1;
+	position: relative;
+	display: block;
+	top: 0;
+	left: 0;
+	right: auto;
+	bottom: auto;
+	padding: 10px;
+	min-width: 40px;
+	min-height: 20px;
+	border: solid 2px #fff;
+	margin: 10px;
+}
 
 .dragging {
 	opacity: 0.5;

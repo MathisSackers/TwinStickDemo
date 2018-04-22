@@ -32,15 +32,115 @@ const DOMUtil = {
     }
   },
 
+  // creates an HTML <select>
+  generateSelection(values, texts) {
+    const select = document.createElement('select');
+    let counter = 0;
+    values.forEach((value) => {
+      const option = document.createElement('option');
+      option.value = value;
+      option.innerHTML = texts[counter];
+      counter += 1;
+      select.appendChild(option);
+    });
+    return select;
+  },
+
+  // creates an HTML <button>
+  generateButton(text, onClick) {
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    button.onclick = onClick;
+    button.innerHTML = text;
+    return button;
+  },
+
+  // creates an HTML <input>
+  generateExpression(text = '_$rand + 4') {
+    const expression = document.createElement('input');
+    expression.setAttribute('type', 'text');
+    expression.setAttribute('title', 'expression');
+    expression.setAttribute('placeholder', text);
+    expression.classList.add('expression');
+    return expression;
+  },
+
+  generateEvaluation(text = '4 == 4') {
+    const evaluation = document.createElement('input');
+    evaluation.setAttribute('type', 'text');
+    evaluation.setAttribute('title', 'evaluation');
+    evaluation.setAttribute('placeholder', text);
+    evaluation.classList.add('evaluation');
+    return evaluation;
+  },
+
+  generateLabel(text = 'Label') {
+    const label = document.createElement('input');
+    label.setAttribute('type', 'text');
+    label.setAttribute('title', 'optional label');
+    label.setAttribute('placeholder', text);
+    label.classList.add('label');
+    return label;
+  },
+
+  // appends a button for ttl and one for ctl
+  appendTTLandCTL(elem) {
+    // <button type="button">Click Me!</button>
+    let ctlShown = false;
+    const ctlInput = this.generateEvaluation('(CTL)');
+    const ctl = this.generateButton('CTL', () => {
+      ctlShown = !ctlShown;
+      if (ctlShown) {
+        ctl.after(ctlInput);
+      } else {
+        ctlInput.parentNode.removeChild(ctlInput);
+      }
+    });
+    let ttlShown = false;
+    const ttlInput = this.generateExpression('(TTL)');
+    const ttl = this.generateButton('TTL', () => {
+      ttlShown = !ttlShown;
+      if (ttlShown) {
+        ctl.after(ttlInput);
+      } else {
+        ttlInput.parentNode.removeChild(ttlInput);
+      }
+    });
+    elem.appendChild(ttl);
+    elem.appendChild(ctl);
+  },
+
   // adds child elements to box
   expandBox(elem) {
     if (elem.classList.contains('action')) {
+      // <select><option value='fast'>Fast</option><option value='slow'>Slow</option></select>
+      elem.appendChild(this.generateSelection(['fast', 'slow'], ['Fast', 'Slow']));
+      // <input type="text" name="label" pattern="[A-Za-z]" title="Label">
+      const label = this.generateLabel();
+      elem.appendChild(label);
+      // new line
+      const br = document.createElement('br');
+      elem.appendChild(br);
+      this.appendTTLandCTL(elem);
       // <div class="dropzone"></div>
       const div = document.createElement('div');
       div.classList.add('dropzone');
       elem.appendChild(div);
       HierarchyUtil.setChildren(div, []);
       HierarchyUtil.addToHierarchy(elem, div);
+    } else if (elem.classList.contains('repeat')) {
+      // <div class="action"><div>Action</div></div>
+      const actionDiv = document.createElement('div');
+      actionDiv.classList.add('action');
+      actionDiv.classList.add('static');
+      elem.appendChild(actionDiv);
+      const textDiv = document.createElement('div');
+      textDiv.innerHTML = 'Action';
+      textDiv.classList.add('blocktitle');
+      actionDiv.appendChild(textDiv);
+      HierarchyUtil.setChildren(actionDiv, []);
+      HierarchyUtil.addToHierarchy(elem, actionDiv);
+      this.expandBox(actionDiv);
     }
   },
 
