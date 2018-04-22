@@ -1,0 +1,64 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	font-family: 'Roboto', sans-serif;
+	color: #fafafa;
+}
+
+#main{
+	margin: 20px;
+}
+
+#main p{
+	color: #e6194b;
+	opacity: 1;
+}
+
+.action {
+	position: fixed;
+	background-color: #e6194b;
+	right: 10px;
+	top: 10px;
+}
+
+
+.drag-drop {
+	padding: 10px;
+	display: inline-block;
+	min-width: 40px;
+	min-height: 20px;
+	color: #fff;
+	border: solid 2px #fff;
+	-webkit-transform: translate(0px, 0px);
+	transform: translate(0px, 0px);
+	transition: padding 2s, width 2s, height 4s;
+}
+
+
+.dragging {
+	opacity: 0.5;
+}
+
+.dropzone {
+	background-color: #fafafa;
+	opacity: 0.3;
+	height: 80px;
+	width: 150px;
+}
+
+.trashcan {
+	position: fixed;
+	padding: 5px;
+	right: 50px;
+	bottom: 50px;
+	background-color: red;
+}
+
+.drop-active {
+  background-color: #4e4e;
+}
+
+.drag-drop.can-drop {
+  color: #000;
+  background-color: #4e4;
+}
