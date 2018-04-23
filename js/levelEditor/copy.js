@@ -121,6 +121,19 @@ function getNode(node, depth = 0) {
     d += 1;
   } else if (node.classList.contains('enemy')) {
     string = string.concat(line('<enemy></enemy>', d));
+  } else if (node.classList.contains('variable')) {
+    if (node.children[2].value.length === 0) {
+      node.children[2].classList.add('error');
+    }
+    if (node.children[1].value === 'clear') {
+      string = string.concat(line(`<var type='${node.children[1].value}' name='${node.children[2].value}'></var>`, d));
+    } else {
+      const { val, err } = scanExpression(node.children[3].value);
+      if (err || val.length === 0) {
+        node.children[3].classList.add('error');
+      }
+      string = string.concat(line(`<var type='${node.children[1].value}' name='${node.children[2].value}'>${val}</var>`, d));
+    }
   }
   // add the children into the middle
   HierarchyUtil.getChildren(node).forEach((child) => {

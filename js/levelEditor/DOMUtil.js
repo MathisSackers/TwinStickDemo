@@ -42,6 +42,8 @@ const DOMUtil = {
       ExpandUtil.expandWait(elem);
     } else if (elem.classList.contains('spawn')) {
       ExpandUtil.expandSpawn(elem);
+    } else if (elem.classList.contains('variable')) {
+      ExpandUtil.expandVariable(elem);
     }
   },
 

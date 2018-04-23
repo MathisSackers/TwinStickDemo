@@ -173,4 +173,18 @@ const ExpandUtil = {
     HierarchyUtil.setChildren(enemyDiv, []);
     HierarchyUtil.addToHierarchy(elem, enemyDiv);
   },
+
+  // adds child elements to <var>
+  expandVariable(elem) {
+    const valueInput = this.generateExpression('Value*', ['value']);
+    elem.appendChild(this.generateSelection(['set', 'add', 'clear'], ['Set', 'Add', 'Clear'], (e) => {
+      if (e.target.value === 'clear') {
+        elem.removeChild(valueInput);
+      } else if (valueInput.parentNode === null) {
+        elem.appendChild(valueInput);
+      }
+    }));
+    elem.appendChild(this.generateInput('Name', 'Name*', ['name']));
+    elem.appendChild(valueInput);
+  },
 };

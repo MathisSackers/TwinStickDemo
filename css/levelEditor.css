@@ -192,6 +192,30 @@ input {
 	top: 160px;
 }
 
+.variable {
+	position: fixed;
+	padding: 5px;
+	background-color: #22b41e;
+	right: 10px;
+	top: 210px;
+}
+
+.variable input {
+	width: 80px;
+	color: #fafafa;
+	background: #93ce92;
+}
+
+.variable select {
+	color: #fafafa;
+	background: #93ce92;
+}
+
+.variable select option {
+	color: #fafafa;
+	background: #93ce92;
+}
+
 .blocktitle {
 	display: inline-block;
 	margin-right: 3px;

@@ -2,7 +2,7 @@
 
 // Attributes - type = (set | add | clear) name = STRING
 // set: set variable >name< to Content
-// set: add Content to variable >name< to specified value
+// add: add Content to variable >name< to specified value
 // clear: removes variable >name<
 
 // Contents - EXPRESSION
