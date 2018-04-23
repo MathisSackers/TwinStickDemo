@@ -31,6 +31,15 @@ input {
 	box-shadow: none;
 }
 
+.error {
+	color: #000 !important;
+	background-color: #ff00ff !important;
+}
+
+.error::placeholder {
+	color: #333 !important;
+}
+
 .action {
 	position: fixed;
 	padding: 5px;

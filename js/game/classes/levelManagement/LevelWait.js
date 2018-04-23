@@ -11,7 +11,7 @@
 // Example
 // <wait type="time">($rand * $playerNum) + 10</wait>
 
-// <wait type="condition">???</wait>
+// <wait type="condition">$playersAlive > $numEnemies</wait>
 
 
 class LevelWait extends LevelObject {
