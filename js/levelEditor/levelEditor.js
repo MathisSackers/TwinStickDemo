@@ -6,7 +6,7 @@ interact('.draggable')
     // enable autoScroll
     autoScroll: true,
 
-    ignoreFrom: '.dropzone, .static',
+    ignoreFrom: '.dropzone, .static, select, input, button',
     snap: {
       targets: [],
       relativePoints: [{ x: 0, y: 0 }],
