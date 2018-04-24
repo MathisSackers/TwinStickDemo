@@ -97,7 +97,7 @@ class LevelAction extends LevelObject {
       action.update(delta);
     });
     // add new children
-    if (this.currentChild !== null && this.currentChild.done()) {
+    while (this.currentChild !== null && this.currentChild.done()) {
       this.currentChild = null;
       this.readNextNode();
     }

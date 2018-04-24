@@ -46,7 +46,7 @@ class LevelRepeat extends LevelObject {
     for (let i = 0; i < this.node.children.length; i += 1) {
       const node = this.node.children[i];
       if (node.nodeName === 'times') {
-        this.times = LevelExpression.eval(node.innerHTML);
+        this.times = Math.max(0, LevelExpression.eval(node.innerHTML));
       } else if (node.nodeName === 'ttl') {
         this.ttl = LevelExpression.eval(node.innerHTML);
       } else if (this.node.children[i].nodeName === 'ctl') {
@@ -78,9 +78,7 @@ class LevelRepeat extends LevelObject {
       this.times -= 1;
     }
     // last action running / already done?
-    if (this.times === 0) {
-      this.isDone = this.actions.every(action => action.done());
-    }
+    this.isDone = (this.times === 0) && this.actions.every(action => action.done());
     // remove unneeded actions
     for (let i = this.actions.length - 1; i >= 0; i -= 1) {
       if (this.actions[i].remove()) {
@@ -101,7 +99,7 @@ class LevelRepeat extends LevelObject {
   }
 
   remove() {
-    return this.actions.length === 0 && this.times === 0;
+    return this.isDone && this.actions.length === 0 && this.times === 0;
   }
 
   kill() {
