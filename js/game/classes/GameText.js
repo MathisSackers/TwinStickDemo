@@ -39,29 +39,32 @@ class GameText {
   }
 
   centerText(instance = 0) {
-    if (this.numTexts === 1) {
-      this.texts[instance].x = (window.innerWidth / 2) - (this.texts[instance].width / 2);
-      this.texts[instance].y = window.innerHeight / 3;
-    } else if (this.numTexts === 3) {
-      if (instance > 0) {
-        this.texts[instance].x = ((window.innerWidth / 4) - (this.texts[instance].width / 2));
-        if (instance === 2) {
-          this.texts[instance].x += (window.innerWidth / 2);
-        }
-        this.texts[instance].y = window.innerHeight - (window.innerHeight / 3);
-      } else {
+    switch (this.numTexts) {
+      case 1:
         this.texts[instance].x = (window.innerWidth / 2) - (this.texts[instance].width / 2);
         this.texts[instance].y = window.innerHeight / 3;
-      }
-    } else {
-      this.texts[instance].x = (window.innerWidth / 4) - (this.texts[instance].width / 2);
-      if (instance % 2 === 1) {
-        this.texts[instance].x += (window.innerWidth / 2);
-      }
-      this.texts[instance].y = window.innerHeight / 3;
-      if (this.numTexts === 4 && instance > 1) {
-        this.texts[instance].y += window.innerHeight / 3;
-      }
+        break;
+      case 3:
+        if (instance > 0) {
+          this.texts[instance].x = ((window.innerWidth / 4) - (this.texts[instance].width / 2));
+          if (instance === 2) {
+            this.texts[instance].x += (window.innerWidth / 2);
+          }
+          this.texts[instance].y = window.innerHeight - (window.innerHeight / 3);
+        } else {
+          this.texts[instance].x = (window.innerWidth / 2) - (this.texts[instance].width / 2);
+          this.texts[instance].y = window.innerHeight / 3;
+        }
+        break;
+      default:
+        this.texts[instance].x = (window.innerWidth / 4) - (this.texts[instance].width / 2);
+        if (instance % 2 === 1) {
+          this.texts[instance].x += (window.innerWidth / 2);
+        }
+        this.texts[instance].y = window.innerHeight / 3;
+        if (this.numTexts === 4 && instance > 1) {
+          this.texts[instance].y += window.innerHeight / 3;
+        }
     }
   }
 

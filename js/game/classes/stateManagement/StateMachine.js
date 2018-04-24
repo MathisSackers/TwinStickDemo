@@ -10,16 +10,24 @@ class StateMachine {
   }
 
   transition(newState) {
-    if (newState === 'PlayState') {
-      this.state = new PlayState(this.state.exit());
-    } else if (newState === 'PauseState') {
-      this.state = new PauseState(this.state.exit());
-    } else if (newState === 'DeathState') {
-      this.state = new DeathState(this.state.exit());
-    } else if (newState === 'BindingState') {
-      this.state = new BindingState(this.state.exit());
-    } else if (newState === 'WinState') {
-      this.state = new WinState(this.state.exit());
+    switch (newState) {
+      case 'PlayState':
+        this.state = new PlayState(this.state.exit());
+        break;
+      case 'PauseState':
+        this.state = new PauseState(this.state.exit());
+        break;
+      case 'DeathState':
+        this.state = new DeathState(this.state.exit());
+        break;
+      case 'BindingState':
+        this.state = new BindingState(this.state.exit());
+        break;
+      case 'WinState':
+        this.state = new WinState(this.state.exit());
+        break;
+      default:
+        console.error(`Unknown State ${newState}`);
     }
   }
 }

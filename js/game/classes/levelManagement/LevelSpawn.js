@@ -20,17 +20,22 @@ class LevelSpawn extends LevelObject {
   readNodes() {
     for (let i = 0; i < this.node.children.length; i += 1) {
       const node = this.node.children[i];
-      if (node.nodeName === 'enemy') {
-        this.enemy = spawnEnemy(node);
-      } else if (node.nodeName === 'ttl') {
-        this.ttl = LevelExpression.eval(node.innerHTML);
-      } else if (this.node.children[i].nodeName === 'ctl') {
-        this.ctl = this.node.children[i].innerHTML;
-      } else if (node.nodeName === 'enemyRef') {
-        // TODO
-      } else {
-        // Invalid input
-        console.error('Unknown node: ', node);
+      switch (node.nodeName) {
+        case 'enemy':
+          this.enemy = spawnEnemy(node);
+          break;
+        case 'ttl':
+          this.ttl = LevelExpression.eval(node.innerHTML);
+          break;
+        case 'ctl':
+          this.ctl = this.node.children[i].innerHTML;
+          break;
+        case 'enemyRef':
+          // TODO
+          break;
+        default:
+          // Invalid input
+          console.error('Unknown node: ', node);
       }
     }
   }

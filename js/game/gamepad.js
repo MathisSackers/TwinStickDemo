@@ -104,61 +104,42 @@ const GamepadUtil = {
 
   // binds a stick
   bindStick(stickName, otherStick, padIndex) {
-    if (this.gamepad[padIndex].bindings[`${stickName}_v`] === undefined) {
-      const iAxis = this.identifyMovedAxis(padIndex);
-      if (iAxis.difference > 0.3
+    const iAxis = this.identifyMovedAxis(padIndex);
+    // relevant movement; not on the other stick
+    if (iAxis.difference > 0.3
         && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v`]
         && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v2`]
         && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h`]
         && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h2`]
-      ) {
+        && iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v2`]
+        && iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_h2`]
+    ) {
+      if (this.gamepad[padIndex].bindings[`${stickName}_v`] === undefined) {
         this.gamepad[padIndex].bindings[`${stickName}_v`] = iAxis.axis;
         this.gamepad[padIndex].bindings[`${stickName}_up`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
         return `Move the ${stickName} stick right.`;
-      }
-    } else if (this.gamepad[padIndex].bindings[`${stickName}_h`] === undefined) {
-      const iAxis = this.identifyMovedAxis(padIndex);
-      if (iAxis.difference > 0.3
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v2`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h2`]
-      ) {
-        this.gamepad[padIndex].bindings[`${stickName}_h`] = iAxis.axis;
-        this.gamepad[padIndex].bindings[`${stickName}_right`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
-        return `Move the ${stickName} stick down.`;
-      }
-    } else if (this.gamepad[padIndex].bindings[`${stickName}_down`] === undefined) {
-      const iAxis = this.identifyMovedAxis(padIndex);
-      if (iAxis.difference > 0.3
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_h`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v2`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h2`]
-      ) {
+      } else if (this.gamepad[padIndex].bindings[`${stickName}_h`] === undefined) {
         if (iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v`]) {
-          this.gamepad[padIndex].bindings[`${stickName}_v2`] = iAxis.axis;
+          this.gamepad[padIndex].bindings[`${stickName}_h`] = iAxis.axis;
+          this.gamepad[padIndex].bindings[`${stickName}_right`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
+          return `Move the ${stickName} stick down.`;
         }
-        this.gamepad[padIndex].bindings[`${stickName}_down`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
-        return `Move the ${stickName} stick left.`;
-      }
-    } else if (this.gamepad[padIndex].bindings[`${stickName}_left`] === undefined) {
-      const iAxis = this.identifyMovedAxis(padIndex);
-      if (iAxis.difference > 0.3
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v2`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_v2`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h`]
-        && iAxis.axis !== this.gamepad[padIndex].bindings[`${otherStick}_h2`]
-      ) {
+      } else if (this.gamepad[padIndex].bindings[`${stickName}_down`] === undefined) {
         if (iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_h`]) {
-          this.gamepad[padIndex].bindings[`${stickName}_h2`] = iAxis.axis;
+          if (iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v`]) {
+            this.gamepad[padIndex].bindings[`${stickName}_v2`] = iAxis.axis;
+          }
+          this.gamepad[padIndex].bindings[`${stickName}_down`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
+          return `Move the ${stickName} stick left.`;
         }
-        this.gamepad[padIndex].bindings[`${stickName}_left`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
-        return true;
+      } else if (this.gamepad[padIndex].bindings[`${stickName}_left`] === undefined) {
+        if (iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_v`]) {
+          if (iAxis.axis !== this.gamepad[padIndex].bindings[`${stickName}_h`]) {
+            this.gamepad[padIndex].bindings[`${stickName}_h2`] = iAxis.axis;
+          }
+          this.gamepad[padIndex].bindings[`${stickName}_left`] = this.gamepad[padIndex].pad.axes[iAxis.axis];
+          return true;
+        }
       }
     }
     return false;

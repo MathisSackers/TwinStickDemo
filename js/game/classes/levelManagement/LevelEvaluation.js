@@ -169,18 +169,27 @@ const LevelEvaluation = {
         const [second, end] = this.getAndEvalExpression(eva, i + token.length);
         // do math
         let solution;
-        if (token === '==') {
-          solution = first === second ? '$true' : '$false';
-        } else if (token === '!=') {
-          solution = first !== second ? '$true' : '$false';
-        } else if (token === '<=') {
-          solution = first <= second ? '$true' : '$false';
-        } else if (token === '>=') {
-          solution = first >= second ? '$true' : '$false';
-        } else if (token === '<') {
-          solution = first < second ? '$true' : '$false';
-        } else if (token === '>') {
-          solution = first > second ? '$true' : '$false';
+        switch (token) {
+          case '==':
+            solution = first === second ? '$true' : '$false';
+            break;
+          case '!=':
+            solution = first !== second ? '$true' : '$false';
+            break;
+          case '<=':
+            solution = first <= second ? '$true' : '$false';
+            break;
+          case '>=':
+            solution = first >= second ? '$true' : '$false';
+            break;
+          case '<':
+            solution = first < second ? '$true' : '$false';
+            break;
+          case '>':
+            solution = first > second ? '$true' : '$false';
+            break;
+          default:
+            console.error(`Unknown token: ${token}`);
         }
         // slice it inside
         e = eva.slice(0, start)
@@ -221,14 +230,18 @@ const LevelEvaluation = {
         // replace following string
         const [keyword, j] = this.getString(eva, i + 1);
         i += j;
-        if (keyword === 'rand') {
-          noKeywordsEvaluation = noKeywordsEvaluation.concat(Math.random() < 0.5 ? '$true' : '$false');
-        } else if (keyword === 'false') {
-          noKeywordsEvaluation = noKeywordsEvaluation.concat('$false');
-        } else if (keyword === 'true') {
-          noKeywordsEvaluation = noKeywordsEvaluation.concat('$true');
-        } else {
-          console.error(`Unknown keyword ${keyword}`);
+        switch (keyword) {
+          case 'rand':
+            noKeywordsEvaluation = noKeywordsEvaluation.concat(Math.random() < 0.5 ? '$true' : '$false');
+            break;
+          case 'false':
+            noKeywordsEvaluation = noKeywordsEvaluation.concat('$false');
+            break;
+          case 'true':
+            noKeywordsEvaluation = noKeywordsEvaluation.concat('$true');
+            break;
+          default:
+            console.error(`Unknown keyword ${keyword}`);
         }
       } else {
         noKeywordsEvaluation = noKeywordsEvaluation.concat(eva.charAt(i));
@@ -268,10 +281,15 @@ const LevelEvaluation = {
           const [first, length1] = this.getString(eva, i - 1, true);
           const [second, length2] = this.getString(eva, i + 2);
           let fill;
-          if (token === '&') {
-            fill = (first === 'true') && (second === 'true') ? '$true' : '$false';
-          } else if (token === '|') {
-            fill = (first === 'true') || (second === 'true') ? '$true' : '$false';
+          switch (token) {
+            case '&':
+              fill = (first === 'true') && (second === 'true') ? '$true' : '$false';
+              break;
+            case '|':
+              fill = (first === 'true') || (second === 'true') ? '$true' : '$false';
+              break;
+            default:
+              console.error(`Unknown token ${token}`);
           }
           // slice it inside
           e = eva.slice(0, i - (length1 + 1))

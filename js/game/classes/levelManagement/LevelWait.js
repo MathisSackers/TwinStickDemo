@@ -26,12 +26,15 @@ class LevelWait extends LevelObject {
     for (let i = 0; i < this.node.attributes.length; i += 1) {
       const attribute = this.node.attributes[i];
       if (attribute.name === 'type') {
-        if (attribute.value === 'time') {
-          this.time = LevelExpression.eval(this.node.innerHTML);
-        } else if (attribute.value === 'condition') {
-          this.condition = this.node.innerHTML;
-        } else {
-          console.error('Unknown type: ', attribute.value);
+        switch (attribute.value) {
+          case 'time':
+            this.time = LevelExpression.eval(this.node.innerHTML);
+            break;
+          case 'condition':
+            this.condition = this.node.innerHTML;
+            break;
+          default:
+            console.error('Unknown type: ', attribute.value);
         }
       } else {
         console.error('Unknown attribute: ', attribute);

@@ -25,12 +25,15 @@ class LevelVariable extends LevelObject {
   readAttributes() {
     for (let i = 0; i < this.node.attributes.length; i += 1) {
       const attribute = this.node.attributes[i];
-      if (attribute.name === 'type') {
-        this.type = attribute.value;
-      } else if (attribute.name === 'name') {
-        this.variableName = attribute.value;
-      } else {
-        console.error('Unknown attribute: ', attribute);
+      switch (attribute.name) {
+        case 'type':
+          this.type = attribute.value;
+          break;
+        case 'name':
+          this.variableName = attribute.value;
+          break;
+        default:
+          console.error('Unknown attribute: ', attribute);
       }
     }
     if (this.type === undefined) {
@@ -39,20 +42,24 @@ class LevelVariable extends LevelObject {
     if (this.variableName === undefined) {
       console.error('No name specified:', this.node);
     }
-    if (this.type === 'set') {
-      game.levelmachine.variables[this.variableName] = LevelExpression.eval(this.node.innerHTML);
-    } else if (this.type === 'add') {
-      if (game.levelmachine.variables[this.variableName] === undefined) {
-        console.error(`Expected ${this.variableName} to already posses a value`);
-      }
-      game.levelmachine.variables[this.variableName] += LevelExpression.eval(this.node.innerHTML);
-    } else if (this.type === 'clear') {
-      if (game.levelmachine.variables[this.variableName] === undefined) {
-        console.error(`Expected ${this.variableName} to not be cleared already`);
-      }
-      game.levelmachine.variables[this.variableName] = undefined;
-    } else {
-      console.error('Unknown type: ', this.type);
+    switch (this.type) {
+      case 'set':
+        game.levelmachine.variables[this.variableName] = LevelExpression.eval(this.node.innerHTML);
+        break;
+      case 'add':
+        if (game.levelmachine.variables[this.variableName] === undefined) {
+          console.error(`Expected ${this.variableName} to already posses a value`);
+        }
+        game.levelmachine.variables[this.variableName] += LevelExpression.eval(this.node.innerHTML);
+        break;
+      case 'clear':
+        if (game.levelmachine.variables[this.variableName] === undefined) {
+          console.error(`Expected ${this.variableName} to not be cleared already`);
+        }
+        game.levelmachine.variables[this.variableName] = undefined;
+        break;
+      default:
+        console.error('Unknown type: ', this.type);
     }
     this.isDone = true;
   }

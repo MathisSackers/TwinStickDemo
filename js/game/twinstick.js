@@ -25,43 +25,52 @@ app.renderer.backgroundColor = BACKGROUND_COLOR;
 // Add the canvas that Pixi automatically created for you to the HTML document
 document.body.appendChild(app.view);
 document.onkeydown = (e) => {
-  // toggle fullscreen with 'f'
-  if (e.key === 'f') {
-    const isFullscreen =
-      document.fullScreenElement
-      || document.mozFullScreen
-      || document.webkitIsFullScreen
-      || document.msIsFullScreen
-      || false;
-    app.view.requestFullScreen =
-      app.view.requestFullScreen
-      || app.view.webkitRequestFullScreen
-      || app.view.mozRequestFullScreen
-      || app.view.msRequestFullscreen
-      || function () { return false; };
-    document.cancelFullScreen =
-      document.cancelFullScreen
-      || document.webkitCancelFullScreen
-      || document.mozCancelFullScreen
-      || document.msCancelFullScreen
-      || function () { return false; };
-    if (isFullscreen) {
-      document.cancelFullScreen();
-    } else {
-      app.view.requestFullScreen();
+  switch (e.key) {
+    case 'f': {
+      // toggle fullscreen with 'f'
+      const isFullscreen =
+        document.fullScreenElement
+        || document.mozFullScreen
+        || document.webkitIsFullScreen
+        || document.msIsFullScreen
+        || false;
+      app.view.requestFullScreen =
+        app.view.requestFullScreen
+        || app.view.webkitRequestFullScreen
+        || app.view.mozRequestFullScreen
+        || app.view.msRequestFullscreen
+        || function () { return false; };
+      document.cancelFullScreen =
+        document.cancelFullScreen
+        || document.webkitCancelFullScreen
+        || document.mozCancelFullScreen
+        || document.msCancelFullScreen
+        || function () { return false; };
+      if (isFullscreen) {
+        document.cancelFullScreen();
+      } else {
+        app.view.requestFullScreen();
+      }
+      break;
     }
-  // toggle mute with 'm'
-  } else if (e.key === 'm') {
-    muted = !muted;
-  // save binding with 's'
-  } else if (e.key === 's') {
-    window.localStorage.setItem('bindings', JSON.stringify(GamepadUtil.bindingToString()));
-  // load binding with 'l'
-  } else if (e.key === 'l') {
-    const bindings = window.localStorage.getItem('bindings');
-    if (bindings !== null) {
-      GamepadUtil.bindingFromString(JSON.parse(bindings));
+    case 'm':
+      // toggle mute with 'm'
+      muted = !muted;
+      break;
+    case 's':
+      // save binding with 's'
+      window.localStorage.setItem('bindings', JSON.stringify(GamepadUtil.bindingToString()));
+      break;
+    case 'l': {
+      // load binding with 'l'
+      const bindings = window.localStorage.getItem('bindings');
+      if (bindings !== null) {
+        GamepadUtil.bindingFromString(JSON.parse(bindings));
+      }
+      break;
     }
+    default:
+      // nothing
   }
 };
 

@@ -49,10 +49,13 @@ class EnemyBullet {
   }
 
   collides(otherObj, shape) {
-    if (shape === 'circle') {
-      return circleHit(otherObj, this.graphic);
-    } else if (shape === 'rectangle') {
-      return circleRectHit(this.graphic, otherObj);
+    switch (shape) {
+      case 'circle':
+        return circleHit(otherObj, this.graphic);
+      case 'rectangle':
+        return circleRectHit(this.graphic, otherObj);
+      default:
+        console.error(`Unknown shape: ${shape}`);
     }
     return false;
   }

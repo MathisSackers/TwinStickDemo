@@ -42,10 +42,13 @@ class Bullet {
   }
 
   collides(otherObj, shape) {
-    if (shape === 'circle') {
-      return circleRectHit(otherObj, this.graphic);
-    } else if (shape === 'rectangle') {
-      return rectHit(otherObj, this.graphic);
+    switch (shape) {
+      case 'circle':
+        return circleRectHit(otherObj, this.graphic);
+      case 'rectangle':
+        return rectHit(otherObj, this.graphic);
+      default:
+        console.error(`Unknown shape: ${shape}`);
     }
     return false;
   }

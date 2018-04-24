@@ -145,17 +145,23 @@ const LevelExpression = {
         // replace following string
         const [keyword, j] = this.getString(exp, i + 1);
         i += j;
-        if (keyword === 'rand') {
-          noKeywordsExpression = noKeywordsExpression.concat(Math.random().toString());
-        } else if (keyword === 'clt') {
-          noKeywordsExpression = noKeywordsExpression.concat(this.clt().toString());
-        } else if (keyword === 'pi') {
-          noKeywordsExpression = noKeywordsExpression.concat(Math.PI.toString());
-        } else if (game.levelmachine.variables[keyword] !== undefined) {
-          noKeywordsExpression = noKeywordsExpression
-            .concat(game.levelmachine.variables[keyword].toString());
-        } else {
-          console.error(`Unknown keyword ${keyword}`);
+        switch (keyword) {
+          case 'rand':
+            noKeywordsExpression = noKeywordsExpression.concat(Math.random().toString());
+            break;
+          case 'clt':
+            noKeywordsExpression = noKeywordsExpression.concat(this.clt().toString());
+            break;
+          case 'pi':
+            noKeywordsExpression = noKeywordsExpression.concat(Math.PI.toString());
+            break;
+          default:
+            if (game.levelmachine.variables[keyword] !== undefined) {
+              noKeywordsExpression = noKeywordsExpression
+                .concat(game.levelmachine.variables[keyword].toString());
+            } else {
+              console.error(`Unknown keyword ${keyword}`);
+            }
         }
       } else {
         noKeywordsExpression = noKeywordsExpression.concat(exp.charAt(i));
@@ -185,16 +191,24 @@ const LevelExpression = {
         const [second, end] = this.getNumber(exp, i + 1);
         // do math
         let solution;
-        if (token === '*') {
-          solution = first * second;
-        } else if (token === '/') {
-          solution = first / second;
-        } else if (token === '%') {
-          solution = first % second;
-        } else if (token === '+') {
-          solution = first + second;
-        } else if (token === '-') {
-          solution = first - second;
+        switch (token) {
+          case '*':
+            solution = first * second;
+            break;
+          case '/':
+            solution = first / second;
+            break;
+          case '%':
+            solution = first % second;
+            break;
+          case '+':
+            solution = first + second;
+            break;
+          case '-':
+            solution = first - second;
+            break;
+          default:
+            console.error(`Unknown token ${token}`);
         }
         // slice it inside
         e = exp.slice(0, start)

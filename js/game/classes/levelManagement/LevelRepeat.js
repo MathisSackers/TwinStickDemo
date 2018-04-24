@@ -45,19 +45,25 @@ class LevelRepeat extends LevelObject {
   readNodes() {
     for (let i = 0; i < this.node.children.length; i += 1) {
       const node = this.node.children[i];
-      if (node.nodeName === 'times') {
-        this.times = Math.max(0, LevelExpression.eval(node.innerHTML));
-      } else if (node.nodeName === 'ttl') {
-        this.ttl = LevelExpression.eval(node.innerHTML);
-      } else if (this.node.children[i].nodeName === 'ctl') {
-        this.ctl = this.node.children[i].innerHTML;
-      } else if (node.nodeName === 'action') {
-        this.actionNode = node;
-      } else if (node.nodeName === 'actionRef') {
-        // TODO
-      } else {
-        // Invalid input
-        console.error('Unknown node: ', node);
+      switch (node.nodeName) {
+        case 'times':
+          this.times = Math.max(0, LevelExpression.eval(node.innerHTML));
+          break;
+        case 'ttl':
+          this.ttl = LevelExpression.eval(node.innerHTML);
+          break;
+        case 'ctl':
+          this.ctl = this.node.children[i].innerHTML;
+          break;
+        case 'action':
+          this.actionNode = node;
+          break;
+        case 'actionRef':
+          // TODO
+          break;
+        default:
+          // Invalid input
+          console.error('Unknown node: ', node);
       }
     }
   }

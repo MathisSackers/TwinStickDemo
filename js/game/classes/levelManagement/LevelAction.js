@@ -36,10 +36,14 @@ class LevelAction extends LevelObject {
 
   scanNodes() {
     for (let i = 0; i < this.node.children.length; i += 1) {
-      if (this.node.children[i].nodeName === 'ttl') {
-        this.ttl = LevelExpression.eval(this.node.children[i].innerHTML);
-      } else if (this.node.children[i].nodeName === 'ctl') {
-        this.ctl = this.node.children[i].innerHTML;
+      switch (this.node.children[i].nodeName) {
+        case 'ttl':
+          this.ttl = LevelExpression.eval(this.node.children[i].innerHTML);
+          break;
+        case 'ctl':
+          this.ctl = this.node.children[i].innerHTML;
+          break;
+        default:
       }
     }
   }
@@ -60,32 +64,38 @@ class LevelAction extends LevelObject {
     const node = this.node.children[this.currentChildIndex];
     this.currentChildIndex += 1;
     if (node !== undefined) {
-      if (node.nodeName === 'ttl' || node.nodeName === 'ctl') {
-        // skip
-        this.readNextNode();
-      } else {
-        // we have an actionable node
-        if (node.nodeName === 'wait') {
+      // we have a node
+      switch (node.nodeName) {
+        case 'ctl':
+        case 'ttl':
+          // skip
+          this.readNextNode();
+          break;
+        case 'wait':
           this.actions.push(new LevelWait(node));
           this.currentChild = this.actions[this.actions.length - 1];
-        } else if (node.nodeName === 'repeat') {
+          break;
+        case 'repeat':
           this.actions.push(new LevelRepeat(node));
-        } else if (node.nodeName === 'spawn') {
+          break;
+        case 'spawn':
           this.actions.push(new LevelSpawn(node));
-        } else if (node.nodeName === 'action') {
+          break;
+        case 'action':
           this.actions.push(new LevelAction(node));
-        } else if (node.nodeName === 'var') {
+          break;
+        case 'var':
           this.actions.push(new LevelVariable(node));
-        } else {
+          break;
+        default:
           // Invalid input
           console.error('Unknown node: ', node);
-        }
-        if (this.currentChild === null) {
-          if (this.slow) {
-            this.currentChild = this.actions[this.actions.length - 1];
-          } else {
-            this.readNextNode();
-          }
+      }
+      if (this.currentChild === null) {
+        if (this.slow) {
+          this.currentChild = this.actions[this.actions.length - 1];
+        } else {
+          this.readNextNode();
         }
       }
     }
