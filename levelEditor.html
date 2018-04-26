@@ -5,42 +5,14 @@
 		<title>Level Editor for STSD</title>
 		<link rel="stylesheet" type="text/css" href="css/levelEditor.css">
 		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-		<script src="js/libs/interact.min.js"></script>
-		<script src="js/levelEditor/HierarchyUtil.js"></script>
-		<script src="js/levelEditor/PositionUtil.js"></script>
-		<script src="js/levelEditor/DragUtil.js"></script>
-		<script src="js/levelEditor/ExpandUtil.js"></script>
-		<script src="js/levelEditor/DOMUtil.js"></script>
-		<script src="js/levelEditor/copy.js"></script>
 		<script src="js/levelEditor/levelEditor.js"></script>
+		<script src="js/levelEditor/commands.js"></script>
+		<script src="js/levelEditor/DOMtoStringUtil.js"></script>
+		<script src="js/levelEditor/CreateUtil.js"></script>
 	</head>
 	<body style='background-color: #65635a;'>
-		<div class="trashcan">TRASH</div>
-		<div class="document">
+		<div id="root" class="document">
 			<div class="blocktitle">Document</div>
-			<div id ="main" class="dropzone main"><p>Drop the main action of your level here.</p></div>
-			<button type="button" onclick="copyToClipboard()">Copy to Clipboard</button>
 		</div>
-
-		<div class="action untouched draggable drag-drop">
-			<div class="blocktitle">Action</div>
-		</div>
-
-		<div class="repeat untouched draggable drag-drop">
-			<div class="blocktitle">Repeat</div>
-		</div>
-
-		<div class="wait untouched draggable drag-drop">
-			<div class="blocktitle">Wait</div>
-		</div>
-
-		<div class="spawn untouched draggable drag-drop">
-			<div class="blocktitle">Spawn</div>
-		</div>
-
-		<div class="variable untouched draggable drag-drop">
-			<div class="blocktitle">Variable</div>
-		</div>
-
 	</body>
 </html>

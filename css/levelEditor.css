@@ -1,6 +1,7 @@
 * {
 	margin: 0px;
-	padding: 0px;
+	padding: 5px;
+	position: relative;
 	font-family: 'Roboto', sans-serif;
 	color: #fafafa;
 }
@@ -31,6 +32,21 @@ input {
 	box-shadow: none;
 }
 
+.delete {
+	position: absolute;
+	top: 5px;
+	right: 5px;
+	font-size: 0.8em;
+	width: 1.3em;
+	padding: 0px;
+	border-radius: 30px;
+	font-weight: bold;
+}
+
+.expanded {
+	margin: 5px;
+}
+
 .error {
 	color: #000 !important;
 	background-color: #ff00ff !important;
@@ -40,178 +56,208 @@ input {
 	color: #333 !important;
 }
 
+.collapsed div {
+	height: 0px;
+	display: inline-block;
+	visibility: hidden;
+}
+
+.collapsed {
+	padding: 0px;
+	height: 5px;
+	margin: 5px;
+ 	background-color: #ef859e;
+}
+
+.buttons {
+	margin: 5px;
+	padding: 2px;
+	display: inline-block;
+	border: solid 2px #fff;
+}
+
+.buttons.close {
+	border-radius: 50px;
+}
+
 .action {
-	position: fixed;
-	padding: 5px;
+	border: solid 2px #fff;
 	background-color: #e6194b;
-	right: 10px;
-	top: 10px;
 }
 
-.action button {
+.action button.action {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #ef859e;
 }
 
-.action input {
+.action input.action {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #ef859e;
 }
 
-.action select {
+.action select.action {
+	border: none;
 	color: #fafafa;
 	background: #ef859e;
 }
 
-.action select option {
+.action select.action option {
+	border: none;
 	color: #fafafa;
 	background: #ef859e;
 }
 
 .action.static {
+	border: solid 2px #fff;
 	background-color: #9E6070;
 }
 
-.action.static button {
+.action.static button.action.static {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #ca93a1;
 }
 
 
-.action.static select {
+.action.static select.action.static {
+	border: none;
+	border: none;
 	color: #fafafa;
 	background: #ca93a1;
 }
 
-.action.static select option {
+.action.static select.action.static option {
+	border: none;
 	color: #fafafa;
 	background: #ca93a1;
 }
 
-.action.static input {
+.action.static input.action.static {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #ca93a1;
 }
 
 .repeat {
-	position: fixed;
-	padding: 5px;
+	border: solid 2px #fff;
 	background-color: #0082c8;
-	right: 10px;
-	top: 60px;
 }
 
-.repeat button {
+.repeat button.repeat {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #68b2da;
 }
 
-.repeat input {
+.repeat input.repeat {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #68b2da;
 }
 
 .repeat input.times {
+	border: none;
 	width: 170px;
 	display: block;
 	color: #fafafa;
 	background: #68b2da;
 }
 
-.repeat select {
+.repeat select.repeat {
+	border: none;
 	color: #fafafa;
 	background: #68b2da;
 }
 
-.repeat select option {
+.repeat select.repeat option {
+	border: none;
 	color: #fafafa;
 	background: #68b2da;
 }
 
 .wait {
-	position: fixed;
-	padding: 5px;
+	border: solid 2px #fff;
 	background-color: #008080;
-	right: 10px;
-	top: 110px;
 }
 
-.wait button {
+.wait button.wait {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #4dc1c1;
 }
 
-.wait input {
+.wait input.wait {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #4dc1c1;
 }
 
-.wait select {
+.wait select.wait {
+	border: none;
 	color: #fafafa;
 	background: #4dc1c1;
 }
 
-.wait select option {
+.wait select.wait option {
+	border: none;
 	color: #fafafa;
 	background: #4dc1c1;
 }
 
 .spawn {
-	position: fixed;
-	padding: 5px;
+	border: solid 2px #fff;
 	background-color: #911eb4;
-	right: 10px;
-	top: 160px;
 }
 
-.spawn button {
+.spawn button.spawn {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #d797ea;
 }
 
-.spawn input {
+.spawn input.spawn {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #d797ea;
 }
 
 .enemy {
-	position: fixed;
-	padding: 5px;
+	border: solid 2px #fff;
 	background-color: #f58231;
-	right: 10px;
-	top: 160px;
 }
 
 .variable {
-	position: fixed;
-	padding: 5px;
+	border: solid 2px #fff;
 	background-color: #22b41e;
-	right: 10px;
-	top: 210px;
 }
 
-.variable input {
+.variable input.variable {
+	border: none;
 	width: 80px;
 	color: #fafafa;
 	background: #93ce92;
 }
 
-.variable select {
+.variable select.variable {
+	border: none;
 	color: #fafafa;
 	background: #93ce92;
 }
 
-.variable select option {
+.variable select.variable option {
+	border: none;
 	color: #fafafa;
 	background: #93ce92;
 }
@@ -219,55 +265,6 @@ input {
 .blocktitle {
 	display: inline-block;
 	margin-right: 3px;
-}
-
-.drag-drop {
-	padding: 10px;
-	display: inline-block;
-	min-width: 40px;
-	min-height: 20px;
-	color: #fff;
-	border: solid 2px #fff;
-}
-
-.static {
-	opacity: 1;
-	position: relative;
-	display: block;
-	top: 0;
-	left: 0;
-	right: auto;
-	bottom: auto;
-	padding: 10px;
-	min-width: 40px;
-	min-height: 20px;
-	border: solid 2px #fff;
-	margin: 10px;
-}
-
-.dragging {
-	opacity: 0.5;
-}
-
-.dropzone {
-	margin: 10px;
-	background-color: #fafafa;
-	opacity: 0.3;
-	height: 5px;
-	width: 150px;
-}
-
-.trashcan {
-	position: fixed;
-	padding: 5px;
-	right: 50px;
-	bottom: 50px;
-	background-color: red;
-}
-
-.dropzone.drop-active {
-	height: 30px;
-	background-color: #4e4e;
 }
 
 .document {
@@ -283,6 +280,7 @@ input {
 }
 
 .document button {
+	border: 2px;
 	width: 80px;
 	color: #fafafa;
 	background: #9438ce;
