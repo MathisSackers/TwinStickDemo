@@ -101,6 +101,7 @@ function setup() {
   gameContainer.addChild(enemyContainer);
   gameContainer.addChild(hitMarkerContainer);
   gameContainer.addChild(heroContainer);
+  gameContainer.addChild(gametextContainer);
   // text manager
   game.text = new GameText();
   // current gamestate

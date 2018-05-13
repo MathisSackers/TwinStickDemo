@@ -37,8 +37,10 @@ const enemyContainer = new Container();
 const markers = [];
 // (visual) container of hitMarkers
 const hitMarkerContainer = new Container();
-// (visual) container of hitMarkers
+// (visual) container of text (pause and menu)
 const textContainer = new Container();
+// (visual) container of ingame text (eg. objective)
+const gametextContainer = new Container();
 // SoundSprite
 let shootSound;
 // sprite information

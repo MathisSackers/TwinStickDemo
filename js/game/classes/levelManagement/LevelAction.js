@@ -1,4 +1,4 @@
-// Template for tags
+// Implementation of the <action> tag
 
 // Attribute - type = (fast | slow), label? = STRING
 // slow: wait for the action(s) to be .done()
@@ -84,6 +84,9 @@ class LevelAction extends LevelObject {
         case 'action':
           this.actions.push(new LevelAction(node));
           break;
+        case 'objective':
+          this.actions.push(new LevelObjectiveText(node));
+          break;
         case 'var':
           this.actions.push(new LevelVariable(node));
           break;
@@ -119,14 +122,16 @@ class LevelAction extends LevelObject {
         this.actions.splice(i, 1);
       }
     }
-    // we might not live forever
-    if (this.ttl !== undefined) {
+    // if we only have unimportant children we just kill ourselves
+    if (this.isDone && this.actions.every(a => a.unimportant())) {
+      this.kill();
+    } else if (this.ttl !== undefined) {
+      // we might not live forever
       this.ttl -= delta;
       if (this.ttl <= 0) {
         this.kill();
       }
-    }
-    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+    } else if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
       this.kill();
     }
     return this;

@@ -22,6 +22,11 @@ class LevelObject {
     return this.isDone;
   }
 
+  // check whether the object is important enough to be waited on
+  unimportant() {
+    return this.isDone && !this.isDone; // false
+  }
+
   // when this is called we have to *kill all children*
   kill() {
     return this;

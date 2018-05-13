@@ -21,12 +21,14 @@ class GameText {
     this.texts[instance].visible = true;
     if (wide) {
       this.texts[instance].style = {
-        fontSize: 65,
+        fontVariant: 'small-caps',
+        fontFamily: 'Roboto',
+        fontSize: 80,
         fill: TEXT_COLOR,
         letterSpacing: window.innerWidth / 10,
       };
     } else {
-      this.texts[instance].style = { fill: TEXT_COLOR };
+      this.texts[instance].style = { fontFamily: 'Roboto', fill: TEXT_COLOR };
     }
     this.centerTexts();
     return this;
