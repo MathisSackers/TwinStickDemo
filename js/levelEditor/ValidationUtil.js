@@ -13,7 +13,8 @@ const ValidationUtil = {
       } else if (input.classList.contains('label') || input.classList.contains('name')) {
         this.validateString(input);
       } else {
-        console.log(input);
+        console.error('Invalid classList on input:');
+        console.error(input);
       }
     }
   },

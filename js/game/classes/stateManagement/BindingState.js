@@ -6,7 +6,6 @@ class BindingState extends State {
     this.numPlayers = 0;
     game.text.setText('Connect a controller (or press A to activate it)', 0);
     game.text.show();
-    console.log(game.text);
     // connected controllers
     this.connectedPads = [];
     this.leaving = [];
