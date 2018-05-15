@@ -115,14 +115,13 @@ class LevelObjectiveText extends LevelObject {
       this.buildGraphics();
     }
     // we might not live forever
-    if (this.ttl !== undefined) {
+    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+      this.kill();
+    } else if (this.ttl !== undefined) {
       this.ttl -= delta;
       if (this.ttl <= 0) {
         this.kill();
       }
-    }
-    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
-      this.kill();
     }
     return this;
   }
@@ -132,7 +131,7 @@ class LevelObjectiveText extends LevelObject {
   }
 
   unimportant() {
-    return this.label === undefined;
+    return this.isDone;
   }
 
   kill() {

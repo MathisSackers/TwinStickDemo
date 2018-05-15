@@ -92,14 +92,13 @@ class LevelRepeat extends LevelObject {
       }
     }
     // we might not live forever
-    if (this.ttl !== undefined) {
+    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+      this.kill();
+    } else if (this.ttl !== undefined) {
       this.ttl -= delta;
       if (this.ttl <= 0) {
         this.kill();
       }
-    }
-    if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
-      this.kill();
     }
     return this;
   }

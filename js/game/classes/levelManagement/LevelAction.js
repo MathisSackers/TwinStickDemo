@@ -125,14 +125,14 @@ class LevelAction extends LevelObject {
     // if we only have unimportant children we just kill ourselves
     if (this.isDone && this.actions.every(a => a.unimportant())) {
       this.kill();
+    } else if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
+      this.kill();
     } else if (this.ttl !== undefined) {
       // we might not live forever
       this.ttl -= delta;
       if (this.ttl <= 0) {
         this.kill();
       }
-    } else if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
-      this.kill();
     }
     return this;
   }
