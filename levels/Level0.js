@@ -33,8 +33,8 @@ const level0 = `
         </repeat>
       </action>
     </repeat>
+    <wait type='time'>60</wait>
   </action>
-  <wait type='time'>60</wait>
   <!-- Part 2 -->
   <!-- Spawn (1 * players) enemy/second -->
   <!-- They die after 10-25 are killed -->
@@ -48,21 +48,32 @@ const level0 = `
         #0xffb861 ($killed)# #/(5 + (5 * $playersAlive))#
       </content>
     </objective>
-    <ctl>$killed &lt; 5 + (5 * $playersAlive)</ctl>
-    <repeat type='slow'>
-      <times>9999</times>
-      <action type='fast'>
-        <action type='slow'>
-          <spawn>
-            <enemy/>
-          </spawn>
-          <var type='add' name='killed'>1</var>
+    <action type='slow'>
+      <var type='set' name='killed'>0</var>
+      <objective>
+        <title>#Stop the flow#</title>
+        <content>
+          #There is a never-ending flow of enemies\\n#
+          #that can only be stopped by killing (5 + (5 * $playersAlive)) of them\\n#
+          #0xffb861 ($killed)# #/(5 + (5 * $playersAlive))#
+        </content>
+      </objective>
+      <ctl>$killed &lt; 5 + (5 * $playersAlive)</ctl>
+      <repeat type='slow'>
+        <times>9999</times>
+        <action type='fast'>
+          <action type='slow'>
+            <spawn>
+              <enemy/>
+            </spawn>
+            <var type='add' name='killed'>1</var>
+          </action>
+          <wait type='time'>60 / $playerNum</wait>
         </action>
-        <wait type='time'>60 / $playerNum</wait>
-      </action>
-    </repeat>
+      </repeat>
+    </action>
+    <wait type='time'>120</wait>
   </action>
-  <wait type='time'>120</wait>
   <!-- Part 3 -->
   <!-- Spawn 6 enemies/second -->
   <!-- They die after 8s~25s with ~16s being the most probable -->
@@ -75,25 +86,27 @@ const level0 = `
         #Just ##0xADD8E6 chill## a bit.#
       </content>
     </objective>
-    <ttl>(500) + _($clt * 1000)</ttl>
-    <repeat type='slow'>
-      <times>9999</times>
-      <action type='fast'>
-        <spawn>
-          <enemy/>
-        </spawn>
-        <wait type='time'>10</wait>
-      </action>
-    </repeat>
+    <action type='slow'>
+      <ttl>(500) + _($clt * 1000)</ttl>
+      <repeat type='slow'>
+        <times>9999</times>
+        <action type='fast'>
+          <spawn>
+            <enemy/>
+          </spawn>
+          <wait type='time'>10</wait>
+        </action>
+      </repeat>
+    </action>
+    <wait type='time'>480</wait>
   </action>
-  <wait type='time'>480</wait>
   <!-- Part 4 -->
-  <!-- Spawn 15 + s, 14 + s, 13 + s, ..., 10 + s enemies -->
+  <!-- Spawn 13 + s, 12 + s, ..., 7 + s enemies -->
   <!-- They die after 6s-14s depending on number of players alive -->
   <!-- s is the number of Enemies that died due to the time limit and weren't killed by players -->
   <action type='slow'>
     <action type='slow'>
-      <var type='set' name='wave'>15</var>
+      <var type='set' name='wave'>13</var>
       <objective>
         <title>#Wave after wave...#</title>
         <content>
@@ -102,14 +115,16 @@ const level0 = `
           #just comes back with the next wave.#
         </content>
       </objective>
+      <var type='set' name='survivors'>0</var>
       <repeat type='slow'>
         <times>5</times>
         <action type='slow'>
+          <var type='set' name='fighters'>$wave + $survivors</var>
           <var type='set' name='survivors'>0</var>
           <repeat type='fast'>
-            <ttl>1000 - $playersAlive * 150</ttl>
-            <times>$wave + $survivors</times>
+            <times>$fighters</times>
             <action type='slow'>
+              <ttl>1000 - $playersAlive * 150</ttl>
               <var type='add' name='survivors'>1</var>
               <spawn>
                 <enemy/>
@@ -118,7 +133,7 @@ const level0 = `
             </action>
           </repeat>
           <wait type='time'>60</wait>
-          <var type='add' name='wave'>0-1</var>
+          <var type='add' name='wave'>-1</var>
         </action>
       </repeat>
     </action>
@@ -137,8 +152,9 @@ const level0 = `
           </spawn>
           <var type='add' name='survivors'>-1</var>
         </action>
-       </repeat>
-     </action>
+      </repeat>
+      <wait type='time'>120</wait>
+    </action>
   </action>
 </action>
 </document>`;
