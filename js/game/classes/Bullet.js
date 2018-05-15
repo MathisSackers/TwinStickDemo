@@ -22,8 +22,8 @@ class Bullet {
       graphic.x = p.x;
       graphic.y = p.y;
       if (
-        graphic.x < -graphic.height || graphic.x > window.innerWidth + graphic.height
-        || graphic.y < -graphic.height || graphic.y > window.innerHeight + graphic.height
+        graphic.x < -graphic.height || graphic.x > game.WIDTH + graphic.height
+        || graphic.y < -graphic.height || graphic.y > game.HEIGHT + graphic.height
       ) {
         this.remove();
       }

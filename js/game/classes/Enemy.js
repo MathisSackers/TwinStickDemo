@@ -16,8 +16,8 @@ const E_STAGGER_COLOR = 0xffb195;
 // generates a goal point somewhere on screen
 function getGoal() {
   const p = {};
-  const fifthOfScreenW = window.innerWidth / 5;
-  const fifthOfScreenH = window.innerHeight / 5;
+  const fifthOfScreenW = game.WIDTH / 5;
+  const fifthOfScreenH = game.HEIGHT / 5;
   p.x = fifthOfScreenW + (Math.random() * fifthOfScreenW * 3);
   p.y = fifthOfScreenH + (Math.random() * fifthOfScreenH * 3);
   return p;
@@ -72,8 +72,8 @@ class Enemy {
         graphic.x = p.x;
         graphic.y = p.y;
         if (
-          graphic.x < -graphic.height || graphic.x > window.innerWidth + graphic.height
-          || graphic.y < -graphic.height || graphic.y > window.innerHeight + graphic.height
+          graphic.x < -graphic.height || graphic.x > game.WIDTH + graphic.height
+          || graphic.y < -graphic.height || graphic.y > game.HEIGHT + graphic.height
         ) {
           this.remove();
         }
@@ -86,8 +86,10 @@ class Enemy {
     heroes.forEach((hero) => {
       if (
         this.goal.x === undefined
-        || (Math.abs(graphic.x - this.goal.x) < 20 && Math.abs(graphic.y - this.goal.y) < 20)
-        || (Math.abs(hero.graphic.x - this.goal.x) < 30 && Math.abs(hero.graphic.y - this.goal.y) < 30)
+        || (Math.abs(graphic.x - this.goal.x) < 20
+          && Math.abs(graphic.y - this.goal.y) < 20)
+        || (Math.abs(hero.graphic.x - this.goal.x) < 30
+          && Math.abs(hero.graphic.y - this.goal.y) < 30)
       ) {
         this.goal = getGoal();
       }
@@ -148,7 +150,7 @@ class Enemy {
     this.stagger = 0;
     this.goal = getGoal();
     const { graphic } = this;
-    graphic.x = Math.random() * window.innerWidth;
+    graphic.x = Math.random() * game.WIDTH;
     graphic.y = -graphic.height;
     graphic.tint = 0xffffff;
     graphic.visible = true;

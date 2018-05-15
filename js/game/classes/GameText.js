@@ -25,7 +25,7 @@ class GameText {
         fontFamily: 'Roboto',
         fontSize: 80,
         fill: TEXT_COLOR,
-        letterSpacing: window.innerWidth / 10,
+        letterSpacing: game.WIDTH / 10,
       };
     } else {
       this.texts[instance].style = { fontFamily: 'Roboto', fill: TEXT_COLOR };
@@ -43,29 +43,29 @@ class GameText {
   centerText(instance = 0) {
     switch (this.numTexts) {
       case 1:
-        this.texts[instance].x = (window.innerWidth / 2) - (this.texts[instance].width / 2);
-        this.texts[instance].y = window.innerHeight / 3;
+        this.texts[instance].x = (game.WIDTH / 2) - (this.texts[instance].width / 2);
+        this.texts[instance].y = game.HEIGHT / 3;
         break;
       case 3:
         if (instance > 0) {
-          this.texts[instance].x = ((window.innerWidth / 4) - (this.texts[instance].width / 2));
+          this.texts[instance].x = ((game.WIDTH / 4) - (this.texts[instance].width / 2));
           if (instance === 2) {
-            this.texts[instance].x += (window.innerWidth / 2);
+            this.texts[instance].x += (game.WIDTH / 2);
           }
-          this.texts[instance].y = window.innerHeight - (window.innerHeight / 3);
+          this.texts[instance].y = game.HEIGHT - (game.HEIGHT / 3);
         } else {
-          this.texts[instance].x = (window.innerWidth / 2) - (this.texts[instance].width / 2);
-          this.texts[instance].y = window.innerHeight / 3;
+          this.texts[instance].x = (game.WIDTH / 2) - (this.texts[instance].width / 2);
+          this.texts[instance].y = game.HEIGHT / 3;
         }
         break;
       default:
-        this.texts[instance].x = (window.innerWidth / 4) - (this.texts[instance].width / 2);
+        this.texts[instance].x = (game.WIDTH / 4) - (this.texts[instance].width / 2);
         if (instance % 2 === 1) {
-          this.texts[instance].x += (window.innerWidth / 2);
+          this.texts[instance].x += (game.WIDTH / 2);
         }
-        this.texts[instance].y = window.innerHeight / 3;
+        this.texts[instance].y = game.HEIGHT / 3;
         if (this.numTexts === 4 && instance > 1) {
-          this.texts[instance].y += window.innerHeight / 3;
+          this.texts[instance].y += game.HEIGHT / 3;
         }
     }
   }

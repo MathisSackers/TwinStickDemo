@@ -11,12 +11,16 @@ const {
 } = PIXI;
 
 // globals
-// object for gamerelated variables;
-const game = {};
+// object for gamerelated variables; WIDTH & HEIGHT describe the virtual size of the play-area
+const game = { WIDTH: 1920, HEIGHT: 1080 };
 // whether the game is muted or not
 let muted;
 // container for all (visual) elements of the game
 const gameContainer = new Container();
+// the letterboxing black bars
+const bars = [];
+// (visual) container of black bars
+const barContainer = new Container();
 // the player characters
 const heroes = [];
 // (visual) container of heroes

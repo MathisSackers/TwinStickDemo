@@ -71,8 +71,7 @@ class Hero {
     graphic.endFill();
     graphic.pivot.set(0, 25);
     graphic.speed = H_SPEED;
-    // TODO: resize on window.resize
-    graphic.filterArea = new PIXI.Rectangle(0, 0, window.innerWidth, window.innerHeight);
+    graphic.filterArea = game.filterArea;
     this.reset(index, totalHeroes);
   }
 
@@ -150,8 +149,8 @@ class Hero {
     this.invincible = 0;
     const { graphic } = this;
     graphic.tint = H_TINTS[index];
-    graphic.x = window.innerWidth / 2;
-    graphic.y = window.innerHeight / 2;
+    graphic.x = game.WIDTH / 2;
+    graphic.y = game.HEIGHT / 2;
     if (totalHeroes > 1) {
       if (totalHeroes === 3) {
         if (index === 0) {
@@ -207,6 +206,10 @@ class Hero {
   remove() {
     this.onScreen = false;
     this.graphic.visible = false;
+  }
+
+  screenResize() {
+    this.graphic.filterArea = game.filterArea;
   }
 }
 

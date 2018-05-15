@@ -15,8 +15,8 @@ function calculateMovement(object, bounds, delta) {
 
   // check out of bounds
   point.x = Math.max(point.x, bounds);
-  point.x = Math.min(point.x, window.innerWidth - bounds);
+  point.x = Math.min(point.x, game.WIDTH - bounds);
   point.y = Math.max(point.y, bounds);
-  point.y = Math.min(point.y, window.innerHeight - bounds);
+  point.y = Math.min(point.y, game.HEIGHT - bounds);
   return point;
 }

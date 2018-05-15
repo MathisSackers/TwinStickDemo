@@ -105,7 +105,7 @@ class LevelObjectiveText extends LevelObject {
     this.box.endFill();
     this.box.alpha = 0.5;
     this.graphics.pivot.set(this.box.width, 0);
-    this.graphics.position.set(window.innerWidth - 20, 20);
+    this.graphics.position.set(game.WIDTH - 20, 20);
     gametextContainer.addChild(this.graphics);
   }
 
