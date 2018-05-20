@@ -4,6 +4,7 @@ class DeathState extends State {
     super();
     this.name = 'DeathState';
     setEntitiesInvisible();
+    game.levelmachine.kill();
     game.text.setText('Hit A to try again.');
     game.text.show();
   }

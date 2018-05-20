@@ -37,4 +37,8 @@ class LevelMachine {
     [this.level] = parser.parseFromString(newLevel, 'application/xml').documentElement.children;
     this.action = new LevelAction(this.level);
   }
+
+  kill() {
+    this.action.kill();
+  }
 }

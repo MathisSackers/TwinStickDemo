@@ -12,7 +12,7 @@ After binding your controller, you can perform the following actions
 
 * Move with the `left stick`
 * Aim with the `right stick`
-* Pressing `A` resets the level
+* Pressing `A` minimizes the objective box
 * Hold down `R1` to fire
 * Pressing `B` will toggle pause on/off
 * Pressing `A` while in the pause screen toggles sound

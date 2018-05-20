@@ -18,9 +18,9 @@ class PlayState extends State {
       if (input.B_press) {
         game.statemachine.transition('PauseState');
       }
-      // spawning enemies
+      // toggle objective box minimization
       if (input.A_press) {
-        game.levelmachine.loadLevel(level0);
+        game.minimizedObjectives = !game.minimizedObjectives;
       }
       // this guy handdles his own input
       heroes[counter].update(input, delta);

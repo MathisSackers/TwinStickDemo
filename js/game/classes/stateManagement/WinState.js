@@ -3,6 +3,7 @@ class WinState extends State {
   constructor() {
     super();
     this.name = 'WinState';
+    game.levelmachine.kill();
     setEntitiesInvisible();
     game.text.setText('You won - Hit A to try again.');
     game.text.show();

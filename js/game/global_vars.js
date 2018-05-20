@@ -12,7 +12,7 @@ const {
 
 // globals
 // object for gamerelated variables; WIDTH & HEIGHT describe the virtual size of the play-area
-const game = { WIDTH: 1920, HEIGHT: 1080 };
+const game = { WIDTH: 1920, HEIGHT: 1080, minimizedObjectives: false };
 // whether the game is muted or not
 let muted;
 // container for all (visual) elements of the game

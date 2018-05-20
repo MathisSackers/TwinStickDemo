@@ -16,13 +16,16 @@
 const BOX_COLOR = 0x8d8a7f;
 // color for outline of textbox
 const OUTLINE_COLOR = 0x807d72;
+// color for the ! in new minimized textboxes
+const ALERT_COLOR = 0xf76a3b;
 
 class LevelObjectiveText extends LevelObject {
   constructor(node) {
     super();
     this.node = node;
+    this.minimized = game.minimizedObjectives;
     this.scanNodes();
-    this.buildGraphics();
+    this.buildGraphics(true);
     this.isDone = true;
     return this;
   }
@@ -47,7 +50,7 @@ class LevelObjectiveText extends LevelObject {
     }
   }
 
-  buildGraphics() {
+  buildGraphics(firstTime = false) {
     if (this.titleHTML === undefined) {
       console.error(`Expected a title for ${this.node}`);
     }
@@ -62,41 +65,59 @@ class LevelObjectiveText extends LevelObject {
     // title text
     this.titleTexts = [];
     let offset = 5;
-    LevelText.eval(this.titleHTML).forEach((textsnippet) => {
-      const t = new Text(textsnippet.text, {
-        fontFamily: 'Roboto',
-        fontSize: 20,
-        fontWeight: 'bold',
-        fill: textsnippet.color,
-      });
-      this.graphics.addChild(t);
-      t.x = offset;
-      t.y = 5;
-      offset += t.width;
-      this.needsUpdates = this.needsUpdates || textsnippet.needsUpdates;
-    });
-    // contet text
-    let textWidth = offset;
-    offset = 5;
+    let textWidth = 5;
     let line = 0;
-    if (this.contentHTML !== undefined) {
-      LevelText.eval(this.contentHTML).forEach((textsnippet) => {
+    if (!this.minimized) {
+      LevelText.eval(this.titleHTML).forEach((textsnippet) => {
         const t = new Text(textsnippet.text, {
           fontFamily: 'Roboto',
-          fontSize: 12,
+          fontSize: 20,
+          fontWeight: 'bold',
           fill: textsnippet.color,
         });
         this.graphics.addChild(t);
         t.x = offset;
-        t.y = 35 + (t.height * line);
+        t.y = 5;
         offset += t.width;
-        textWidth = Math.max(textWidth, offset);
-        if (textsnippet.newline) {
-          line += 1;
-          offset = 5;
-        }
         this.needsUpdates = this.needsUpdates || textsnippet.needsUpdates;
       });
+      // contet text
+      textWidth = offset;
+      offset = 5;
+      if (this.contentHTML !== undefined) {
+        LevelText.eval(this.contentHTML).forEach((textsnippet) => {
+          const t = new Text(textsnippet.text, {
+            fontFamily: 'Roboto',
+            fontSize: 12,
+            fill: textsnippet.color,
+          });
+          this.graphics.addChild(t);
+          t.x = offset;
+          t.y = 35 + (t.height * line);
+          offset += t.width;
+          textWidth = Math.max(textWidth, offset);
+          if (textsnippet.newline) {
+            line += 1;
+            offset = 5;
+          }
+          this.needsUpdates = this.needsUpdates || textsnippet.needsUpdates;
+        });
+      }
+    } else if (firstTime) {
+      // minimized and new
+      const t = new Text('!', {
+        fontFamily: 'Roboto',
+        fontSize: 20,
+        fontWeight: 'bold',
+        fill: ALERT_COLOR,
+      });
+      this.graphics.addChild(t);
+      t.x = 20;
+      t.y = 10;
+      textWidth = 40;
+    } else {
+      // minimized
+      return;
     }
     // fit the box
     this.box.beginFill(BOX_COLOR);
@@ -110,10 +131,16 @@ class LevelObjectiveText extends LevelObject {
   }
 
   update(delta) {
-    // update texts if necessary
-    if (this.needsUpdates) {
+    if (this.minimized !== game.minimizedObjectives) {
+      this.minimized = game.minimizedObjectives;
       this.buildGraphics();
     }
+    // update texts if necessary
+    if (this.needsUpdates && !this.minimized) {
+      this.buildGraphics();
+    }
+    // rescale
+    this.graphics.scale.set(1 / game.scale);
     // we might not live forever
     if (this.ctl !== undefined && !LevelEvaluation.eval(this.ctl)) {
       this.kill();

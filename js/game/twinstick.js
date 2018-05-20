@@ -85,8 +85,8 @@ function resize() {
   // update the game-area
   if (game.text !== undefined) {
     // we have gone through setup()
-    const scale = Math.min(window.innerWidth / game.WIDTH, window.innerHeight / game.HEIGHT);
-    gameContainer.scale.set(scale);
+    game.scale = Math.min(window.innerWidth / game.WIDTH, window.innerHeight / game.HEIGHT);
+    gameContainer.scale.set(game.scale);
     barContainer.removeChild(bars[0]);
     barContainer.removeChild(bars[1]);
     bars.pop();
@@ -98,7 +98,7 @@ function resize() {
     if (window.innerWidth / game.WIDTH < window.innerHeight / game.HEIGHT) {
       // screen is too high => black bars top & bottom
       gameContainer.x = 0;
-      gameContainer.y = (window.innerHeight - (game.HEIGHT * scale)) / 2;
+      gameContainer.y = (window.innerHeight - (game.HEIGHT * game.scale)) / 2;
       // top bar
       bars[0].beginFill(BAR_COLOR);
       bars[0].drawRect(0, 0, window.innerWidth, gameContainer.y);
@@ -106,13 +106,13 @@ function resize() {
       // bottom bar
       bars[1].beginFill(BAR_COLOR);
       bars[1].drawRect(
-        0, gameContainer.y + (game.HEIGHT * scale),
+        0, gameContainer.y + (game.HEIGHT * game.scale),
         window.innerWidth, window.innerHeight,
       );
       bars[1].endFill();
     } else {
       // screen is too wide => black bars left & right
-      gameContainer.x = (window.innerWidth - (game.WIDTH * scale)) / 2;
+      gameContainer.x = (window.innerWidth - (game.WIDTH * game.scale)) / 2;
       gameContainer.y = 0;
       // left bar
       bars[0].beginFill(BAR_COLOR);
@@ -121,7 +121,7 @@ function resize() {
       // right bar
       bars[1].beginFill(BAR_COLOR);
       bars[1].drawRect(
-        gameContainer.x + (game.WIDTH * scale), 0,
+        gameContainer.x + (game.WIDTH * game.scale), 0,
         window.innerWidth, window.innerHeight,
       );
       bars[1].endFill();
@@ -129,7 +129,7 @@ function resize() {
     // also scale the gametext
     textContainer.x = gameContainer.x;
     textContainer.y = gameContainer.y;
-    textContainer.scale.set(scale);
+    textContainer.scale.set(game.scale);
   }
 }
 
