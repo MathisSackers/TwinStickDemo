@@ -77,7 +77,7 @@ const GamepadUtil = {
       if (this.gamepad[padIndex].pad.buttons[i].pressed
         && !this.gamepad[padIndex].bound_buttons.includes(this.gamepad[padIndex].pad.buttons[i])
       ) {
-        this.gamepad[padIndex].bindings[`${buttonName}_button`] = this.gamepad[padIndex].pad.buttons[i];
+        this.gamepad[padIndex].bindings[`${buttonName}_button`] = i;
         this.gamepad[padIndex].bound_buttons.push(this.gamepad[padIndex].pad.buttons[i]);
         return true;
       }
@@ -260,12 +260,13 @@ const GamepadUtil = {
       this.input[padIndex][`${buttonName}_press`] = false;
       this.input[padIndex][`${buttonName}_release`] = false;
       // update one-frame-states
-      if (this.gamepad[padIndex].bindings[`${buttonName}_button`].pressed !== this.input[padIndex][`${buttonName}_down`]) {
-        this.input[padIndex][`${buttonName}_press`] = this.gamepad[padIndex].bindings[`${buttonName}_button`].pressed;
+      const index = this.gamepad[padIndex].bindings[`${buttonName}_button`];
+      if (this.gamepad[padIndex].pad.buttons[index].pressed !== this.input[padIndex][`${buttonName}_down`]) {
+        this.input[padIndex][`${buttonName}_press`] = this.gamepad[padIndex].pad.buttons[index].pressed;
         this.input[padIndex][`${buttonName}_release`] = this.input[padIndex][`${buttonName}_down`];
       }
       // current state
-      this.input[padIndex][`${buttonName}_down`] = this.gamepad[padIndex].bindings[`${buttonName}_button`].pressed;
+      this.input[padIndex][`${buttonName}_down`] = this.gamepad[padIndex].pad.buttons[index].pressed;
     });
     return this.input[padIndex];
   },
