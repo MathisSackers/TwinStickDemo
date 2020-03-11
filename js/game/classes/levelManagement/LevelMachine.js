@@ -14,8 +14,6 @@ class LevelMachine {
     if (this.action !== null) {
       this.action.update(delta);
       if (this.action.done()) {
-        this.action.kill();
-        this.action = null;
         game.statemachine.transition('WinState');
       }
     }
